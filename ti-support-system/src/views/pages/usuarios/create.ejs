@@ -1,0 +1,68 @@
+<div class="page-header">
+    <h2>Novo Usuário</h2>
+    <a href="/usuarios" class="btn btn-secondary">Voltar</a>
+</div>
+
+<div class="form-container">
+
+    <% if (error) { %>
+        <div class="alert alert-error">
+            <%= error %>
+        </div>
+    <% } %>
+
+    <form action="/usuarios" method="POST">
+
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input 
+                type="text" 
+                name="nome" 
+                id="nome" 
+                required 
+                placeholder="Nome completo"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input 
+                type="email" 
+                name="email" 
+                id="email" 
+                required 
+                placeholder="email@exemplo.com"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="senha">Senha</label>
+            <input 
+                type="password" 
+                name="senha" 
+                id="senha" 
+                required 
+                placeholder="Criar senha"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="role">Perfil</label>
+            <select name="role" id="role" required>
+                <option value="">Selecione o perfil</option>
+                <option value="admin">Administrador</option>
+                <option value="tecnico">Técnico</option>
+                <option value="padrao">Padrão</option>
+                <option value="cliente">Cliente</option>
+                <option value="fornecedor">Fornecedor</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="/usuarios" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>

@@ -1,0 +1,124 @@
+
+<div class="page-header">
+    <div>
+        <h2>Detalhes do Lead</h2>
+        <span style="color: #777; font-size: 14px;">
+            Recebido em <%= new Date(lead.criado_em).toLocaleString('pt-BR') %>
+        </span>
+    </div>
+    <a href="/leads" class="btn btn-secondary">← Voltar</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+
+    <!-- ===== INFORMAÇÕES DO LEAD ===== -->
+    <div class="detail-card">
+
+        <div class="detail-row">
+            <div class="detail-label">Nome:</div>
+            <div class="detail-value"><strong><%= lead.nome %></strong></div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">E-mail:</div>
+            <div class="detail-value">
+                <a href="mailto:<%= lead.email %>" style="color: #2563eb;">
+                    <%= lead.email %>
+                </a>
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">WhatsApp:</div>
+            <div class="detail-value">
+                <% if (lead.whatsapp) { %>
+                    <a href="https://wa.me/55<%= lead.whatsapp.replace(/\D/g,'') %>" target="_blank" style="color: #10b981;">
+                        📱 <%= lead.whatsapp %>
+                    </a>
+                <% } else { %>
+                    -
+                <% } %>
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Empresa:</div>
+            <div class="detail-value"><%= lead.empresa || '-' %></div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Interesse:</div>
+            <div class="detail-value"><%= lead.interesse || '-' %></div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Origem:</div>
+            <div class="detail-value"><%= lead.origem %></div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Status atual:</div>
+            <div class="detail-value">
+                <span class="lead-status status-<%= lead.status %>">
+                    <%= lead.status.replace('_', ' ') %>
+                </span>
+            </div>
+        </div>
+
+        <% if (lead.mensagem) { %>
+            <div class="detail-row" style="flex-direction: column; align-items: flex-start;">
+                <div class="detail-label" style="margin-bottom: 10px;">Mensagem:</div>
+                <div class="detail-value" style="background: #f8fafc; padding: 15px; border-radius: 8px; width: 100%; line-height: 1.6;">
+                    <%= lead.mensagem %>
+                </div>
+            </div>
+        <% } %>
+
+    </div>
+
+    <!-- ===== AÇÕES ===== -->
+    <div class="detail-card">
+        <h3 style="margin-bottom: 15px; color: #2c3e50;">Atualizar Status</h3>
+
+        <form action="/leads/<%= lead.id %>/status" method="POST">
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Novo status:</label>
+                <select name="status" required style="width:100%; padding:10px; border:2px solid #e0e0e0; border-radius:6px; margin-top:5px;">
+                    <option value="novo" <%= lead.status === 'novo' ? 'selected' : '' %>>🆕 Novo</option>
+                    <option value="contatado" <%= lead.status === 'contatado' ? 'selected' : '' %>>📞 Contatado</option>
+                    <option value="em_negociacao" <%= lead.status === 'em_negociacao' ? 'selected' : '' %>>💬 Em Negociação</option>
+                    <option value="convertido" <%= lead.status === 'convertido' ? 'selected' : '' %>>✅ Convertido</option>
+                    <option value="perdido" <%= lead.status === 'perdido' ? 'selected' : '' %>>❌ Perdido</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%;">
+                Atualizar Status
+            </button>
+        </form>
+
+        <hr style="margin: 25px 0; border: none; border-top: 1px solid #eee;">
+
+        <h3 style="margin-bottom: 15px; color: #2c3e50;">Ações rápidas</h3>
+
+        <a href="mailto:<%= lead.email %>" class="btn btn-info" style="width:100%; display:block; text-align:center; margin-bottom:10px;">
+            ✉️ Enviar E-mail
+        </a>
+
+        <% if (lead.whatsapp) { %>
+            <a href="https://wa.me/55<%= lead.whatsapp.replace(/\D/g,'') %>" target="_blank" class="btn btn-success" style="width:100%; display:block; text-align:center; margin-bottom:10px;">
+                📱 Abrir WhatsApp
+            </a>
+        <% } %>
+
+        <form action="/leads/<%= lead.id %>/delete" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este lead?')">
+            <button type="submit" class="btn btn-danger" style="width:100%;">
+                🗑️ Excluir Lead
+            </button>
+        </form>
+
+    </div>
+
+</div>
+

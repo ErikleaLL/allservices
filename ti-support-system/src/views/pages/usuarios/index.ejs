@@ -1,0 +1,55 @@
+<div class="page-header">
+    <h2>Lista de Usuários</h2>
+    <a href="/usuarios/create" class="btn btn-primary">+ Novo Usuário</a>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Perfil</th>
+                <th>Status</th>
+                <th>Cadastrado em</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (usuarios.length === 0) { %>
+                <tr>
+                    <td colspan="7" class="empty">Nenhum usuário cadastrado.</td>
+                </tr>
+            <% } else { %>
+                <% usuarios.forEach(u => { %>
+                    <tr>
+                        <td><%= u.id %></td>
+                        <td><%= u.nome %></td>
+                        <td><%= u.email %></td>
+                        <td>
+                            <span class="badge badge-<%= u.role %>">
+                                <%= u.role %>
+                            </span>
+                        </td>
+                        <td>
+                            <% if (u.ativo) { %>
+                                <span class="status status-active">Ativo</span>
+                            <% } else { %>
+                                <span class="status status-inactive">Inativo</span>
+                            <% } %>
+                        </td>
+                        <td><%= new Date(u.criado_em).toLocaleDateString('pt-BR') %></td>
+                        <td class="actions">
+                            <a href="/usuarios/<%= u.id %>" class="btn-sm btn-info">Ver</a>
+                            <a href="/usuarios/<%= u.id %>/edit" class="btn-sm btn-warning">Editar</a>
+                            <form action="/usuarios/<%= u.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Deseja excluir este usuário?')">
+                                <button type="submit" class="btn-sm btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } %>
+        </tbody>
+    </table>
+</div>

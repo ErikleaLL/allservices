@@ -1,0 +1,43 @@
+# Dependências
+node_modules/
+
+# Banco de dados
+database/database.sqlite
+database/*.sqlite
+database/*.db
+
+# Variáveis de ambiente
+.env
+
+# Logs
+logs/*.log
+*.log
+
+# Uploads
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build
+dist/
+build/
+
+# Cache
+.cache/
+.npm/
+
+# Temporários
+tmp/
+temp/
+*.tmp
+

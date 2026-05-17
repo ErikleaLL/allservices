@@ -1,0 +1,53 @@
+<div class="page-header">
+    <h2>Detalhes do Usuário</h2>
+    <div>
+        <a href="/usuarios/<%= usuario.id %>/edit" class="btn btn-warning">Editar</a>
+        <a href="/usuarios" class="btn btn-secondary">Voltar</a>
+    </div>
+</div>
+
+<div class="detail-card">
+
+    <div class="detail-row">
+        <div class="detail-label">ID:</div>
+        <div class="detail-value">#<%= usuario.id %></div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">Nome:</div>
+        <div class="detail-value"><%= usuario.nome %></div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">E-mail:</div>
+        <div class="detail-value"><%= usuario.email %></div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">Perfil:</div>
+        <div class="detail-value">
+            <span class="badge badge-<%= usuario.role %>">
+                <%= usuario.role %>
+            </span>
+        </div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">Status:</div>
+        <div class="detail-value">
+            <% if (usuario.ativo) { %>
+                <span class="status status-active">Ativo</span>
+            <% } else { %>
+                <span class="status status-inactive">Inativo</span>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">Cadastrado em:</div>
+        <div class="detail-value">
+            <%= new Date(usuario.criado_em).toLocaleString('pt-BR') %>
+        </div>
+    </div>
+
+</div>

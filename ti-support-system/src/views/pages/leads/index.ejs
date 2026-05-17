@@ -1,0 +1,112 @@
+
+<div class="page-header">
+    <div>
+        <h2>Gestão de Leads</h2>
+        <span style="color: #777; font-size: 14px;">
+            Interessados na plataforma Allservices
+        </span>
+    </div>
+</div>
+
+<!-- ===== ESTATÍSTICAS ===== -->
+<div class="stats-grid">
+
+    <div class="stat-card stat-total">
+        <div class="stat-icon">📊</div>
+        <div class="stat-info">
+            <span class="stat-number"><%= estatisticas.total %></span>
+            <span class="stat-label">Total de Leads</span>
+        </div>
+    </div>
+
+    <div class="stat-card stat-novo">
+        <div class="stat-icon">🆕</div>
+        <div class="stat-info">
+            <span class="stat-number"><%= estatisticas.novo %></span>
+            <span class="stat-label">Novos</span>
+        </div>
+    </div>
+
+    <div class="stat-card stat-contatado">
+        <div class="stat-icon">📞</div>
+        <div class="stat-info">
+            <span class="stat-number"><%= estatisticas.contatado %></span>
+            <span class="stat-label">Contatados</span>
+        </div>
+    </div>
+
+    <div class="stat-card stat-negociacao">
+        <div class="stat-icon">💬</div>
+        <div class="stat-info">
+            <span class="stat-number"><%= estatisticas.em_negociacao %></span>
+            <span class="stat-label">Em Negociação</span>
+        </div>
+    </div>
+
+    <div class="stat-card stat-convertido">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+            <span class="stat-number"><%= estatisticas.convertido %></span>
+            <span class="stat-label">Convertidos</span>
+        </div>
+    </div>
+
+    <div class="stat-card stat-perdido">
+        <div class="stat-icon">❌</div>
+        <div class="stat-info">
+            <span class="stat-number"><%= estatisticas.perdido %></span>
+            <span class="stat-label">Perdidos</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== TABELA DE LEADS ===== -->
+<div class="table-container" style="margin-top: 30px;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>WhatsApp</th>
+                <th>Interesse</th>
+                <th>Status</th>
+                <th>Recebido em</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (leads.length === 0) { %>
+                <tr>
+                    <td colspan="8" class="empty">
+                        Nenhum lead capturado ainda. Compartilhe sua landing page!
+                    </td>
+                </tr>
+            <% } else { %>
+                <% leads.forEach(l => { %>
+                    <tr>
+                        <td><%= l.id %></td>
+                        <td><strong><%= l.nome %></strong></td>
+                        <td><%= l.email %></td>
+                        <td><%= l.whatsapp || '-' %></td>
+                        <td><%= l.interesse || '-' %></td>
+                        <td>
+                            <span class="lead-status status-<%= l.status %>">
+                                <%= l.status.replace('_', ' ') %>
+                            </span>
+                        </td>
+                        <td><%= new Date(l.criado_em).toLocaleString('pt-BR') %></td>
+                        <td class="actions">
+                            <a href="/leads/<%= l.id %>" class="btn-sm btn-info">Ver</a>
+                            <form action="/leads/<%= l.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Excluir este lead?')">
+                                <button type="submit" class="btn-sm btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+

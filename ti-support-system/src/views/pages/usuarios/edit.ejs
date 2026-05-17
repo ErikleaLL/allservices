@@ -1,0 +1,68 @@
+<div class="page-header">
+    <h2>Editar Usuário</h2>
+    <a href="/usuarios" class="btn btn-secondary">Voltar</a>
+</div>
+
+<div class="form-container">
+
+    <% if (error) { %>
+        <div class="alert alert-error">
+            <%= error %>
+        </div>
+    <% } %>
+
+    <form action="/usuarios/<%= usuario.id %>" method="POST">
+
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input 
+                type="text" 
+                name="nome" 
+                id="nome" 
+                required 
+                value="<%= usuario.nome %>"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input 
+                type="email" 
+                name="email" 
+                id="email" 
+                required 
+                value="<%= usuario.email %>"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="role">Perfil</label>
+            <select name="role" id="role" required>
+                <option value="admin" <%= usuario.role === 'admin' ? 'selected' : '' %>>Administrador</option>
+                <option value="tecnico" <%= usuario.role === 'tecnico' ? 'selected' : '' %>>Técnico</option>
+                <option value="padrao" <%= usuario.role === 'padrao' ? 'selected' : '' %>>Padrão</option>
+                <option value="cliente" <%= usuario.role === 'cliente' ? 'selected' : '' %>>Cliente</option>
+                <option value="fornecedor" <%= usuario.role === 'fornecedor' ? 'selected' : '' %>>Fornecedor</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input 
+                    type="checkbox" 
+                    name="ativo" 
+                    value="1"
+                    <%= usuario.ativo ? 'checked' : '' %>
+                >
+                Usuário ativo
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <a href="/usuarios" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>

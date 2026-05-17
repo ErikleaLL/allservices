@@ -1,0 +1,54 @@
+
+<div class="page-header">
+    <div>
+        <h2>Clientes</h2>
+        <span style="color: #777; font-size: 14px;">
+            Total: <%= total %> cliente(s) cadastrado(s)
+        </span>
+    </div>
+    <a href="/clientes/create" class="btn btn-primary">+ Novo Cliente</a>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>CPF/CNPJ</th>
+                <th>Cadastrado em</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (clientes.length === 0) { %>
+                <tr>
+                    <td colspan="7" class="empty">
+                        Nenhum cliente cadastrado. Clique em <strong>"+ Novo Cliente"</strong> para começar.
+                    </td>
+                </tr>
+            <% } else { %>
+                <% clientes.forEach(c => { %>
+                    <tr>
+                        <td><%= c.id %></td>
+                        <td><strong><%= c.nome %></strong></td>
+                        <td><%= c.email || '-' %></td>
+                        <td><%= c.telefone || '-' %></td>
+                        <td><%= c.cpf_cnpj || '-' %></td>
+                        <td><%= new Date(c.criado_em).toLocaleDateString('pt-BR') %></td>
+                        <td class="actions">
+                            <a href="/clientes/<%= c.id %>" class="btn-sm btn-info">Ver</a>
+                            <a href="/clientes/<%= c.id %>/edit" class="btn-sm btn-warning">Editar</a>
+                            <form action="/clientes/<%= c.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Excluir este cliente?')">
+                                <button type="submit" class="btn-sm btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+

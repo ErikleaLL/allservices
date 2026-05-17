@@ -1,0 +1,36 @@
+<form action="/auth/login" method="POST" class="auth-form">
+
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <input 
+            type="email" 
+            name="email" 
+            id="email" 
+            required 
+            placeholder="Digite seu e-mail"
+        >
+    </div>
+
+    <div class="form-group">
+        <label for="password">Senha</label>
+        <input 
+            type="password" 
+            name="password" 
+            id="password" 
+            required 
+            placeholder="Digite sua senha"
+        >
+    </div>
+
+    <button type="submit" class="btn-primary">
+        Entrar
+    </button>
+
+    <div class="auth-links">
+        <p>
+            Não tem conta?
+            <a href="/auth/register">Criar conta</a>
+        </p>
+    </div>
+
+</form>

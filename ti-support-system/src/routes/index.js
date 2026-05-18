@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// 🌐 Rotas públicas (landing page)
+// 🌐 Rotas públicas (landing page + rastreio)
 router.use('/', require('./publicRoutes'));
 
 // 🔐 Rotas privadas
@@ -10,6 +10,7 @@ router.use('/dashboard', require('./dashboardRoutes'));
 router.use('/usuarios', require('./usuarioRoutes'));
 router.use('/leads', require('./leadRoutes'));
 router.use('/clientes', require('./clienteRoutes'));
+router.use('/dispositivos', require('./dispositivoRoutes'));
 
 // Rota 404
 router.use((req, res) => {

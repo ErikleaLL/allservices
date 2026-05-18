@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title><%= title %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0f172a">
     <meta name="description" content="Allservices - Manutenção inteligente, gestão simples. A plataforma de TI do futuro.">
 
     <link rel="stylesheet" href="/css/public.css">
@@ -13,23 +14,37 @@
     <!-- ===== NAVBAR ===== -->
     <header class="navbar">
         <div class="container nav-container">
+
             <a href="/" class="logo">
                 <span class="logo-icon">⚡</span>
                 <span class="logo-text">All<strong>services</strong></span>
             </a>
 
-            <nav class="nav-menu">
+            <!-- Botão hambúrguer (mobile) -->
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">
+                ☰
+            </button>
+
+            <!-- Menu -->
+            <nav class="nav-menu" id="navMenu">
                 <a href="/">Início</a>
                 <a href="/funcionalidades">Funcionalidades</a>
                 <a href="/planos">Planos</a>
                 <a href="/sobre">Sobre</a>
                 <a href="/contato">Contato</a>
+
+                <div class="nav-actions-mobile">
+                    <a href="/auth/login" class="btn-login">Entrar</a>
+                    <a href="/contato" class="btn-cta">Quero conhecer</a>
+                </div>
             </nav>
 
+            <!-- Ações (desktop) -->
             <div class="nav-actions">
                 <a href="/auth/login" class="btn-login">Entrar</a>
                 <a href="/contato" class="btn-cta">Quero conhecer</a>
             </div>
+
         </div>
     </header>
 
@@ -43,9 +58,7 @@
         <div class="container footer-container">
 
             <div class="footer-col">
-                <h3 class="footer-logo">
-                    ⚡ All<strong>services</strong>
-                </h3>
+                <h3 class="footer-logo">⚡ All<strong>services</strong></h3>
                 <p>Manutenção inteligente, gestão simples.</p>
                 <p class="footer-tag">A plataforma de TI do futuro.</p>
             </div>
@@ -84,6 +97,28 @@
             <p>&copy; <%= new Date().getFullYear() %> Allservices • Todos os direitos reservados</p>
         </div>
     </footer>
+
+    <script>
+        (function() {
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+                });
+
+                // Fechar ao clicar em link
+                navMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navMenu.classList.remove('active');
+                        navToggle.textContent = '☰';
+                    });
+                });
+            }
+        })();
+    </script>
 
 </body>
 </html>

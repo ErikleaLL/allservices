@@ -1,37 +1,214 @@
-<div class="dashboard">
 
-    <div class="card-grid">
+<!-- ===== ESTATÍSTICAS ===== -->
+<div class="stats-grid">
 
-        <div class="card">
-            <h3>Usuários</h3>
-            <p>Gerenciar administradores, técnicos e clientes.</p>
-            <a href="/usuarios" class="btn-link">Acessar</a>
+    <div class="stat">
+        <div class="stat-label">Receita / mês</div>
+        <div class="stat-value">R$ 12.4k</div>
+        <div style="font-size:11.5px; color:#4ade80; margin-top:4px;">
+            <i class="ti ti-arrow-up-right"></i> 8%
         </div>
+    </div>
 
-        <div class="card">
-            <h3>Ordens de Serviço</h3>
-            <p>Visualizar e gerenciar serviços em andamento.</p>
-            <a href="/ordens" class="btn-link">Acessar</a>
+    <div class="stat">
+        <div class="stat-label">Ordens abertas</div>
+        <div class="stat-value">23</div>
+        <div style="font-size:11.5px; color:#f87171; margin-top:4px;">
+            <i class="ti ti-arrow-down-right"></i> 2
         </div>
+    </div>
 
-        <div class="card">
-            <h3>Estoque</h3>
-            <p>Controlar peças e reposições.</p>
-            <a href="/estoque" class="btn-link">Acessar</a>
+    <div class="stat">
+        <div class="stat-label">Clientes ativos</div>
+        <div class="stat-value">148</div>
+        <div style="font-size:11.5px; color:#4ade80; margin-top:4px;">
+            <i class="ti ti-arrow-up-right"></i> 5
         </div>
+    </div>
 
-        <div class="card">
-            <h3>Financeiro</h3>
-            <p>Controle de receitas e despesas.</p>
-            <a href="/financeiro" class="btn-link">Acessar</a>
+    <div class="stat">
+        <div class="stat-label">Itens no estoque</div>
+        <div class="stat-value">312</div>
+        <div style="font-size:11.5px; color:#f87171; margin-top:4px;">
+            <i class="ti ti-arrow-down-right"></i> 12
         </div>
-
-        <div class="card">
-            <h3>Relatórios</h3>
-            <p>Visualizar relatórios completos do sistema.</p>
-            <a href="/relatorios" class="btn-link">Acessar</a>
-        </div>
-
     </div>
 
 </div>
+
+<!-- ===== TÍTULO DA SEÇÃO ===== -->
+<div style="margin: 0 30px 14px; font-family:'Syne',sans-serif; font-size:14px; font-weight:600; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:1px;">
+    Módulos
+</div>
+
+<!-- ===== CARDS DE MÓDULOS ===== -->
+<div class="modules-grid">
+
+    <a href="/usuarios" class="module-card purple" style="text-decoration:none;">
+        <div class="module-icon" style="background:rgba(124,58,237,0.15); color:#a78bfa;">
+            <i class="ti ti-users"></i>
+        </div>
+        <div class="module-name">Usuários</div>
+        <div class="module-desc">Gestão de equipe e perfis</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:0.5px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+            <span style="color:rgba(255,255,255,0.55);">→ Acessar</span>
+            <span style="background:rgba(124,58,237,0.15); color:#a78bfa; padding:3px 8px; border-radius:50px; font-weight:600;">Admin</span>
+        </div>
+    </a>
+
+    <a href="/ordens" class="module-card blue" style="text-decoration:none;">
+        <div class="module-icon" style="background:rgba(96,165,250,0.15); color:#60a5fa;">
+            <i class="ti ti-tools"></i>
+        </div>
+        <div class="module-name">Ordens de Serviço</div>
+        <div class="module-desc">Reparos e manutenções</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:0.5px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+            <span style="color:rgba(255,255,255,0.55);">→ Acessar</span>
+            <span style="background:rgba(251,191,36,0.15); color:#fbbf24; padding:3px 8px; border-radius:50px; font-weight:600;">23 abertas</span>
+        </div>
+    </a>
+
+    <a href="/estoque" class="module-card green" style="text-decoration:none;">
+        <div class="module-icon" style="background:rgba(74,222,128,0.15); color:#4ade80;">
+            <i class="ti ti-package"></i>
+        </div>
+        <div class="module-name">Estoque</div>
+        <div class="module-desc">Peças e produtos</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:0.5px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+            <span style="color:rgba(255,255,255,0.55);">→ Acessar</span>
+            <span style="background:rgba(74,222,128,0.15); color:#4ade80; padding:3px 8px; border-radius:50px; font-weight:600;">Atualizado</span>
+        </div>
+    </a>
+
+    <a href="/financeiro" class="module-card amber" style="text-decoration:none;">
+        <div class="module-icon" style="background:rgba(251,191,36,0.15); color:#fbbf24;">
+            <i class="ti ti-cash"></i>
+        </div>
+        <div class="module-name">Financeiro</div>
+        <div class="module-desc">Receitas e despesas</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:0.5px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+            <span style="color:rgba(255,255,255,0.55);">→ Acessar</span>
+            <span style="background:rgba(251,191,36,0.15); color:#fbbf24; padding:3px 8px; border-radius:50px; font-weight:600;">R$12.4k</span>
+        </div>
+    </a>
+
+    <a href="/relatorios" class="module-card red" style="text-decoration:none;">
+        <div class="module-icon" style="background:rgba(248,113,113,0.15); color:#f87171;">
+            <i class="ti ti-chart-bar"></i>
+        </div>
+        <div class="module-name">Relatórios</div>
+        <div class="module-desc">Análises e insights</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:0.5px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+            <span style="color:rgba(255,255,255,0.55);">→ Acessar</span>
+        </div>
+    </a>
+
+    <a href="/leads" class="module-card purple" style="text-decoration:none;">
+        <div class="module-icon" style="background:rgba(124,58,237,0.15); color:#a78bfa;">
+            <i class="ti ti-target-arrow"></i>
+        </div>
+        <div class="module-name">Leads</div>
+        <div class="module-desc">Captação de clientes</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:0.5px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+            <span style="color:rgba(255,255,255,0.55);">→ Acessar</span>
+            <span style="background:rgba(124,58,237,0.15); color:#a78bfa; padding:3px 8px; border-radius:50px; font-weight:600;">Novos</span>
+        </div>
+    </a>
+
+</div>
+
+<!-- ===== WIDGETS INFERIORES ===== -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:0 30px 40px;" class="bottom-widgets">
+
+    <!-- ORDENS RECENTES -->
+    <div style="background:#13121f; border:0.5px solid rgba(255,255,255,0.07); border-radius:12px; padding:18px;">
+        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:14px;">
+            Ordens recentes
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 0; border-bottom:0.5px solid rgba(255,255,255,0.07);">
+            <div style="width:8px; height:8px; border-radius:50%; background:#4ade80; box-shadow:0 0 8px rgba(74,222,128,0.5);"></div>
+            <div style="flex:1;">
+                <div style="font-size:13px; font-weight:500;">OS #2451 — Troca de SSD</div>
+                <div style="font-size:11.5px; color:rgba(255,255,255,0.35);">Carlos Mendes</div>
+            </div>
+            <span style="font-size:10.5px; padding:3px 9px; border-radius:50px; font-weight:600; background:rgba(74,222,128,0.12); color:#4ade80;">Concluído</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 0; border-bottom:0.5px solid rgba(255,255,255,0.07);">
+            <div style="width:8px; height:8px; border-radius:50%; background:#fbbf24; box-shadow:0 0 8px rgba(251,191,36,0.5);"></div>
+            <div style="flex:1;">
+                <div style="font-size:13px; font-weight:500;">OS #2450 — Formatação</div>
+                <div style="font-size:11.5px; color:rgba(255,255,255,0.35);">Mariana Silva</div>
+            </div>
+            <span style="font-size:10.5px; padding:3px 9px; border-radius:50px; font-weight:600; background:rgba(251,191,36,0.12); color:#fbbf24;">Em andamento</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 0; border-bottom:0.5px solid rgba(255,255,255,0.07);">
+            <div style="width:8px; height:8px; border-radius:50%; background:#60a5fa; box-shadow:0 0 8px rgba(96,165,250,0.5);"></div>
+            <div style="flex:1;">
+                <div style="font-size:13px; font-weight:500;">OS #2449 — Diagnóstico</div>
+                <div style="font-size:11.5px; color:rgba(255,255,255,0.35);">Pedro Souza</div>
+            </div>
+            <span style="font-size:10.5px; padding:3px 9px; border-radius:50px; font-weight:600; background:rgba(96,165,250,0.12); color:#60a5fa;">Aguardando</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 0;">
+            <div style="width:8px; height:8px; border-radius:50%; background:#4ade80; box-shadow:0 0 8px rgba(74,222,128,0.5);"></div>
+            <div style="flex:1;">
+                <div style="font-size:13px; font-weight:500;">OS #2448 — Limpeza interna</div>
+                <div style="font-size:11.5px; color:rgba(255,255,255,0.35);">Ana Costa</div>
+            </div>
+            <span style="font-size:10.5px; padding:3px 9px; border-radius:50px; font-weight:600; background:rgba(74,222,128,0.12); color:#4ade80;">Concluído</span>
+        </div>
+    </div>
+
+    <!-- ATIVIDADE RECENTE -->
+    <div style="background:#13121f; border:0.5px solid rgba(255,255,255,0.07); border-radius:12px; padding:18px;">
+        <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:14px;">
+            Atividade recente
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 0; border-bottom:0.5px solid rgba(255,255,255,0.07);">
+            <div style="width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; background:rgba(124,58,237,0.15); color:#a78bfa;">
+                <i class="ti ti-user-plus"></i>
+            </div>
+            <div style="flex:1; font-size:12.5px;">Novo cliente cadastrado</div>
+            <div style="font-size:11px; color:rgba(255,255,255,0.35);">5 min</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 0; border-bottom:0.5px solid rgba(255,255,255,0.07);">
+            <div style="width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; background:rgba(74,222,128,0.15); color:#4ade80;">
+                <i class="ti ti-check"></i>
+            </div>
+            <div style="flex:1; font-size:12.5px;">OS #2451 concluída</div>
+            <div style="font-size:11px; color:rgba(255,255,255,0.35);">22 min</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 0; border-bottom:0.5px solid rgba(255,255,255,0.07);">
+            <div style="width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; background:rgba(251,191,36,0.15); color:#fbbf24;">
+                <i class="ti ti-package"></i>
+            </div>
+            <div style="flex:1; font-size:12.5px;">Estoque atualizado (+30 itens)</div>
+            <div style="font-size:11px; color:rgba(255,255,255,0.35);">1h</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 0;">
+            <div style="width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; background:rgba(96,165,250,0.15); color:#60a5fa;">
+                <i class="ti ti-cash"></i>
+            </div>
+            <div style="flex:1; font-size:12.5px;">Pagamento recebido R$450</div>
+            <div style="font-size:11px; color:rgba(255,255,255,0.35);">3h</div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+@media (max-width: 768px) {
+    .bottom-widgets {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+

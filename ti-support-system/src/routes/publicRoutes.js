@@ -2,26 +2,24 @@ const express = require('express');
 const router = express.Router();
 
 const publicController = require('../controllers/publicController');
+const dispositivoController = require('../controllers/dispositivoController');
 
-// Landing Page (página inicial)
+// Landing Page
 router.get('/', publicController.home);
 
-// Página de funcionalidades
+// Páginas institucionais
 router.get('/funcionalidades', publicController.funcionalidades);
-
-// Página sobre
 router.get('/sobre', publicController.sobre);
-
-// Página de planos
 router.get('/planos', publicController.planos);
-
-// Página de contato
 router.get('/contato', publicController.contato);
 
 // Capturar lead (formulário)
 router.post('/lead', publicController.salvarLead);
 
-// Página de obrigado (após enviar formulário)
+// Página de obrigado
 router.get('/obrigado', publicController.obrigado);
+
+// 🎯 RASTREAMENTO PÚBLICO POR QR CODE
+router.get('/rastreio/:qrcode', dispositivoController.rastreio);
 
 module.exports = router;

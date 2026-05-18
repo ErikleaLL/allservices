@@ -1,0 +1,103 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Dispositivos</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Total: <%= total %> dispositivo(s) cadastrado(s)
+            </span>
+        </div>
+        <a href="/dispositivos/create" class="btn btn-primary">
+            <i class="ti ti-plus"></i> Novo Dispositivo
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Tipo / Modelo</th>
+                    <th>Cliente</th>
+                    <th>Status</th>
+                    <th>Entrada</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (dispositivos.length === 0) { %>
+                    <tr>
+                        <td colspan="6" class="empty">
+                            <i class="ti ti-device-laptop" style="font-size: 32px; opacity: 0.3;"></i>
+                            <p style="margin-top: 10px;">Nenhum dispositivo cadastrado.</p>
+                            <p style="font-size: 12px; margin-top: 5px;">Clique em <strong>"+ Novo Dispositivo"</strong> para começar.</p>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <% dispositivos.forEach(d => { 
+                        const statusInfo = STATUS_LIST[d.status] || { label: d.status, cor: '#94a3b8', icone: 'ti-help' };
+                    %>
+                        <tr>
+                            <td>
+                                <span style="font-family: monospace; background: rgba(124,58,237,0.15); color: #a78bfa; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: 600;">
+                                    <%= d.qr_code %>
+                                </span>
+                            </td>
+                            <td>
+                                <strong><%= d.tipo %></strong>
+                                <% if (d.marca || d.modelo) { %>
+                                    <div style="font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 2px;">
+                                        <%= [d.marca, d.modelo].filter(Boolean).join(' • ') %>
+                                    </div>
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if (d.cliente_nome) { %>
+                                    <%= d.cliente_nome %>
+                                    <% if (d.cliente_telefone) { %>
+                                        <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                            <i class="ti ti-phone"></i> <%= d.cliente_telefone %>
+                                        </div>
+                                    <% } %>
+                                <% } else { %>
+                                    <span style="color: rgba(255,255,255,0.3);">Sem cliente</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; background: <%= statusInfo.cor %>22; color: <%= statusInfo.cor %>;">
+                                    <i class="ti <%= statusInfo.icone %>"></i>
+                                    <%= statusInfo.label %>
+                                </span>
+                            </td>
+                            <td style="font-size: 12.5px;">
+                                <%= new Date(d.criado_em).toLocaleDateString('pt-BR') %>
+                                <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                    <%= new Date(d.criado_em).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) %>
+                                </div>
+                            </td>
+                            <td class="actions">
+                                <a href="/dispositivos/<%= d.id %>" class="btn-sm btn-info" title="Ver detalhes">
+                                    <i class="ti ti-eye"></i>
+                                </a>
+                                <a href="/dispositivos/<%= d.id %>/etiqueta" class="btn-sm btn-success" title="Imprimir etiqueta" target="_blank">
+                                    <i class="ti ti-qrcode"></i>
+                                </a>
+                                <a href="/dispositivos/<%= d.id %>/edit" class="btn-sm btn-warning" title="Editar">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                                <form action="/dispositivos/<%= d.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Excluir este dispositivo?')">
+                                    <button type="submit" class="btn-sm btn-danger" title="Excluir">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

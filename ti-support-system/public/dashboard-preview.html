@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Allservices • Dashboard</title>
+
+<!-- Fontes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Tabler Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+<style>
+:root {
+    --bg-main: #0a0a0f;
+    --bg-sidebar: #0d0c14;
+    --bg-card: #13121f;
+    --border: 0.5px solid rgba(255,255,255,0.07);
+    --border-strong: 0.5px solid rgba(255,255,255,0.12);
+    --purple: #7c3aed;
+    --purple-light: #a78bfa;
+    --purple-soft: #c4b5fd;
+    --text: #ffffff;
+    --text-muted: rgba(255,255,255,0.55);
+    --text-faded: rgba(255,255,255,0.35);
+    --green: #4ade80;
+    --red: #f87171;
+    --blue: #60a5fa;
+    --amber: #fbbf24;
+    --radius: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-main);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   SIDEBAR
+============================================ */
+.sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 220px;
+    height: 100vh;
+    background: var(--bg-sidebar);
+    border-right: var(--border);
+    padding: 22px 14px;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px 22px;
+    border-bottom: var(--border);
+    margin-bottom: 16px;
+}
+
+.logo-icon {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, var(--purple), #5b21b6);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(124,58,237,0.4);
+}
+
+.logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.3px;
+}
+
+.menu-section {
+    list-style: none;
+    margin-bottom: 14px;
+}
+
+.menu-section li a {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-bottom: 2px;
+}
+
+.menu-section li a:hover {
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+}
+
+.menu-section li a i {
+    font-size: 17px;
+}
+
+.menu-section li a.active {
+    background: rgba(124,58,237,0.18);
+    color: var(--purple-soft);
+}
+
+.menu-section li a.active i {
+    color: var(--purple-light);
+}
+
+.menu-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.05);
+    margin: 10px 6px;
+}
+
+/* ============================================
+   MAIN
+============================================ */
+.main {
+    margin-left: 220px;
+    padding: 26px 30px 50px;
+    min-height: 100vh;
+}
+
+/* TOPBAR */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.topbar-left h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.topbar-left p {
+    color: var(--text-faded);
+    font-size: 12.5px;
+    margin-top: 2px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.menu-toggle {
+    display: none;
+    background: var(--bg-card);
+    border: var(--border-strong);
+    color: var(--text);
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), #5b21b6);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    border: 2px solid rgba(124,58,237,0.4);
+}
+
+/* ============================================
+   STATS GRID
+============================================ */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 26px;
+}
+
+.stat {
+    background: var(--bg-card);
+    border: var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-faded);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+}
+
+.stat-change {
+    font-size: 11.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.stat-change.up { color: var(--green); }
+.stat-change.down { color: var(--red); }
+
+/* ============================================
+   MÓDULOS GRID
+============================================ */
+.section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+}
+
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.module-card {
+    background: var(--bg-card);
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.module-card.purple::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+.module-card.blue::before { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+.module-card.green::before { background: linear-gradient(90deg, #16a34a, #4ade80); }
+.module-card.amber::before { background: linear-gradient(90deg, #d97706, #fbbf24); }
+.module-card.red::before { background: linear-gradient(90deg, #dc2626, #f87171); }
+
+.module-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.15);
+}
+
+.module-card:hover::before {
+    opacity: 1;
+}
+
+.module-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.module-card.purple .module-icon { background: rgba(124,58,237,0.15); color: #a78bfa; }
+.module-card.blue   .module-icon { background: rgba(96,165,250,0.15); color: #60a5fa; }
+.module-card.green  .module-icon { background: rgba(74,222,128,0.15); color: #4ade80; }
+.module-card.amber  .module-icon { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.module-card.red    .module-icon { background: rgba(248,113,113,0.15); color: #f87171; }
+
+.module-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+}
+
+.module-desc {
+    font-size: 11px;
+    color: var(--text-faded);
+    line-height: 1.45;
+}
+
+.module-footer {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+
+.module-footer .access {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.module-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+.module-badge.purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+.module-badge.amber  { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.module-badge.green  { background: rgba(74,222,128,0.15); color: #4ade80; }
+
+/* ============================================
+   BOTTOM ROW
+============================================ */
+.bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.widget {
+    background: var(--bg-card);
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+}
+
+.widget-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text);
+}
+
+/* Lista de ordens */
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 0;
+    border-bottom: var(--border);
+}
+
+.order-item:last-child { border-bottom: none; }
+
+.order-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.order-dot.green { background: var(--green); box-shadow: 0 0 8px rgba(74,222,128,0.5); }
+.order-dot.amber { background: var(--amber); box-shadow: 0 0 8px rgba(251,191,36,0.5); }
+.order-dot.blue  { background: var(--blue);  box-shadow: 0 0 8px rgba(96,165,250,0.5); }
+
+.order-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.order-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1px;
+}
+
+.order-client {
+    font-size: 11.5px;
+    color: var(--text-faded);
+}
+
+.order-status {
+    font-size: 10.5px;
+    padding: 3px 9px;
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+.order-status.green { background: rgba(74,222,128,0.12); color: var(--green); }
+.order-status.amber { background: rgba(251,191,36,0.12); color: var(--amber); }
+.order-status.blue  { background: rgba(96,165,250,0.12); color: var(--blue); }
+
+/* Lista de atividades */
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 0;
+    border-bottom: var(--border);
+}
+
+.activity-item:last-child { border-bottom: none; }
+
+.activity-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.activity-icon.purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+.activity-icon.green  { background: rgba(74,222,128,0.15); color: var(--green); }
+.activity-icon.amber  { background: rgba(251,191,36,0.15); color: var(--amber); }
+.activity-icon.blue   { background: rgba(96,165,250,0.15); color: var(--blue); }
+
+.activity-text {
+    flex: 1;
+    font-size: 12.5px;
+    color: var(--text);
+}
+
+.activity-time {
+    font-size: 11px;
+    color: var(--text-faded);
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 240px;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .main {
+        margin-left: 0;
+        padding: 18px;
+    }
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .bottom-row {
+        grid-template-columns: 1fr;
+    }
+    .topbar-left h1 { font-size: 19px; }
+}
+
+@media (max-width: 480px) {
+    .modules-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .module-name { font-size: 12px; }
+    .module-desc { font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-logo">
+        <div class="logo-icon"><i class="ti ti-bolt"></i></div>
+        <div class="logo-text">Allservices</div>
+    </div>
+
+    <ul class="menu-section">
+        <li><a href="#" class="active"><i class="ti ti-layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="#"><i class="ti ti-users"></i> Usuários</a></li>
+        <li><a href="#"><i class="ti ti-target-arrow"></i> Leads</a></li>
+        <li><a href="#"><i class="ti ti-user-circle"></i> Clientes</a></li>
+        <li><a href="#"><i class="ti ti-device-laptop"></i> Dispositivos</a></li>
+    </ul>
+
+    <div class="menu-divider"></div>
+
+    <ul class="menu-section">
+        <li><a href="#"><i class="ti ti-tools"></i> Ordens de Serviço</a></li>
+        <li><a href="#"><i class="ti ti-package"></i> Estoque</a></li>
+        <li><a href="#"><i class="ti ti-cash"></i> Financeiro</a></li>
+        <li><a href="#"><i class="ti ti-chart-bar"></i> Relatórios</a></li>
+    </ul>
+
+    <div class="menu-divider"></div>
+
+    <ul class="menu-section">
+        <li><a href="#"><i class="ti ti-settings"></i> Administração</a></li>
+        <li><a href="#"><i class="ti ti-logout"></i> Sair</a></li>
+    </ul>
+
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <h1>Dashboard</h1>
+            <p id="dataAtual">Carregando...</p>
+        </div>
+        <div class="topbar-right">
+            <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                <i class="ti ti-menu-2"></i>
+            </button>
+            <div class="avatar">AD</div>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat">
+            <div class="stat-label">Receita / mês</div>
+            <div class="stat-value">R$12.4k</div>
+            <div class="stat-change up"><i class="ti ti-arrow-up-right"></i> 8%</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Ordens abertas</div>
+            <div class="stat-value">23</div>
+            <div class="stat-change down"><i class="ti ti-arrow-down-right"></i> 2</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Clientes ativos</div>
+            <div class="stat-value">148</div>
+            <div class="stat-change up"><i class="ti ti-arrow-up-right"></i> 5</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Itens no estoque</div>
+            <div class="stat-value">312</div>
+            <div class="stat-change down"><i class="ti ti-arrow-down-right"></i> 12</div>
+        </div>
+    </div>
+
+    <!-- MÓDULOS -->
+    <div class="section-title">Módulos</div>
+    <div class="modules-grid">
+
+        <div class="module-card purple">
+            <div class="module-icon"><i class="ti ti-users"></i></div>
+            <div class="module-name">Usuários</div>
+            <div class="module-desc">Gestão de equipe e perfis</div>
+            <div class="module-footer">
+                <span class="access">→ Acessar</span>
+                <span class="module-badge purple">Admin</span>
+            </div>
+        </div>
+
+        <div class="module-card blue">
+            <div class="module-icon"><i class="ti ti-tools"></i></div>
+            <div class="module-name">Ordens de Serviço</div>
+            <div class="module-desc">Reparos e manutenções</div>
+            <div class="module-footer">
+                <span class="access">→ Acessar</span>
+                <span class="module-badge amber">23 abertas</span>
+            </div>
+        </div>
+
+        <div class="module-card green">
+            <div class="module-icon"><i class="ti ti-package"></i></div>
+            <div class="module-name">Estoque</div>
+            <div class="module-desc">Peças e produtos</div>
+            <div class="module-footer">
+                <span class="access">→ Acessar</span>
+                <span class="module-badge green">Atualizado</span>
+            </div>
+        </div>
+
+        <div class="module-card amber">
+            <div class="module-icon"><i class="ti ti-cash"></i></div>
+            <div class="module-name">Financeiro</div>
+            <div class="module-desc">Receitas e despesas</div>
+            <div class="module-footer">
+                <span class="access">→ Acessar</span>
+                <span class="module-badge amber">R$12.4k</span>
+            </div>
+        </div>
+
+        <div class="module-card red">
+            <div class="module-icon"><i class="ti ti-chart-bar"></i></div>
+            <div class="module-name">Relatórios</div>
+            <div class="module-desc">Análises e insights</div>
+            <div class="module-footer">
+                <span class="access">→ Acessar</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div class="bottom-row">
+
+        <!-- ORDENS RECENTES -->
+        <div class="widget">
+            <div class="widget-title">Ordens recentes</div>
+
+            <div class="order-item">
+                <div class="order-dot green"></div>
+                <div class="order-info">
+                    <div class="order-name">OS #2451 — Troca de SSD</div>
+                    <div class="order-client">Carlos Mendes</div>
+                </div>
+                <span class="order-status green">Concluído</span>
+            </div>
+
+            <div class="order-item">
+                <div class="order-dot amber"></div>
+                <div class="order-info">
+                    <div class="order-name">OS #2450 — Formatação</div>
+                    <div class="order-client">Mariana Silva</div>
+                </div>
+                <span class="order-status amber">Em andamento</span>
+            </div>
+
+            <div class="order-item">
+                <div class="order-dot blue"></div>
+                <div class="order-info">
+                    <div class="order-name">OS #2449 — Diagnóstico</div>
+                    <div class="order-client">Pedro Souza</div>
+                </div>
+                <span class="order-status blue">Aguardando</span>
+            </div>
+
+            <div class="order-item">
+                <div class="order-dot green"></div>
+                <div class="order-info">
+                    <div class="order-name">OS #2448 — Limpeza interna</div>
+                    <div class="order-client">Ana Costa</div>
+                </div>
+                <span class="order-status green">Concluído</span>
+            </div>
+        </div>
+
+        <!-- ATIVIDADE RECENTE -->
+        <div class="widget">
+            <div class="widget-title">Atividade recente</div>
+
+            <div class="activity-item">
+                <div class="activity-icon purple"><i class="ti ti-user-plus"></i></div>
+                <div class="activity-text">Novo cliente cadastrado</div>
+                <div class="activity-time">5 min</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon green"><i class="ti ti-check"></i></div>
+                <div class="activity-text">OS #2451 concluída</div>
+                <div class="activity-time">22 min</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon amber"><i class="ti ti-package"></i></div>
+                <div class="activity-text">Estoque atualizado (+30 itens)</div>
+                <div class="activity-time">1h</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon blue"><i class="ti ti-cash"></i></div>
+                <div class="activity-text">Pagamento recebido R$450</div>
+                <div class="activity-time">3h</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+// Data dinâmica
+const data = new Date();
+document.getElementById('dataAtual').textContent =
+    data.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+
+// Fechar sidebar ao clicar fora (mobile)
+document.addEventListener('click', function(e) {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.querySelector('.menu-toggle');
+    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+        sidebar.classList.remove('open');
+    }
+});
+</script>
+
+</body>
+</html>

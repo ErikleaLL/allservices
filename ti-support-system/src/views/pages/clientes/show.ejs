@@ -1,0 +1,124 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Detalhes do Cliente</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Cadastrado em <%= new Date(cliente.criado_em).toLocaleString('pt-BR') %>
+            </span>
+        </div>
+        <div>
+            <a href="/clientes/<%= cliente.id %>/edit" class="btn btn-warning">
+                <i class="ti ti-edit"></i> Editar
+            </a>
+            <a href="/clientes" class="btn btn-secondary">
+                <i class="ti ti-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;" class="detail-grid">
+
+        <!-- ===== DADOS DO CLIENTE ===== -->
+        <div class="detail-card">
+
+            <div class="detail-row">
+                <div class="detail-label">ID:</div>
+                <div class="detail-value">#<%= cliente.id %></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Nome:</div>
+                <div class="detail-value"><strong><%= cliente.nome %></strong></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">E-mail:</div>
+                <div class="detail-value">
+                    <% if (cliente.email) { %>
+                        <a href="mailto:<%= cliente.email %>"><%= cliente.email %></a>
+                    <% } else { %>
+                        <span style="color: rgba(255,255,255,0.3);">Não informado</span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Telefone:</div>
+                <div class="detail-value">
+                    <% if (cliente.telefone) { %>
+                        <a href="https://wa.me/55<%= cliente.telefone.replace(/\D/g,'') %>" target="_blank" style="color: #4ade80;">
+                            <i class="ti ti-brand-whatsapp"></i> <%= cliente.telefone %>
+                        </a>
+                    <% } else { %>
+                        <span style="color: rgba(255,255,255,0.3);">Não informado</span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">CPF/CNPJ:</div>
+                <div class="detail-value">
+                    <%= cliente.cpf_cnpj || '<span style="color: rgba(255,255,255,0.3);">Não informado</span>' %>
+                </div>
+            </div>
+
+            <div class="detail-row" style="flex-direction: column; align-items: flex-start;">
+                <div class="detail-label" style="margin-bottom: 10px;">Endereço:</div>
+                <div style="background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.07); padding: 14px; border-radius: 8px; width: 100%; color: #fff; font-size: 14px; line-height: 1.6;">
+                    <%= cliente.endereco || 'Endereço não informado' %>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== AÇÕES RÁPIDAS ===== -->
+        <div class="detail-card">
+            <h3 style="margin-bottom: 15px; font-size: 15px;">Ações rápidas</h3>
+
+            <% if (cliente.email) { %>
+                <a href="mailto:<%= cliente.email %>" class="btn btn-info" style="width:100%; margin-bottom:10px;">
+                    <i class="ti ti-mail"></i> Enviar E-mail
+                </a>
+            <% } %>
+
+            <% if (cliente.telefone) { %>
+                <a href="https://wa.me/55<%= cliente.telefone.replace(/\D/g,'') %>" target="_blank" class="btn btn-success" style="width:100%; margin-bottom:10px;">
+                    <i class="ti ti-brand-whatsapp"></i> Abrir WhatsApp
+                </a>
+            <% } %>
+
+            <a href="/clientes/<%= cliente.id %>/edit" class="btn btn-warning" style="width:100%; margin-bottom:10px;">
+                <i class="ti ti-edit"></i> Editar dados
+            </a>
+
+            <hr style="margin: 20px 0; border: none; border-top: 0.5px solid rgba(255,255,255,0.07);">
+
+            <h3 style="margin-bottom: 12px; font-size: 15px;">Histórico</h3>
+            <p style="color: rgba(255,255,255,0.4); font-size: 12.5px; line-height: 1.5; margin-bottom: 20px;">
+                Em breve: histórico de dispositivos, ordens de serviço e compras desse cliente.
+            </p>
+
+            <hr style="margin: 20px 0; border: none; border-top: 0.5px solid rgba(255,255,255,0.07);">
+
+            <form action="/clientes/<%= cliente.id %>/delete" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este cliente?')">
+                <button type="submit" class="btn btn-danger" style="width:100%;">
+                    <i class="ti ti-trash"></i> Excluir Cliente
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+@media (max-width: 1024px) {
+    .detail-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+

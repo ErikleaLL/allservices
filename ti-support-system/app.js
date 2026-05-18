@@ -11,14 +11,45 @@ const { errorHandler } = require('./src/middlewares/errorMiddleware');
 
 const app = express();
 
-// Configurações básicas
+// Configurações
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');
-app.use(expressLayouts);
 
-// Middlewares globais
-app.use(helmet());
+// ⚠️ Layout padrão (importante!)
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');
+app.set('layout extractScripts', true);
+app.set('layout extractStyles', true);
+
+// Helmet com CDN liberado
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrcAttr: ["'unsafe-inline'"],
+            styleSrc: [
+                "'self'", 
+                "'unsafe-inline'",
+                "https://fonts.googleapis.com",
+                "https://cdn.jsdelivr.net"
+            ],
+            fontSrc: [
+                "'self'", 
+                "data:",
+                "https://fonts.gstatic.com",
+                "https://cdn.jsdelivr.net"
+            ],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'", "https://cdn.jsdelivr.net"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'self'"]
+        }
+    }
+}));
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,13 +57,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
-// Sessão
 app.use(sessionConfig);
 
-// Rotas principais
 app.use('/', require('./src/routes'));
 
-// Middleware de erro
 app.use(errorHandler);
 
 module.exports = app;

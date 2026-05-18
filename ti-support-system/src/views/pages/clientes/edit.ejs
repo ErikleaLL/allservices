@@ -1,0 +1,94 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Editar Cliente</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                ID #<%= cliente.id %> • <%= cliente.nome %>
+            </span>
+        </div>
+        <a href="/clientes" class="btn btn-secondary">
+            <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <div class="form-container">
+
+        <% if (error) { %>
+            <div class="alert alert-error">
+                <i class="ti ti-alert-circle"></i> <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/clientes/<%= cliente.id %>" method="POST">
+
+            <div class="form-group">
+                <label for="nome">Nome completo *</label>
+                <input 
+                    type="text" 
+                    name="nome" 
+                    id="nome" 
+                    required 
+                    value="<%= cliente.nome %>"
+                    placeholder="Digite o nome do cliente"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    id="email" 
+                    value="<%= cliente.email || '' %>"
+                    placeholder="email@exemplo.com"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone / WhatsApp</label>
+                <input 
+                    type="text" 
+                    name="telefone" 
+                    id="telefone" 
+                    value="<%= cliente.telefone || '' %>"
+                    placeholder="(00) 00000-0000"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="cpf_cnpj">CPF / CNPJ</label>
+                <input 
+                    type="text" 
+                    name="cpf_cnpj" 
+                    id="cpf_cnpj" 
+                    value="<%= cliente.cpf_cnpj || '' %>"
+                    placeholder="000.000.000-00"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="endereco">Endereço</label>
+                <textarea 
+                    name="endereco" 
+                    id="endereco" 
+                    placeholder="Rua, número, bairro, cidade..."
+                ><%= cliente.endereco || '' %></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="ti ti-check"></i> Salvar Alterações
+                </button>
+                <a href="/clientes/<%= cliente.id %>" class="btn btn-secondary">
+                    <i class="ti ti-x"></i> Cancelar
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+

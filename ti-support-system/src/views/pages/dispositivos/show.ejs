@@ -1,0 +1,191 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Dispositivo #<%= dispositivo.id %></h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Cadastrado em <%= new Date(dispositivo.criado_em).toLocaleString('pt-BR') %>
+            </span>
+        </div>
+        <div>
+            <a href="/dispositivos/<%= dispositivo.id %>/etiqueta" target="_blank" class="btn btn-success">
+                <i class="ti ti-printer"></i> Imprimir Etiqueta
+            </a>
+            <a href="/dispositivos/<%= dispositivo.id %>/edit" class="btn btn-warning">
+                <i class="ti ti-edit"></i> Editar
+            </a>
+            <a href="/dispositivos" class="btn btn-secondary">
+                <i class="ti ti-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== STATUS ATUAL DESTACADO ===== -->
+    <% const statusAtual = STATUS_LIST[dispositivo.status] || { label: dispositivo.status, cor: '#94a3b8', icone: 'ti-help' }; %>
+    
+    <div style="background: <%= statusAtual.cor %>15; border: 1px solid <%= statusAtual.cor %>50; padding: 18px 22px; border-radius: 12px; margin-bottom: 22px; display: flex; align-items: center; gap: 14px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: <%= statusAtual.cor %>30; display: flex; align-items: center; justify-content: center; font-size: 22px; color: <%= statusAtual.cor %>;">
+            <i class="ti <%= statusAtual.icone %>"></i>
+        </div>
+        <div style="flex: 1;">
+            <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+                Status Atual
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: <%= statusAtual.cor %>; margin-top: 2px;">
+                <%= statusAtual.label %>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== GRID PRINCIPAL ===== -->
+    <div style="display: grid; grid-template-columns: 1fr 380px; gap: 20px;" class="dev-grid">
+
+        <!-- ===== INFORMAÇÕES DO DISPOSITIVO ===== -->
+        <div class="detail-card">
+
+            <div class="detail-row">
+                <div class="detail-label">Código:</div>
+                <div class="detail-value">
+                    <span style="font-family: monospace; background: rgba(124,58,237,0.15); color: #a78bfa; padding: 4px 10px; border-radius: 5px; font-weight: 600;">
+                        <%= dispositivo.qr_code %>
+                    </span>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Tipo:</div>
+                <div class="detail-value"><strong><%= dispositivo.tipo %></strong></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Marca:</div>
+                <div class="detail-value"><%= dispositivo.marca || '-' %></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Modelo:</div>
+                <div class="detail-value"><%= dispositivo.modelo || '-' %></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Nº Série:</div>
+                <div class="detail-value">
+                    <% if (dispositivo.numero_serie) { %>
+                        <span style="font-family: monospace;"><%= dispositivo.numero_serie %></span>
+                    <% } else { %>
+                        <span style="color: rgba(255,255,255,0.3);">Não informado</span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Cliente:</div>
+                <div class="detail-value">
+                    <% if (dispositivo.cliente_id) { %>
+                        <a href="/clientes/<%= dispositivo.cliente_id %>" style="color: #a78bfa;">
+                            <i class="ti ti-user"></i> <%= dispositivo.cliente_nome %>
+                        </a>
+                        <% if (dispositivo.cliente_telefone) { %>
+                            <div style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;">
+                                <i class="ti ti-phone"></i> <%= dispositivo.cliente_telefone %>
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                        <span style="color: rgba(255,255,255,0.3);">Sem cliente vinculado</span>
+                    <% } %>
+                </div>
+            </div>
+
+            <% if (dispositivo.problema_relato) { %>
+                <div class="detail-row" style="flex-direction: column; align-items: flex-start;">
+                    <div class="detail-label" style="margin-bottom: 10px;">Problema relatado:</div>
+                    <div style="background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.07); padding: 14px; border-radius: 8px; width: 100%; color: #fff; font-size: 14px; line-height: 1.6;">
+                        <%= dispositivo.problema_relato %>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- MUDANÇA DE STATUS -->
+            <div class="detail-row" style="flex-direction: column; align-items: flex-start; border-bottom: none;">
+                <div class="detail-label" style="margin-bottom: 10px;">Mudar status rapidamente:</div>
+                <form action="/dispositivos/<%= dispositivo.id %>/status" method="POST" style="width: 100%; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <select name="status" style="flex: 1; min-width: 200px; padding: 10px; border: 0.5px solid rgba(255,255,255,0.12); border-radius: 8px; background: #0a0a0f; color: #fff;">
+                        <% Object.entries(STATUS_LIST).forEach(([key, info]) => { %>
+                            <option value="<%= key %>" <%= dispositivo.status === key ? 'selected' : '' %>>
+                                <%= info.label %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-refresh"></i> Atualizar
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- ===== QR CODE GIGANTE ===== -->
+        <div class="detail-card" style="text-align: center;">
+            
+            <h3 style="font-family: 'Syne', sans-serif; font-size: 15px; margin-bottom: 5px;">
+                <i class="ti ti-qrcode" style="color: #a78bfa;"></i>
+                QR Code de Rastreamento
+            </h3>
+            <p style="color: rgba(255,255,255,0.4); font-size: 12px; margin-bottom: 18px;">
+                Cliente escaneia e acompanha o reparo
+            </p>
+
+            <!-- QR CODE -->
+            <div style="background: #fff; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 18px;">
+                <img src="<%= qrImage %>" alt="QR Code" style="display: block; width: 240px; height: 240px;">
+            </div>
+
+            <!-- URL DE RASTREIO -->
+            <div style="background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.07); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                <div style="font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600;">
+                    Link público
+                </div>
+                <div style="font-family: monospace; font-size: 11px; color: #a78bfa; word-break: break-all;">
+                    <%= urlRastreio %>
+                </div>
+            </div>
+
+            <!-- BOTÕES DE AÇÃO -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <a href="<%= urlRastreio %>" target="_blank" class="btn btn-info" style="width: 100%;">
+                    <i class="ti ti-external-link"></i> Abrir página pública
+                </a>
+                <a href="/dispositivos/<%= dispositivo.id %>/etiqueta" target="_blank" class="btn btn-success" style="width: 100%;">
+                    <i class="ti ti-printer"></i> Imprimir Etiqueta
+                </a>
+
+                <% if (dispositivo.cliente_telefone) { %>
+                    <a href="https://wa.me/55<%= dispositivo.cliente_telefone.replace(/\D/g,'') %>?text=<%= encodeURIComponent('Olá! Acompanhe o reparo do seu dispositivo em: ' + urlRastreio) %>" target="_blank" class="btn btn-warning" style="width: 100%;">
+                        <i class="ti ti-brand-whatsapp"></i> Enviar via WhatsApp
+                    </a>
+                <% } %>
+            </div>
+
+            <hr style="margin: 20px 0; border: none; border-top: 0.5px solid rgba(255,255,255,0.07);">
+
+            <form action="/dispositivos/<%= dispositivo.id %>/delete" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este dispositivo?')">
+                <button type="submit" class="btn btn-danger" style="width: 100%;">
+                    <i class="ti ti-trash"></i> Excluir Dispositivo
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+@media (max-width: 1024px) {
+    .dev-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+

@@ -1,0 +1,157 @@
+
+<div class="content">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <div>
+            <h2>Ordens de Serviço</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                <%= stats.total %> ordem(ns) no total
+            </span>
+        </div>
+        <div>
+            <a href="/ordens/kanban" class="btn btn-secondary">
+                <i class="ti ti-layout-kanban"></i> Kanban
+            </a>
+            <a href="/ordens/create" class="btn btn-primary">
+                <i class="ti ti-plus"></i> Nova OS
+            </a>
+        </div>
+    </div>
+
+    <!-- ESTATÍSTICAS -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 25px;">
+
+        <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #fbbf24;">
+            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Orçamentos</div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.orcamento %></div>
+        </div>
+
+        <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #60a5fa;">
+            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Aprovadas</div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.aprovada %></div>
+        </div>
+
+        <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #a78bfa;">
+            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Em execução</div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.em_execucao %></div>
+        </div>
+
+        <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #4ade80;">
+            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Prontas</div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.pronta %></div>
+        </div>
+
+        <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #94a3b8;">
+            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Entregues</div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.entregue %></div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(74,222,128,0.15), rgba(74,222,128,0.05)); border: 1px solid rgba(74,222,128,0.3); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 10px; text-transform: uppercase; color: #4ade80; letter-spacing: 1px; font-weight: 700;">
+                <i class="ti ti-cash"></i> Receita / mês
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px; color: #4ade80;">
+                R$ <%= stats.receitaMes.toFixed(2).replace('.', ',') %>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nº OS</th>
+                    <th>Cliente / Dispositivo</th>
+                    <th>Status</th>
+                    <th>Valor</th>
+                    <th>Prazo</th>
+                    <th>Criada em</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (ordens.length === 0) { %>
+                    <tr>
+                        <td colspan="7" class="empty">
+                            <i class="ti ti-clipboard-list" style="font-size: 38px; opacity: 0.3;"></i>
+                            <p style="margin-top: 12px; font-size: 14px;">Nenhuma ordem de serviço cadastrada.</p>
+                            <p style="font-size: 12px; margin-top: 5px;">Clique em <strong>"+ Nova OS"</strong> para começar.</p>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <% ordens.forEach(os => {
+                        const statusInfo = STATUS_OS[os.status] || { label: os.status, cor: '#94a3b8', icone: 'ti-help' };
+                    %>
+                        <tr>
+                            <td>
+                                <span style="font-family: monospace; font-weight: 700; color: #a78bfa;">
+                                    <%= os.numero_os %>
+                                </span>
+                            </td>
+                            <td>
+                                <strong><%= os.cliente_nome || '-' %></strong>
+                                <div style="font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 2px;">
+                                    <i class="ti ti-device-laptop"></i>
+                                    <%= os.dispositivo_tipo %>
+                                    <% if (os.dispositivo_marca) { %>
+                                        • <%= os.dispositivo_marca %>
+                                    <% } %>
+                                </div>
+                            </td>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; background: <%= statusInfo.cor %>22; color: <%= statusInfo.cor %>;">
+                                    <i class="ti <%= statusInfo.icone %>"></i>
+                                    <%= statusInfo.label %>
+                                </span>
+                            </td>
+                            <td>
+                                <strong style="color: #4ade80;">
+                                    R$ <%= (os.valor_total || 0).toFixed(2).replace('.', ',') %>
+                                </strong>
+                                <% if (os.valor_pecas > 0) { %>
+                                    <div style="font-size: 10.5px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                        + R$ <%= os.valor_pecas.toFixed(2).replace('.', ',') %> peças
+                                    </div>
+                                <% } %>
+                            </td>
+                            <td style="font-size: 12.5px;">
+                                <% if (os.prazo_entrega) { %>
+                                    <%= new Date(os.prazo_entrega).toLocaleDateString('pt-BR') %>
+                                <% } else { %>
+                                    <span style="color: rgba(255,255,255,0.3);">-</span>
+                                <% } %>
+                            </td>
+                            <td style="font-size: 12.5px;">
+                                <%= new Date(os.criado_em).toLocaleDateString('pt-BR') %>
+                                <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                    <%= new Date(os.criado_em).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) %>
+                                </div>
+                            </td>
+                            <td class="actions">
+                                <a href="/ordens/<%= os.id %>" class="btn-sm btn-info" title="Ver detalhes">
+                                    <i class="ti ti-eye"></i>
+                                </a>
+                                <a href="/ordens/<%= os.id %>/imprimir" target="_blank" class="btn-sm btn-success" title="Imprimir">
+                                    <i class="ti ti-printer"></i>
+                                </a>
+                                <a href="/ordens/<%= os.id %>/edit" class="btn-sm btn-warning" title="Editar">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                                <form action="/ordens/<%= os.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Excluir esta OS?')">
+                                    <button type="submit" class="btn-sm btn-danger" title="Excluir">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

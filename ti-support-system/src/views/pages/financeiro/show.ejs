@@ -1,0 +1,160 @@
+
+<div class="content">
+
+    <% 
+        const isReceita = lancamento.tipo === 'receita';
+        const cor = isReceita ? '#4ade80' : '#f87171';
+        const sinal = isReceita ? '+' : '−';
+        
+        let statusCor = '#fbbf24', statusTexto = 'Pendente', statusIcone = 'ti-clock';
+        if (lancamento.status === 'pago') { 
+            statusCor = '#4ade80'; statusTexto = 'Pago'; statusIcone = 'ti-check';
+        }
+        if (lancamento.status === 'pendente' && lancamento.data_vencimento) {
+            const hoje = new Date().toISOString().split('T')[0];
+            if (lancamento.data_vencimento < hoje) {
+                statusCor = '#f87171'; statusTexto = 'Vencido'; statusIcone = 'ti-alert-circle';
+            }
+        }
+    %>
+
+    <div class="page-header">
+        <div>
+            <h2><%= lancamento.descricao %></h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Criado em <%= new Date(lancamento.criado_em).toLocaleString('pt-BR') %>
+            </span>
+        </div>
+        <div>
+            <% if (lancamento.status === 'pendente') { %>
+                <form action="/financeiro/<%= lancamento.id %>/pagar" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-success">
+                        <i class="ti ti-check"></i> Marcar como Pago
+                    </button>
+                </form>
+            <% } %>
+            <a href="/financeiro/<%= lancamento.id %>/edit" class="btn btn-warning">
+                <i class="ti ti-edit"></i> Editar
+            </a>
+            <a href="/financeiro" class="btn btn-secondary">
+                <i class="ti ti-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- VALOR DESTACADO -->
+    <div style="background: <%= cor %>15; border: 1px solid <%= cor %>50; padding: 22px; border-radius: 12px; margin-bottom: 22px; display: flex; align-items: center; gap: 16px;">
+        <div style="width: 60px; height: 60px; border-radius: 14px; background: <%= cor %>30; color: <%= cor %>; display: flex; align-items: center; justify-content: center; font-size: 30px;">
+            <i class="ti <%= isReceita ? 'ti-arrow-up' : 'ti-arrow-down' %>"></i>
+        </div>
+        <div style="flex: 1;">
+            <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                <%= isReceita ? 'Receita' : 'Despesa' %>
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: <%= cor %>;">
+                <%= sinal %> R$ <%= lancamento.valor.toFixed(2).replace('.', ',') %>
+            </div>
+        </div>
+        <div>
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; background: <%= statusCor %>22; color: <%= statusCor %>;">
+                <i class="ti <%= statusIcone %>"></i>
+                <%= statusTexto %>
+            </span>
+        </div>
+    </div>
+
+    <!-- INFORMAÇÕES -->
+    <div class="detail-card">
+
+        <div class="detail-row">
+            <div class="detail-label">Categoria:</div>
+            <div class="detail-value">
+                <% if (lancamento.categoria) { %>
+                    <span style="background: rgba(124,58,237,0.15); color: #a78bfa; padding: 3px 10px; border-radius: 50px; font-size: 12px; font-weight: 600;">
+                        <%= lancamento.categoria %>
+                    </span>
+                <% } else { %>
+                    <span style="color: rgba(255,255,255,0.3);">Sem categoria</span>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Vencimento:</div>
+            <div class="detail-value">
+                <% if (lancamento.data_vencimento) { %>
+                    <%= new Date(lancamento.data_vencimento + 'T00:00:00').toLocaleDateString('pt-BR') %>
+                <% } else { %>
+                    <span style="color: rgba(255,255,255,0.3);">Não definido</span>
+                <% } %>
+            </div>
+        </div>
+
+        <% if (lancamento.data_pagamento) { %>
+            <div class="detail-row">
+                <div class="detail-label">Pago em:</div>
+                <div class="detail-value">
+                    <strong style="color: #4ade80;">
+                        <%= new Date(lancamento.data_pagamento + 'T00:00:00').toLocaleDateString('pt-BR') %>
+                    </strong>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (lancamento.forma_pagamento) { %>
+            <div class="detail-row">
+                <div class="detail-label">Forma:</div>
+                <div class="detail-value"><%= lancamento.forma_pagamento %></div>
+            </div>
+        <% } %>
+
+        <% if (lancamento.cliente_nome) { %>
+            <div class="detail-row">
+                <div class="detail-label">Cliente:</div>
+                <div class="detail-value">
+                    <a href="/clientes/<%= lancamento.cliente_id %>" style="color: #a78bfa;">
+                        <i class="ti ti-user"></i> <%= lancamento.cliente_nome %>
+                    </a>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (lancamento.fornecedor_nome) { %>
+            <div class="detail-row">
+                <div class="detail-label">Fornecedor:</div>
+                <div class="detail-value">
+                    <i class="ti ti-truck"></i> <%= lancamento.fornecedor_nome %>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (lancamento.numero_os) { %>
+            <div class="detail-row">
+                <div class="detail-label">OS vinculada:</div>
+                <div class="detail-value">
+                    <a href="/ordens/<%= lancamento.ordem_servico_id %>" style="color: #a78bfa; font-family: monospace;">
+                        <%= lancamento.numero_os %>
+                    </a>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (lancamento.observacoes) { %>
+            <div class="detail-row" style="flex-direction: column; align-items: flex-start; border-bottom: none;">
+                <div class="detail-label" style="margin-bottom: 10px;">Observações:</div>
+                <div style="background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.07); padding: 14px; border-radius: 8px; width: 100%; color: #fff; font-size: 14px; line-height: 1.6;">
+                    <%= lancamento.observacoes %>
+                </div>
+            </div>
+        <% } %>
+
+    </div>
+
+    <form action="/financeiro/<%= lancamento.id %>/delete" method="POST" onsubmit="return confirm('Excluir este lançamento?')" style="margin-top: 18px;">
+        <button type="submit" class="btn btn-danger">
+            <i class="ti ti-trash"></i> Excluir Lançamento
+        </button>
+    </form>
+
+</div>
+

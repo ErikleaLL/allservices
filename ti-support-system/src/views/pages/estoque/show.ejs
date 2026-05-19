@@ -1,0 +1,251 @@
+
+<div class="content">
+
+    <% 
+        let statusCor = '#4ade80', statusTexto = 'Estoque OK', statusIcone = 'ti-check';
+        if (peca.quantidade === 0) {
+            statusCor = '#f87171'; statusTexto = 'Sem estoque'; statusIcone = 'ti-alert-circle';
+        } else if (peca.quantidade <= peca.estoque_minimo) {
+            statusCor = '#fbbf24'; statusTexto = 'Estoque baixo'; statusIcone = 'ti-alert-triangle';
+        }
+
+        const margem = peca.preco_custo > 0 
+            ? (((peca.preco_venda - peca.preco_custo) / peca.preco_custo) * 100).toFixed(1)
+            : 0;
+    %>
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <div>
+            <h2><%= peca.nome %></h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Cadastrada em <%= new Date(peca.criado_em).toLocaleString('pt-BR') %>
+            </span>
+        </div>
+        <div>
+            <a href="/estoque/<%= peca.id %>/edit" class="btn btn-warning">
+                <i class="ti ti-edit"></i> Editar
+            </a>
+            <a href="/estoque" class="btn btn-secondary">
+                <i class="ti ti-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- STATUS DESTACADO -->
+    <div style="background: <%= statusCor %>15; border: 1px solid <%= statusCor %>50; padding: 18px 22px; border-radius: 12px; margin-bottom: 22px; display: flex; align-items: center; gap: 14px;">
+        <div style="width: 56px; height: 56px; border-radius: 12px; background: <%= statusCor %>30; display: flex; align-items: center; justify-content: center; font-size: 26px; color: <%= statusCor %>;">
+            <i class="ti <%= statusIcone %>"></i>
+        </div>
+        <div style="flex: 1;">
+            <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+                <%= statusTexto %>
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: <%= statusCor %>; margin-top: 2px;">
+                <%= peca.quantidade %> 
+                <span style="font-size: 14px; color: rgba(255,255,255,0.4); font-weight: 500;">
+                    unidade(s) • mínimo: <%= peca.estoque_minimo %>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRID PRINCIPAL -->
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 20px;" class="estoque-grid">
+
+        <!-- ===== COLUNA ESQUERDA ===== -->
+        <div>
+
+            <!-- INFORMAÇÕES -->
+            <div class="detail-card">
+                <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 14px;">
+                    <i class="ti ti-info-circle" style="color: #60a5fa;"></i> Informações
+                </h3>
+
+                <div class="detail-row">
+                    <div class="detail-label">Categoria:</div>
+                    <div class="detail-value">
+                        <% if (peca.categoria_nome) { %>
+                            <span style="background: rgba(124,58,237,0.15); color: #a78bfa; padding: 3px 10px; border-radius: 50px; font-size: 12px; font-weight: 600;">
+                                <%= peca.categoria_nome %>
+                            </span>
+                        <% } else { %>
+                            <span style="color: rgba(255,255,255,0.3);">Sem categoria</span>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Fornecedor:</div>
+                    <div class="detail-value">
+                        <% if (peca.fornecedor_nome) { %>
+                            <i class="ti ti-truck"></i> <%= peca.fornecedor_nome %>
+                            <% if (peca.fornecedor_telefone) { %>
+                                <span style="color: rgba(255,255,255,0.4); margin-left: 8px;">• <%= peca.fornecedor_telefone %></span>
+                            <% } %>
+                        <% } else { %>
+                            <span style="color: rgba(255,255,255,0.3);">Sem fornecedor</span>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Preço de custo:</div>
+                    <div class="detail-value">
+                        R$ <%= (peca.preco_custo || 0).toFixed(2).replace('.', ',') %>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Preço de venda:</div>
+                    <div class="detail-value">
+                        <strong style="color: #4ade80;">R$ <%= (peca.preco_venda || 0).toFixed(2).replace('.', ',') %></strong>
+                    </div>
+                </div>
+
+                <div class="detail-row" style="border-bottom: none;">
+                    <div class="detail-label">Margem de lucro:</div>
+                    <div class="detail-value">
+                        <span style="color: <%= margem >= 30 ? '#4ade80' : '#fbbf24' %>; font-weight: 700;">
+                            <%= margem %>%
+                        </span>
+                        <span style="color: rgba(255,255,255,0.4); font-size: 12px; margin-left: 8px;">
+                            (lucro: R$ <%= ((peca.preco_venda || 0) - (peca.preco_custo || 0)).toFixed(2).replace('.', ',') %>/unid)
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTÓRICO DE MOVIMENTAÇÕES -->
+            <div class="detail-card">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                    <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;">
+                        <i class="ti ti-history" style="color: #94a3b8;"></i> Histórico de movimentações
+                    </h3>
+                    <span style="font-size: 11px; color: rgba(255,255,255,0.4);">
+                        <%= movimentacoes.length %> registro(s)
+                    </span>
+                </div>
+
+                <% if (movimentacoes.length === 0) { %>
+                    <div style="text-align: center; padding: 30px 10px; color: rgba(255,255,255,0.3); font-style: italic; font-size: 13px;">
+                        <i class="ti ti-arrow-bar-up" style="font-size: 28px; opacity: 0.5;"></i>
+                        <p style="margin-top: 8px;">Nenhuma movimentação registrada.</p>
+                        <p style="font-size: 11px; margin-top: 4px;">Use o painel à direita para registrar a primeira.</p>
+                    </div>
+                <% } else { %>
+                    <% movimentacoes.forEach((m, i) => { 
+                        const isEntrada = m.tipo === 'entrada';
+                        const cor = isEntrada ? '#4ade80' : '#f87171';
+                        const sinal = isEntrada ? '+' : '−';
+                    %>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: <%= i < movimentacoes.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' %>;">
+                            <div style="width: 38px; height: 38px; border-radius: 50%; background: <%= cor %>22; color: <%= cor %>; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="ti <%= isEntrada ? 'ti-arrow-down' : 'ti-arrow-up' %>"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <strong style="color: <%= cor %>; font-size: 16px;">
+                                        <%= sinal %><%= m.quantidade %>
+                                    </strong>
+                                    <span style="font-size: 11px; padding: 2px 8px; border-radius: 50px; background: <%= cor %>22; color: <%= cor %>; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">
+                                        <%= isEntrada ? 'Entrada' : 'Saída' %>
+                                    </span>
+                                </div>
+                                <% if (m.motivo) { %>
+                                    <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 3px;">
+                                        <%= m.motivo %>
+                                    </div>
+                                <% } %>
+                                <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px;">
+                                    <%= new Date(m.criado_em).toLocaleString('pt-BR') %>
+                                    <% if (m.usuario_nome) { %>
+                                        • por <%= m.usuario_nome %>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </div>
+
+        </div>
+
+        <!-- ===== COLUNA DIREITA: MOVIMENTAR ===== -->
+        <div>
+
+            <!-- ENTRADA DE ESTOQUE -->
+            <div class="detail-card" style="background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(74,222,128,0.02));">
+                <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #4ade80;">
+                    <i class="ti ti-arrow-down"></i> Entrada de estoque
+                </h3>
+                <p style="font-size: 11.5px; color: rgba(255,255,255,0.5); margin-bottom: 12px;">
+                    Compra do fornecedor, devolução, etc.
+                </p>
+
+                <form action="/estoque/<%= peca.id %>/movimentar" method="POST">
+                    <input type="hidden" name="tipo" value="entrada">
+
+                    <div class="form-group">
+                        <label>Quantidade</label>
+                        <input type="number" name="quantidade" min="1" required placeholder="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Motivo</label>
+                        <input type="text" name="motivo" placeholder="Ex: Compra fornecedor X">
+                    </div>
+
+                    <button type="submit" class="btn btn-success" style="width: 100%;">
+                        <i class="ti ti-plus"></i> Registrar Entrada
+                    </button>
+                </form>
+            </div>
+
+            <!-- SAÍDA DE ESTOQUE -->
+            <div class="detail-card" style="background: linear-gradient(135deg, rgba(248,113,113,0.08), rgba(248,113,113,0.02));">
+                <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #f87171;">
+                    <i class="ti ti-arrow-up"></i> Saída de estoque
+                </h3>
+                <p style="font-size: 11.5px; color: rgba(255,255,255,0.5); margin-bottom: 12px;">
+                    Venda, uso em OS, perda, etc.
+                </p>
+
+                <form action="/estoque/<%= peca.id %>/movimentar" method="POST">
+                    <input type="hidden" name="tipo" value="saida">
+
+                    <div class="form-group">
+                        <label>Quantidade</label>
+                        <input type="number" name="quantidade" min="1" max="<%= peca.quantidade %>" required placeholder="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Motivo</label>
+                        <input type="text" name="motivo" placeholder="Ex: Vendido para cliente">
+                    </div>
+
+                    <button type="submit" class="btn btn-danger" style="width: 100%;" <%= peca.quantidade === 0 ? 'disabled' : '' %>>
+                        <i class="ti ti-minus"></i> Registrar Saída
+                    </button>
+                </form>
+            </div>
+
+            <!-- AÇÕES PERIGOSAS -->
+            <form action="/estoque/<%= peca.id %>/delete" method="POST" onsubmit="return confirm('Excluir esta peça? Esta ação não pode ser desfeita.')">
+                <button type="submit" class="btn btn-danger" style="width: 100%;">
+                    <i class="ti ti-trash"></i> Excluir Peça
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+@media (max-width: 1024px) {
+    .estoque-grid { grid-template-columns: 1fr !important; }
+}
+</style>
+

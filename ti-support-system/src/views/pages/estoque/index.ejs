@@ -1,0 +1,174 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Estoque</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                <%= stats.totalItens %> peça(s) cadastrada(s)
+            </span>
+        </div>
+        <div>
+            <a href="/estoque/categorias/lista" class="btn btn-secondary">
+                <i class="ti ti-category"></i> Categorias
+            </a>
+            <a href="/estoque/fornecedores/lista" class="btn btn-secondary">
+                <i class="ti ti-truck-delivery"></i> Fornecedores
+            </a>
+            <a href="/estoque/alertas" class="btn btn-warning">
+                <i class="ti ti-alert-triangle"></i> Alertas
+                <% if (stats.baixoEstoque + stats.semEstoque > 0) { %>
+                    <span style="background:#fff; color:#f97316; padding:1px 7px; border-radius:50px; font-size:10px; margin-left:5px; font-weight:800;">
+                        <%= stats.baixoEstoque + stats.semEstoque %>
+                    </span>
+                <% } %>
+            </a>
+            <a href="/estoque/create" class="btn btn-primary">
+                <i class="ti ti-plus"></i> Nova Peça
+            </a>
+        </div>
+    </div>
+
+    <!-- ESTATÍSTICAS -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 25px;">
+
+        <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #a78bfa;">
+            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Total de peças</div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.totalItens %></div>
+        </div>
+
+        <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #fbbf24;">
+            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Estoque baixo</div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px; color: #fbbf24;"><%= stats.baixoEstoque %></div>
+        </div>
+
+        <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #f87171;">
+            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Sem estoque</div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px; color: #f87171;"><%= stats.semEstoque %></div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(96,165,250,0.1), rgba(96,165,250,0.02)); border: 1px solid rgba(96,165,250,0.3); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 10px; text-transform: uppercase; color: #60a5fa; letter-spacing: 1px; font-weight: 700;">
+                <i class="ti ti-coin"></i> Investido (custo)
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-top: 4px; color: #60a5fa;">
+                R$ <%= stats.valorTotal.toFixed(2).replace('.', ',') %>
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(74,222,128,0.02)); border: 1px solid rgba(74,222,128,0.3); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 10px; text-transform: uppercase; color: #4ade80; letter-spacing: 1px; font-weight: 700;">
+                <i class="ti ti-cash"></i> Valor de venda
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-top: 4px; color: #4ade80;">
+                R$ <%= stats.valorVenda.toFixed(2).replace('.', ',') %>
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(124,58,237,0.03)); border: 1px solid rgba(124,58,237,0.3); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 10px; text-transform: uppercase; color: #a78bfa; letter-spacing: 1px; font-weight: 700;">
+                <i class="ti ti-trending-up"></i> Lucro estimado
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-top: 4px; color: #a78bfa;">
+                R$ <%= stats.lucroEstimado.toFixed(2).replace('.', ',') %>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TABELA DE PEÇAS -->
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Peça</th>
+                    <th>Categoria</th>
+                    <th>Estoque</th>
+                    <th>Custo</th>
+                    <th>Venda</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (pecas.length === 0) { %>
+                    <tr>
+                        <td colspan="7" class="empty">
+                            <i class="ti ti-package" style="font-size: 38px; opacity: 0.3;"></i>
+                            <p style="margin-top: 12px; font-size: 14px;">Nenhuma peça cadastrada.</p>
+                            <p style="font-size: 12px; margin-top: 5px;">Clique em <strong>"+ Nova Peça"</strong> para começar.</p>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <% pecas.forEach(p => {
+                        let statusCor = '#4ade80', statusTexto = 'OK', statusIcone = 'ti-check';
+                        if (p.quantidade === 0) {
+                            statusCor = '#f87171'; statusTexto = 'Sem estoque'; statusIcone = 'ti-alert-circle';
+                        } else if (p.quantidade <= p.estoque_minimo) {
+                            statusCor = '#fbbf24'; statusTexto = 'Baixo'; statusIcone = 'ti-alert-triangle';
+                        }
+                    %>
+                        <tr>
+                            <td>
+                                <strong><%= p.nome %></strong>
+                                <% if (p.fornecedor_nome) { %>
+                                    <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                        <i class="ti ti-truck"></i> <%= p.fornecedor_nome %>
+                                    </div>
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if (p.categoria_nome) { %>
+                                    <span style="background: rgba(124,58,237,0.15); color: #a78bfa; padding: 3px 9px; border-radius: 50px; font-size: 11px; font-weight: 600;">
+                                        <%= p.categoria_nome %>
+                                    </span>
+                                <% } else { %>
+                                    <span style="color: rgba(255,255,255,0.3); font-size: 12px;">Sem categoria</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: <%= statusCor %>;">
+                                    <%= p.quantidade %>
+                                </strong>
+                                <div style="font-size: 10.5px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                    mín: <%= p.estoque_minimo %>
+                                </div>
+                            </td>
+                            <td>
+                                <span style="color: rgba(255,255,255,0.6); font-size: 12.5px;">
+                                    R$ <%= (p.preco_custo || 0).toFixed(2).replace('.', ',') %>
+                                </span>
+                            </td>
+                            <td>
+                                <strong style="color: #4ade80;">
+                                    R$ <%= (p.preco_venda || 0).toFixed(2).replace('.', ',') %>
+                                </strong>
+                            </td>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 50px; font-size: 11px; font-weight: 700; background: <%= statusCor %>22; color: <%= statusCor %>;">
+                                    <i class="ti <%= statusIcone %>"></i>
+                                    <%= statusTexto %>
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <a href="/estoque/<%= p.id %>" class="btn-sm btn-info" title="Detalhes">
+                                    <i class="ti ti-eye"></i>
+                                </a>
+                                <a href="/estoque/<%= p.id %>/edit" class="btn-sm btn-warning" title="Editar">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                                <form action="/estoque/<%= p.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Excluir esta peça?')">
+                                    <button type="submit" class="btn-sm btn-danger" title="Excluir">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

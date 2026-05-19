@@ -1,0 +1,124 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Categorias</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Organize suas peças por categoria
+            </span>
+        </div>
+        <a href="/estoque" class="btn btn-secondary">
+            <i class="ti ti-arrow-left"></i> Voltar ao Estoque
+        </a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 20px;" class="cat-grid">
+
+        <!-- LISTA -->
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Categoria</th>
+                        <th>Descrição</th>
+                        <th>Peças</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (categorias.length === 0) { %>
+                        <tr>
+                            <td colspan="4" class="empty">
+                                <i class="ti ti-category" style="font-size: 32px; opacity: 0.3;"></i>
+                                <p style="margin-top: 10px;">Nenhuma categoria cadastrada.</p>
+                            </td>
+                        </tr>
+                    <% } else { %>
+                        <% categorias.forEach(c => { %>
+                            <tr>
+                                <td>
+                                    <span style="background: rgba(124,58,237,0.15); color: #a78bfa; padding: 3px 10px; border-radius: 50px; font-size: 12px; font-weight: 600;">
+                                        <%= c.nome %>
+                                    </span>
+                                </td>
+                                <td style="font-size: 12.5px; color: rgba(255,255,255,0.6);">
+                                    <%= c.descricao || '-' %>
+                                </td>
+                                <td>
+                                    <strong><%= c.total_pecas %></strong>
+                                </td>
+                                <td class="actions">
+                                    <button onclick="editarCategoria(<%= c.id %>, '<%= c.nome.replace(/'/g, '&#39;') %>', '<%= (c.descricao || '').replace(/'/g, '&#39;') %>')" class="btn-sm btn-warning">
+                                        <i class="ti ti-edit"></i>
+                                    </button>
+                                    <form action="/estoque/categorias/<%= c.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Excluir esta categoria?')">
+                                        <button type="submit" class="btn-sm btn-danger">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FORM NOVA/EDITAR -->
+        <div class="detail-card">
+            <h3 id="formTitulo" style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 14px;">
+                <i class="ti ti-plus" style="color: #a78bfa;"></i> Nova Categoria
+            </h3>
+
+            <form id="formCategoria" action="/estoque/categorias" method="POST">
+                <div class="form-group">
+                    <label>Nome *</label>
+                    <input type="text" name="nome" id="catNome" required placeholder="Ex: Memórias RAM">
+                </div>
+
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea name="descricao" id="catDescricao" rows="3" placeholder="Opcional..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="ti ti-check"></i> Salvar
+                    </button>
+                    <button type="button" onclick="cancelarEdicao()" class="btn btn-secondary" style="width: 100%; display: none;" id="btnCancelar">
+                        <i class="ti ti-x"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function editarCategoria(id, nome, descricao) {
+    document.getElementById('formCategoria').action = '/estoque/categorias/' + id;
+    document.getElementById('catNome').value = nome;
+    document.getElementById('catDescricao').value = descricao;
+    document.getElementById('formTitulo').innerHTML = '<i class="ti ti-edit" style="color: #fbbf24;"></i> Editando Categoria';
+    document.getElementById('btnCancelar').style.display = 'inline-flex';
+    window.scrollTo(0, 0);
+}
+
+function cancelarEdicao() {
+    document.getElementById('formCategoria').action = '/estoque/categorias';
+    document.getElementById('catNome').value = '';
+    document.getElementById('catDescricao').value = '';
+    document.getElementById('formTitulo').innerHTML = '<i class="ti ti-plus" style="color: #a78bfa;"></i> Nova Categoria';
+    document.getElementById('btnCancelar').style.display = 'none';
+}
+</script>
+
+<style>
+@media (max-width: 1024px) {
+    .cat-grid { grid-template-columns: 1fr !important; }
+}
+</style>
+

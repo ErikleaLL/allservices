@@ -1,0 +1,148 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Alertas de Estoque</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Peças que precisam de atenção
+            </span>
+        </div>
+        <a href="/estoque" class="btn btn-secondary">
+            <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <!-- RESUMO -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 25px;">
+
+        <div style="background: linear-gradient(135deg, rgba(248,113,113,0.15), rgba(248,113,113,0.03)); border: 1px solid rgba(248,113,113,0.3); border-radius: 12px; padding: 18px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(248,113,113,0.2); color: #f87171; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="ti ti-alert-circle"></i>
+                </div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                    Sem estoque
+                </div>
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: #f87171;">
+                <%= stats.semEstoque %>
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(251,191,36,0.03)); border: 1px solid rgba(251,191,36,0.3); border-radius: 12px; padding: 18px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(251,191,36,0.2); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="ti ti-alert-triangle"></i>
+                </div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                    Estoque baixo
+                </div>
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: #fbbf24;">
+                <%= stats.baixoEstoque %>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SEM ESTOQUE -->
+    <% if (semEstoque.length > 0) { %>
+        <div class="detail-card" style="margin-bottom: 18px;">
+            <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 14px; color: #f87171;">
+                <i class="ti ti-alert-circle"></i> Peças SEM ESTOQUE (<%= semEstoque.length %>)
+            </h3>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Peça</th>
+                            <th>Mínimo</th>
+                            <th>Custo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% semEstoque.forEach(p => { %>
+                            <tr>
+                                <td><strong><%= p.nome %></strong></td>
+                                <td><%= p.estoque_minimo %></td>
+                                <td>R$ <%= (p.preco_custo || 0).toFixed(2).replace('.', ',') %></td>
+                                <td>
+                                    <a href="/estoque/<%= p.id %>" class="btn-sm btn-success">
+                                        <i class="ti ti-plus"></i> Reabastecer
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- ESTOQUE BAIXO -->
+    <% if (baixoEstoque.length > 0) { %>
+        <div class="detail-card">
+            <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 14px; color: #fbbf24;">
+                <i class="ti ti-alert-triangle"></i> Peças com ESTOQUE BAIXO (<%= baixoEstoque.length %>)
+            </h3>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Peça</th>
+                            <th>Quantidade</th>
+                            <th>Mínimo</th>
+                            <th>Categoria</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% baixoEstoque.forEach(p => { %>
+                            <tr>
+                                <td><strong><%= p.nome %></strong></td>
+                                <td>
+                                    <strong style="color: #fbbf24; font-size: 16px;">
+                                        <%= p.quantidade %>
+                                    </strong>
+                                </td>
+                                <td><%= p.estoque_minimo %></td>
+                                <td>
+                                    <% if (p.categoria_nome) { %>
+                                        <span style="background: rgba(124,58,237,0.15); color: #a78bfa; padding: 3px 9px; border-radius: 50px; font-size: 11px;">
+                                            <%= p.categoria_nome %>
+                                        </span>
+                                    <% } else { %>
+                                        <span style="color: rgba(255,255,255,0.3);">-</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <a href="/estoque/<%= p.id %>" class="btn-sm btn-warning">
+                                        <i class="ti ti-plus"></i> Repor
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <% } %>
+
+    <% if (semEstoque.length === 0 && baixoEstoque.length === 0) { %>
+        <div class="detail-card" style="text-align: center; padding: 50px 20px;">
+            <i class="ti ti-circle-check" style="font-size: 50px; color: #4ade80;"></i>
+            <h3 style="font-family: 'Syne', sans-serif; font-size: 18px; margin-top: 14px; color: #4ade80;">
+                Tudo em ordem! 🎉
+            </h3>
+            <p style="color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 6px;">
+                Nenhuma peça com estoque baixo no momento.
+            </p>
+        </div>
+    <% } %>
+
+</div>
+

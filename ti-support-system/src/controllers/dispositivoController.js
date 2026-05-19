@@ -2,7 +2,6 @@ const Dispositivo = require('../models/Dispositivo');
 const Cliente = require('../models/Cliente');
 const QRCode = require('qrcode');
 
-// Status disponíveis com cor e label
 const STATUS_LIST = {
     'entrada':           { label: 'Entrada',           cor: '#60a5fa', icone: 'ti-package' },
     'diagnostico':       { label: 'Em Diagnóstico',    cor: '#fbbf24', icone: 'ti-search' },
@@ -12,200 +11,168 @@ const STATUS_LIST = {
     'entregue':          { label: 'Entregue',          cor: '#94a3b8', icone: 'ti-truck-delivery' }
 };
 
-// Listar todos
+function getBaseUrl(req) {
+    if (process.env.PUBLIC_URL) return process.env.PUBLIC_URL;
+
+    const forwardedHost = req.get('x-forwarded-host');
+    const forwardedProto = req.get('x-forwarded-proto') || 'https';
+    if (forwardedHost) return `${forwardedProto}://${forwardedHost}`;
+
+    if (process.env.CODESPACE_NAME) {
+        return `https://${process.env.CODESPACE_NAME}-3000.app.github.dev`;
+    }
+
+    return `${req.protocol}://${req.get('host')}`;
+}
+
 exports.index = (req, res, next) => {
     try {
         const dispositivos = Dispositivo.findAll();
         const total = Dispositivo.count();
-
         res.render('pages/dispositivos/index', {
-            title: 'Dispositivos',
-            layout: 'layouts/main',
-            dispositivos,
-            total,
-            STATUS_LIST
+            title: 'Dispositivos', layout: 'layouts/main',
+            dispositivos, total, STATUS_LIST
         });
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };
 
-// Formulário novo dispositivo
 exports.create = (req, res, next) => {
     try {
         const clientes = Cliente.findAll();
-
         res.render('pages/dispositivos/create', {
-            title: 'Novo Dispositivo',
-            layout: 'layouts/main',
-            clientes,
-            error: null
+            title: 'Novo Dispositivo', layout: 'layouts/main',
+            clientes, error: null
         });
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };
 
-// Salvar novo dispositivo
 exports.store = (req, res, next) => {
     try {
         const { cliente_id, tipo, marca, modelo, numero_serie, problema_relato } = req.body;
-
         if (!cliente_id || !tipo) {
             const clientes = Cliente.findAll();
             return res.render('pages/dispositivos/create', {
-                title: 'Novo Dispositivo',
-                layout: 'layouts/main',
-                clientes,
-                error: 'Cliente e Tipo são obrigatórios.'
+                title: 'Novo Dispositivo', layout: 'layouts/main',
+                clientes, error: 'Cliente e Tipo são obrigatórios.'
             });
         }
-
-        const novo = Dispositivo.create({ 
-            cliente_id, tipo, marca, modelo, numero_serie, problema_relato 
-        });
-
+        const novo = Dispositivo.create({ cliente_id, tipo, marca, modelo, numero_serie, problema_relato });
         res.redirect('/dispositivos/' + novo.id);
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };
 
-// Ver detalhes (com QR Code gerado)
 exports.show = async (req, res, next) => {
     try {
         const dispositivo = Dispositivo.findById(req.params.id);
         if (!dispositivo) return res.redirect('/dispositivos');
 
-        // Gera URL pública de rastreamento
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const urlRastreio = baseUrl + '/rastreio/' + dispositivo.qr_code;
 
-        // Gera QR Code como base64 (imagem)
         const qrImage = await QRCode.toDataURL(urlRastreio, {
-            width: 300,
-            margin: 2,
-            color: {
-                dark: '#0a0a0f',
-                light: '#ffffff'
-            }
+            width: 300, margin: 2,
+            color: { dark: '#0a0a0f', light: '#ffffff' }
         });
 
         res.render('pages/dispositivos/show', {
             title: 'Dispositivo #' + dispositivo.id,
             layout: 'layouts/main',
-            dispositivo,
-            qrImage,
-            urlRastreio,
-            STATUS_LIST
+            dispositivo, qrImage, urlRastreio, STATUS_LIST
         });
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };
 
-// Tela de impressão de etiqueta
+// 🖨️ ETIQUETA (cola no dispositivo)
 exports.etiqueta = async (req, res, next) => {
     try {
         const dispositivo = Dispositivo.findById(req.params.id);
         if (!dispositivo) return res.redirect('/dispositivos');
 
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const urlRastreio = baseUrl + '/rastreio/' + dispositivo.qr_code;
 
         const qrImage = await QRCode.toDataURL(urlRastreio, {
-            width: 400,
-            margin: 1,
+            width: 400, margin: 1,
             color: { dark: '#000', light: '#fff' }
         });
 
         res.render('pages/dispositivos/etiqueta', {
             title: 'Etiqueta - ' + dispositivo.qr_code,
             layout: false,
-            dispositivo,
-            qrImage,
-            urlRastreio
+            dispositivo, qrImage, urlRastreio
         });
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };
 
-// Formulário de edição
-exports.edit = (req, res, next) => {
+// 🎫 COMPROVANTE (entrega para o cliente)
+exports.comprovante = async (req, res, next) => {
     try {
         const dispositivo = Dispositivo.findById(req.params.id);
         if (!dispositivo) return res.redirect('/dispositivos');
 
-        const clientes = Cliente.findAll();
+        const baseUrl = getBaseUrl(req);
+        const urlRastreio = baseUrl + '/rastreio/' + dispositivo.qr_code;
 
-        res.render('pages/dispositivos/edit', {
-            title: 'Editar Dispositivo',
-            layout: 'layouts/main',
-            dispositivo,
-            clientes,
-            STATUS_LIST,
-            error: null
+        const qrImage = await QRCode.toDataURL(urlRastreio, {
+            width: 300, margin: 1,
+            color: { dark: '#000', light: '#fff' }
         });
-    } catch (error) {
-        next(error);
-    }
+
+        res.render('pages/dispositivos/comprovante', {
+            title: 'Comprovante - ' + dispositivo.qr_code,
+            layout: false,
+            dispositivo, qrImage, urlRastreio
+        });
+    } catch (error) { next(error); }
 };
 
-// Atualizar dispositivo completo
+exports.edit = (req, res, next) => {
+    try {
+        const dispositivo = Dispositivo.findById(req.params.id);
+        if (!dispositivo) return res.redirect('/dispositivos');
+        const clientes = Cliente.findAll();
+        res.render('pages/dispositivos/edit', {
+            title: 'Editar Dispositivo', layout: 'layouts/main',
+            dispositivo, clientes, STATUS_LIST, error: null
+        });
+    } catch (error) { next(error); }
+};
+
 exports.update = (req, res, next) => {
     try {
         const { cliente_id, tipo, marca, modelo, numero_serie, problema_relato, status } = req.body;
-
-        Dispositivo.update(req.params.id, {
-            cliente_id, tipo, marca, modelo, numero_serie, problema_relato, status
-        });
-
+        Dispositivo.update(req.params.id, { cliente_id, tipo, marca, modelo, numero_serie, problema_relato, status });
         res.redirect('/dispositivos/' + req.params.id);
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };
 
-// Atualizar apenas status
 exports.updateStatus = (req, res, next) => {
     try {
         Dispositivo.updateStatus(req.params.id, req.body.status);
         res.redirect('/dispositivos/' + req.params.id);
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };
 
-// Deletar
 exports.destroy = (req, res, next) => {
     try {
         Dispositivo.delete(req.params.id);
         res.redirect('/dispositivos');
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };
 
-// 🌐 PÁGINA PÚBLICA DE RASTREAMENTO (QR Code)
 exports.rastreio = (req, res, next) => {
     try {
         const dispositivo = Dispositivo.findByQrCode(req.params.qrcode);
-
         if (!dispositivo) {
             return res.status(404).render('pages/public/rastreio-naoencontrado', {
                 title: 'Dispositivo não encontrado',
                 layout: 'layouts/public'
             });
         }
-
         res.render('pages/public/rastreio', {
             title: 'Acompanhamento - ' + dispositivo.qr_code,
             layout: 'layouts/public',
-            dispositivo,
-            STATUS_LIST
+            dispositivo, STATUS_LIST
         });
-    } catch (error) {
-        next(error);
-    }
+    } catch (error) { next(error); }
 };

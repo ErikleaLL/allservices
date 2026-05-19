@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comprovante - <%= dispositivo.qr_code %></title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1e1b3a 100%);
+    min-height: 100vh;
+    padding: 30px 15px;
+    color: #fff;
+}
+
+/* TOOLBAR */
+.toolbar {
+    max-width: 850px;
+    margin: 0 auto 25px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.toolbar button, .toolbar a {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.btn-print {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+}
+
+.btn-print:hover { transform: translateY(-2px); }
+
+.btn-back {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.btn-back:hover { background: rgba(255,255,255,0.15); }
+
+.toolbar-info {
+    width: 100%;
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* PÁGINA A4 */
+.pagina {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #fff;
+    color: #000;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* COMPROVANTE INDIVIDUAL (estilo ticket) */
+.comprovante {
+    background: #fff;
+    border: 2px dashed #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.comprovante-header {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1e1b3a 100%);
+    color: #fff;
+    padding: 16px 18px;
+    position: relative;
+}
+
+.comprovante-header::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0; right: 0;
+    height: 16px;
+    background: 
+        radial-gradient(circle at 8px 8px, transparent 8px, #fff 9px) 0 0 / 16px 16px;
+}
+
+.comprovante-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.comprovante-logo-icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #f97316, #f59e0b);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.comprovante-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.comprovante-logo-text strong { color: #f97316; }
+
+.comprovante-tipo {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.comprovante-body {
+    padding: 20px 18px 16px;
+    text-align: center;
+}
+
+.comprovante-codigo {
+    font-family: 'Syne', monospace;
+    font-size: 14px;
+    font-weight: 800;
+    background: #000;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    display: inline-block;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.comprovante-qr {
+    background: #fff;
+    padding: 8px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.comprovante-qr img {
+    display: block;
+    width: 130px;
+    height: 130px;
+}
+
+.comprovante-instrucao {
+    font-size: 11px;
+    color: #555;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.comprovante-instrucao strong {
+    color: #000;
+    font-weight: 700;
+}
+
+.comprovante-instrucao i {
+    color: #7c3aed;
+    font-size: 14px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
+.comprovante-dados {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-align: left;
+    margin-bottom: 10px;
+    border-left: 3px solid #7c3aed;
+}
+
+.comprovante-linha {
+    font-size: 10.5px;
+    color: #444;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    gap: 8px;
+}
+
+.comprovante-linha:last-child { margin-bottom: 0; }
+
+.comprovante-linha strong {
+    color: #777;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 0.8px;
+    flex-shrink: 0;
+}
+
+.comprovante-linha span {
+    color: #000;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+.comprovante-assinatura {
+    border-top: 1px dashed #ccc;
+    padding-top: 8px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.assinatura-linha {
+    border-bottom: 1px solid #999;
+    height: 20px;
+    margin-bottom: 4px;
+}
+
+.assinatura-label {
+    font-size: 9px;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.comprovante-rodape {
+    background: #000;
+    color: #fff;
+    padding: 8px 12px;
+    text-align: center;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+
+.comprovante-rodape strong { color: #f97316; }
+
+/* CORTE TRACEJADO ENTRE OS DOIS */
+.corte {
+    border-left: 2px dashed rgba(0,0,0,0.15);
+    position: relative;
+}
+
+/* IMPRESSÃO */
+@media print {
+    @page {
+        size: A4;
+        margin: 12mm;
+    }
+    
+    body {
+        background: #fff;
+        padding: 0;
+    }
+    
+    .toolbar { display: none; }
+    
+    .pagina {
+        box-shadow: none;
+        max-width: 100%;
+        padding: 0;
+        page-break-inside: avoid;
+    }
+    
+    .comprovante {
+        border: 2px dashed #999;
+    }
+    
+    .comprovante-header,
+    .comprovante-rodape,
+    .comprovante-codigo {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .comprovante-dados {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+    .pagina {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+    <button class="btn-print" onclick="window.print()">
+        <i class="ti ti-printer"></i> Imprimir Comprovante
+    </button>
+    <a href="/dispositivos/<%= dispositivo.id %>" class="btn-back">
+        <i class="ti ti-arrow-left"></i> Voltar
+    </a>
+    <div class="toolbar-info">
+        💡 Imprime 2 vias por folha • Uma para você guardar, outra para entregar ao cliente
+    </div>
+</div>
+
+<!-- PÁGINA COM 2 COMPROVANTES -->
+<div class="pagina">
+
+    <!-- VIA 1 - DO CLIENTE -->
+    <div class="comprovante">
+
+        <div class="comprovante-header">
+            <div class="comprovante-logo">
+                <span class="comprovante-logo-icon">⚡</span>
+                <span class="comprovante-logo-text">All<strong>services</strong></span>
+            </div>
+            <div class="comprovante-tipo">📋 Via do Cliente</div>
+        </div>
+
+        <div class="comprovante-body">
+
+            <div class="comprovante-codigo"><%= dispositivo.qr_code %></div>
+
+            <div class="comprovante-qr">
+                <img src="<%= qrImage %>" alt="QR Code">
+            </div>
+
+            <div class="comprovante-instrucao">
+                <i class="ti ti-device-mobile"></i>
+                <strong>Acompanhe seu reparo!</strong><br>
+                Escaneie o QR Code com seu celular
+            </div>
+
+            <div class="comprovante-dados">
+                <div class="comprovante-linha">
+                    <strong>Cliente</strong>
+                    <span><%= dispositivo.cliente_nome || '-' %></span>
+                </div>
+                <div class="comprovante-linha">
+                    <strong>Tipo</strong>
+                    <span><%= dispositivo.tipo %></span>
+                </div>
+                <% if (dispositivo.marca || dispositivo.modelo) { %>
+                    <div class="comprovante-linha">
+                        <strong>Modelo</strong>
+                        <span><%= [dispositivo.marca, dispositivo.modelo].filter(Boolean).join(' ') %></span>
+                    </div>
+                <% } %>
+                <div class="comprovante-linha">
+                    <strong>Entrada</strong>
+                    <span><%= new Date(dispositivo.criado_em).toLocaleDateString('pt-BR') %></span>
+                </div>
+                <% if (dispositivo.numero_serie) { %>
+                    <div class="comprovante-linha">
+                        <strong>Nº Série</strong>
+                        <span><%= dispositivo.numero_serie %></span>
+                    </div>
+                <% } %>
+            </div>
+
+        </div>
+
+        <div class="comprovante-rodape">
+            All<strong>services</strong> • Guarde este comprovante
+        </div>
+
+    </div>
+
+    <!-- VIA 2 - DA ASSISTÊNCIA -->
+    <div class="comprovante">
+
+        <div class="comprovante-header">
+            <div class="comprovante-logo">
+                <span class="comprovante-logo-icon">⚡</span>
+                <span class="comprovante-logo-text">All<strong>services</strong></span>
+            </div>
+            <div class="comprovante-tipo">🏢 Via da Assistência</div>
+        </div>
+
+        <div class="comprovante-body">
+
+            <div class="comprovante-codigo"><%= dispositivo.qr_code %></div>
+
+            <div class="comprovante-qr">
+                <img src="<%= qrImage %>" alt="QR Code">
+            </div>
+
+            <div class="comprovante-instrucao">
+                <i class="ti ti-file-check"></i>
+                <strong>Termo de entrega</strong><br>
+                Cliente declara entregar o dispositivo
+            </div>
+
+            <div class="comprovante-dados">
+                <div class="comprovante-linha">
+                    <strong>Cliente</strong>
+                    <span><%= dispositivo.cliente_nome || '-' %></span>
+                </div>
+                <div class="comprovante-linha">
+                    <strong>Tipo</strong>
+                    <span><%= dispositivo.tipo %></span>
+                </div>
+                <% if (dispositivo.marca || dispositivo.modelo) { %>
+                    <div class="comprovante-linha">
+                        <strong>Modelo</strong>
+                        <span><%= [dispositivo.marca, dispositivo.modelo].filter(Boolean).join(' ') %></span>
+                    </div>
+                <% } %>
+                <div class="comprovante-linha">
+                    <strong>Entrada</strong>
+                    <span><%= new Date(dispositivo.criado_em).toLocaleDateString('pt-BR') %></span>
+                </div>
+                <% if (dispositivo.problema_relato) { %>
+                    <div class="comprovante-linha" style="flex-direction: column; align-items: flex-start; gap: 3px;">
+                        <strong>Problema</strong>
+                        <span style="text-align: left; font-weight: 500; font-size: 10px; line-height: 1.4;"><%= dispositivo.problema_relato %></span>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="comprovante-assinatura">
+                <div class="assinatura-linha"></div>
+                <div class="assinatura-label">Assinatura do cliente</div>
+            </div>
+
+        </div>
+
+        <div class="comprovante-rodape">
+            All<strong>services</strong> • Arquivo interno
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Financeiro</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Receitas, despesas e fluxo de caixa
+            </span>
+        </div>
+        <div>
+            <a href="/financeiro/fluxo" class="btn btn-secondary">
+                <i class="ti ti-chart-line"></i> Fluxo de caixa
+            </a>
+            <a href="/financeiro/vencidos" class="btn btn-warning">
+                <i class="ti ti-alert-triangle"></i> Vencidos
+                <% if (resumo.vencidos > 0) { %>
+                    <span style="background:#fff; color:#f97316; padding:1px 7px; border-radius:50px; font-size:10px; margin-left:5px; font-weight:800;">
+                        <%= resumo.vencidos %>
+                    </span>
+                <% } %>
+            </a>
+            <a href="/financeiro/create?tipo=despesa" class="btn btn-danger">
+                <i class="ti ti-arrow-down"></i> Despesa
+            </a>
+            <a href="/financeiro/create?tipo=receita" class="btn btn-success">
+                <i class="ti ti-arrow-up"></i> Receita
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== CARDS RESUMO ===== -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 25px;">
+
+        <!-- SALDO ATUAL -->
+        <div style="background: linear-gradient(135deg, <%= resumo.saldo >= 0 ? 'rgba(74,222,128,0.15), rgba(74,222,128,0.03)' : 'rgba(248,113,113,0.15), rgba(248,113,113,0.03)' %>); border: 1px solid <%= resumo.saldo >= 0 ? 'rgba(74,222,128,0.3)' : 'rgba(248,113,113,0.3)' %>; border-radius: 12px; padding: 18px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: <%= resumo.saldo >= 0 ? 'rgba(74,222,128,0.2)' : 'rgba(248,113,113,0.2)' %>; color: <%= resumo.saldo >= 0 ? '#4ade80' : '#f87171' %>; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="ti ti-wallet"></i>
+                </div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                    Saldo atual
+                </div>
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: <%= resumo.saldo >= 0 ? '#4ade80' : '#f87171' %>;">
+                R$ <%= resumo.saldo.toFixed(2).replace('.', ',') %>
+            </div>
+            <div style="font-size: 10.5px; color: rgba(255,255,255,0.4); margin-top: 4px;">
+                Receitas − Despesas (pagos)
+            </div>
+        </div>
+
+        <!-- RECEITAS -->
+        <div style="background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(74,222,128,0.02)); border: 0.5px solid rgba(74,222,128,0.2); border-radius: 12px; padding: 18px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(74,222,128,0.15); color: #4ade80; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="ti ti-arrow-up-right"></i>
+                </div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                    Total recebido
+                </div>
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #4ade80;">
+                R$ <%= resumo.totalReceitas.toFixed(2).replace('.', ',') %>
+            </div>
+            <div style="font-size: 10.5px; color: rgba(74,222,128,0.7); margin-top: 4px;">
+                + R$ <%= resumo.aReceber.toFixed(2).replace('.', ',') %> a receber
+            </div>
+        </div>
+
+        <!-- DESPESAS -->
+        <div style="background: linear-gradient(135deg, rgba(248,113,113,0.08), rgba(248,113,113,0.02)); border: 0.5px solid rgba(248,113,113,0.2); border-radius: 12px; padding: 18px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(248,113,113,0.15); color: #f87171; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="ti ti-arrow-down-right"></i>
+                </div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                    Total pago
+                </div>
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #f87171;">
+                R$ <%= resumo.totalDespesas.toFixed(2).replace('.', ',') %>
+            </div>
+            <div style="font-size: 10.5px; color: rgba(248,113,113,0.7); margin-top: 4px;">
+                + R$ <%= resumo.aPagar.toFixed(2).replace('.', ',') %> a pagar
+            </div>
+        </div>
+
+        <!-- SALDO PROJETADO -->
+        <div style="background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(124,58,237,0.02)); border: 1px solid rgba(124,58,237,0.3); border-radius: 12px; padding: 18px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(124,58,237,0.2); color: #a78bfa; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="ti ti-chart-pie"></i>
+                </div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                    Saldo projetado
+                </div>
+            </div>
+            <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #a78bfa;">
+                R$ <%= resumo.saldoProjetado.toFixed(2).replace('.', ',') %>
+            </div>
+            <div style="font-size: 10.5px; color: rgba(255,255,255,0.4); margin-top: 4px;">
+                Considera pendentes
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RESUMO DO MÊS -->
+    <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 18px 22px; margin-bottom: 22px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="ti ti-calendar-stats" style="color: #a78bfa; font-size: 22px;"></i>
+                <div>
+                    <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+                        Movimentação do mês
+                    </div>
+                    <div style="font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-top: 2px;">
+                        <%= new Date().toLocaleDateString('pt-BR', {month:'long', year:'numeric'}).replace(/^./, c => c.toUpperCase()) %>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 25px; flex-wrap: wrap;">
+                <div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Receitas</div>
+                    <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: #4ade80;">
+                        R$ <%= resumoMes.receitas.toFixed(2).replace('.', ',') %>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Despesas</div>
+                    <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: #f87171;">
+                        R$ <%= resumoMes.despesas.toFixed(2).replace('.', ',') %>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Saldo</div>
+                    <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: <%= resumoMes.saldo >= 0 ? '#4ade80' : '#f87171' %>;">
+                        R$ <%= resumoMes.saldo.toFixed(2).replace('.', ',') %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TABELA DE LANÇAMENTOS ===== -->
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Categoria</th>
+                    <th>Valor</th>
+                    <th>Vencimento</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (lancamentos.length === 0) { %>
+                    <tr>
+                        <td colspan="7" class="empty">
+                            <i class="ti ti-cash" style="font-size: 38px; opacity: 0.3;"></i>
+                            <p style="margin-top: 12px; font-size: 14px;">Nenhum lançamento financeiro.</p>
+                            <p style="font-size: 12px; margin-top: 5px;">Comece adicionando uma <strong>receita</strong> ou <strong>despesa</strong>.</p>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <% lancamentos.forEach(l => {
+                        const isReceita = l.tipo === 'receita';
+                        const cor = isReceita ? '#4ade80' : '#f87171';
+                        const sinal = isReceita ? '+' : '−';
+                        
+                        let statusCor = '#fbbf24', statusTexto = 'Pendente';
+                        if (l.status === 'pago') { statusCor = '#4ade80'; statusTexto = 'Pago'; }
+                        else if (l.status === 'vencido') { statusCor = '#f87171'; statusTexto = 'Vencido'; }
+                        
+                        // Verifica se está vencido
+                        if (l.status === 'pendente' && l.data_vencimento) {
+                            const hoje = new Date().toISOString().split('T')[0];
+                            if (l.data_vencimento < hoje) {
+                                statusCor = '#f87171';
+                                statusTexto = 'Vencido';
+                            }
+                        }
+                    %>
+                        <tr>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; background: <%= cor %>22; color: <%= cor %>;">
+                                    <i class="ti <%= isReceita ? 'ti-arrow-up' : 'ti-arrow-down' %>"></i>
+                                    <%= isReceita ? 'Receita' : 'Despesa' %>
+                                </span>
+                            </td>
+                            <td>
+                                <strong><%= l.descricao %></strong>
+                                <% if (l.cliente_nome) { %>
+                                    <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                        <i class="ti ti-user"></i> <%= l.cliente_nome %>
+                                    </div>
+                                <% } else if (l.fornecedor_nome) { %>
+                                    <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                        <i class="ti ti-truck"></i> <%= l.fornecedor_nome %>
+                                    </div>
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if (l.categoria) { %>
+                                    <span style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); padding: 3px 9px; border-radius: 50px; font-size: 11px;">
+                                        <%= l.categoria %>
+                                    </span>
+                                <% } else { %>
+                                    <span style="color: rgba(255,255,255,0.3); font-size: 12px;">-</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <strong style="color: <%= cor %>; font-size: 14px;">
+                                    <%= sinal %> R$ <%= l.valor.toFixed(2).replace('.', ',') %>
+                                </strong>
+                            </td>
+                            <td style="font-size: 12.5px;">
+                                <% if (l.data_vencimento) { %>
+                                    <%= new Date(l.data_vencimento + 'T00:00:00').toLocaleDateString('pt-BR') %>
+                                <% } else { %>
+                                    <span style="color: rgba(255,255,255,0.3);">-</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 50px; font-size: 11px; font-weight: 700; background: <%= statusCor %>22; color: <%= statusCor %>;">
+                                    <%= statusTexto %>
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <% if (l.status === 'pendente') { %>
+                                    <form action="/financeiro/<%= l.id %>/pagar" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn-sm btn-success" title="Marcar como pago">
+                                            <i class="ti ti-check"></i>
+                                        </button>
+                                    </form>
+                                <% } %>
+                                <a href="/financeiro/<%= l.id %>" class="btn-sm btn-info" title="Ver">
+                                    <i class="ti ti-eye"></i>
+                                </a>
+                                <a href="/financeiro/<%= l.id %>/edit" class="btn-sm btn-warning" title="Editar">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                                <form action="/financeiro/<%= l.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Excluir este lançamento?')">
+                                    <button type="submit" class="btn-sm btn-danger" title="Excluir">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

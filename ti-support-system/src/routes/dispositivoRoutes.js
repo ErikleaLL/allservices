@@ -5,32 +5,34 @@ const dispositivoController = require('../controllers/dispositivoController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 
-// ⚠️ Rotas protegidas (admin e técnico)
 router.use(authMiddleware);
 router.use(roleMiddleware(['admin', 'tecnico']));
 
 // Listar todos
 router.get('/', dispositivoController.index);
 
-// Formulário de criação
+// Formulário novo
 router.get('/create', dispositivoController.create);
 
-// Salvar novo
+// Salvar
 router.post('/', dispositivoController.store);
 
-// Visualizar
+// Ver detalhes
 router.get('/:id', dispositivoController.show);
 
-// Imprimir etiqueta (QR Code)
+// 🖨️ Imprimir etiqueta (para o dispositivo)
 router.get('/:id/etiqueta', dispositivoController.etiqueta);
 
-// Formulário de edição
+// 🎫 Imprimir comprovante (para o cliente)
+router.get('/:id/comprovante', dispositivoController.comprovante);
+
+// Editar
 router.get('/:id/edit', dispositivoController.edit);
 
 // Atualizar
 router.post('/:id', dispositivoController.update);
 
-// Mudar status rápido
+// Mudar status
 router.post('/:id/status', dispositivoController.updateStatus);
 
 // Deletar

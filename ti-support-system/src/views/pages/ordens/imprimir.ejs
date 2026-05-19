@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS <%= ordem.numero_os %> - Imprimir</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1e1b3a 100%);
+    min-height: 100vh;
+    padding: 30px 15px;
+    color: #fff;
+}
+
+/* TOOLBAR */
+.toolbar {
+    max-width: 850px;
+    margin: 0 auto 25px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.toolbar button, .toolbar a {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.btn-print {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+}
+
+.btn-back {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* PÁGINA */
+.os-pagina {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #fff;
+    color: #000;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+}
+
+/* HEADER */
+.os-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 22px;
+    margin-bottom: 25px;
+    border-bottom: 3px solid #000;
+}
+
+.os-empresa {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.os-logo {
+    width: 50px; height: 50px;
+    background: linear-gradient(135deg, #f97316, #f59e0b);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #fff;
+}
+
+.os-empresa-nome {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.os-empresa-nome strong { color: #f97316; }
+
+.os-empresa-slogan {
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+    font-weight: 600;
+}
+
+.os-numero-box {
+    text-align: right;
+}
+
+.os-numero-label {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.os-numero {
+    font-family: 'Syne', monospace;
+    font-size: 22px;
+    font-weight: 800;
+    background: #000;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    display: inline-block;
+    letter-spacing: 2px;
+}
+
+.os-data {
+    font-size: 11px;
+    color: #666;
+    margin-top: 6px;
+}
+
+/* SEÇÕES */
+.os-secao {
+    margin-bottom: 22px;
+}
+
+.os-secao-titulo {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #7c3aed;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* CLIENTE + DISPOSITIVO */
+.os-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.os-info-box {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 4px solid #7c3aed;
+}
+
+.os-info-box.dispositivo {
+    border-left-color: #60a5fa;
+}
+
+.os-info-titulo {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #666;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.os-info-nome {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.os-info-linha {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 3px;
+}
+
+.os-info-linha strong { color: #000; }
+
+/* TEXTOS */
+.os-texto {
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.5;
+    border-left: 3px solid #60a5fa;
+}
+
+.os-texto.servico { border-left-color: #a78bfa; }
+.os-texto.solucao { border-left-color: #4ade80; }
+
+/* PEÇAS */
+.os-pecas-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+}
+
+.os-pecas-tabela th {
+    background: #000;
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.os-pecas-tabela th:last-child,
+.os-pecas-tabela td:last-child {
+    text-align: right;
+}
+
+.os-pecas-tabela td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 12px;
+    color: #333;
+}
+
+.os-pecas-tabela tr:last-child td {
+    border-bottom: none;
+}
+
+/* TOTAIS */
+.os-totais {
+    background: linear-gradient(135deg, #f8fafc, #fff);
+    border: 2px solid #000;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-top: 18px;
+}
+
+.os-totais-linha {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 13px;
+    color: #555;
+}
+
+.os-totais-linha strong { color: #000; }
+
+.os-totais-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    margin-top: 10px;
+    border-top: 2px dashed #ccc;
+}
+
+.os-totais-total-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.os-totais-total-valor {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #16a34a;
+}
+
+/* GARANTIA */
+.os-garantia {
+    background: rgba(74,222,128,0.1);
+    border: 1px solid rgba(22,163,74,0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 18px;
+    text-align: center;
+    color: #166534;
+    font-size: 12px;
+}
+
+.os-garantia strong {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+}
+
+/* OBSERVAÇÕES */
+.os-obs {
+    background: rgba(251,191,36,0.08);
+    border-left: 3px solid #fbbf24;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* ASSINATURAS */
+.os-assinaturas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 40px;
+    padding-top: 30px;
+}
+
+.os-assinatura {
+    text-align: center;
+}
+
+.os-assinatura-linha {
+    border-bottom: 1px solid #000;
+    height: 40px;
+    margin-bottom: 6px;
+}
+
+.os-assinatura-label {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+/* RODAPÉ */
+.os-rodape {
+    margin-top: 30px;
+    padding-top: 14px;
+    border-top: 2px solid #000;
+    text-align: center;
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.os-rodape strong {
+    color: #f97316;
+}
+
+/* IMPRESSÃO */
+@media print {
+    @page {
+        size: A4;
+        margin: 10mm;
+    }
+    
+    body {
+        background: #fff;
+        padding: 0;
+    }
+    
+    .toolbar { display: none; }
+    
+    .os-pagina {
+        box-shadow: none;
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .os-logo,
+    .os-numero,
+    .os-info-box,
+    .os-texto,
+    .os-pecas-tabela th,
+    .os-totais,
+    .os-garantia,
+    .os-obs {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 700px) {
+    .os-info-grid,
+    .os-assinaturas {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    
+    .os-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .os-numero-box {
+        text-align: left;
+    }
+    
+    .os-pagina {
+        padding: 22px;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+    <button class="btn-print" onclick="window.print()">
+        <i class="ti ti-printer"></i> Imprimir
+    </button>
+    <a href="/ordens/<%= ordem.id %>" class="btn-back">
+        <i class="ti ti-arrow-left"></i> Voltar
+    </a>
+</div>
+
+<!-- PÁGINA -->
+<div class="os-pagina">
+
+    <!-- HEADER -->
+    <div class="os-header">
+        <div class="os-empresa">
+            <div class="os-logo">⚡</div>
+            <div>
+                <div class="os-empresa-nome">All<strong>services</strong></div>
+                <div class="os-empresa-slogan">Manutenção inteligente</div>
+            </div>
+        </div>
+        <div class="os-numero-box">
+            <div class="os-numero-label">Ordem de Serviço</div>
+            <div class="os-numero"><%= ordem.numero_os %></div>
+            <div class="os-data">
+                Emitida em <%= new Date(ordem.criado_em).toLocaleDateString('pt-BR') %>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLIENTE + DISPOSITIVO -->
+    <div class="os-info-grid">
+        <div class="os-info-box">
+            <div class="os-info-titulo">
+                <i class="ti ti-user"></i> Cliente
+            </div>
+            <div class="os-info-nome"><%= ordem.cliente_nome || '-' %></div>
+            <% if (ordem.cliente_telefone) { %>
+                <div class="os-info-linha"><strong>Tel:</strong> <%= ordem.cliente_telefone %></div>
+            <% } %>
+            <% if (ordem.cliente_email) { %>
+                <div class="os-info-linha"><strong>E-mail:</strong> <%= ordem.cliente_email %></div>
+            <% } %>
+            <% if (ordem.cliente_cpf) { %>
+                <div class="os-info-linha"><strong>CPF/CNPJ:</strong> <%= ordem.cliente_cpf %></div>
+            <% } %>
+        </div>
+
+        <div class="os-info-box dispositivo">
+            <div class="os-info-titulo">
+                <i class="ti ti-device-laptop"></i> Dispositivo
+            </div>
+            <div class="os-info-nome"><%= ordem.dispositivo_tipo %></div>
+            <% if (ordem.dispositivo_marca || ordem.dispositivo_modelo) { %>
+                <div class="os-info-linha">
+                    <strong>Modelo:</strong> <%= [ordem.dispositivo_marca, ordem.dispositivo_modelo].filter(Boolean).join(' ') %>
+                </div>
+            <% } %>
+            <% if (ordem.dispositivo_serie) { %>
+                <div class="os-info-linha"><strong>Nº Série:</strong> <%= ordem.dispositivo_serie %></div>
+            <% } %>
+            <div class="os-info-linha"><strong>Código:</strong> <%= ordem.dispositivo_qr_code %></div>
+        </div>
+    </div>
+
+    <!-- PROBLEMA -->
+    <% if (ordem.dispositivo_problema) { %>
+        <div class="os-secao">
+            <div class="os-secao-titulo">
+                <i class="ti ti-alert-triangle"></i> Problema relatado
+            </div>
+            <div class="os-texto"><%= ordem.dispositivo_problema %></div>
+        </div>
+    <% } %>
+
+    <!-- DIAGNÓSTICO -->
+    <% if (ordem.diagnostico) { %>
+        <div class="os-secao">
+            <div class="os-secao-titulo">
+                <i class="ti ti-search"></i> Diagnóstico técnico
+            </div>
+            <div class="os-texto"><%= ordem.diagnostico %></div>
+        </div>
+    <% } %>
+
+    <!-- SERVIÇO -->
+    <% if (ordem.descricao_servico) { %>
+        <div class="os-secao">
+            <div class="os-secao-titulo">
+                <i class="ti ti-tools"></i> Serviço a executar
+            </div>
+            <div class="os-texto servico"><%= ordem.descricao_servico %></div>
+        </div>
+    <% } %>
+
+    <!-- SOLUÇÃO -->
+    <% if (ordem.solucao) { %>
+        <div class="os-secao">
+            <div class="os-secao-titulo">
+                <i class="ti ti-check"></i> Solução aplicada
+            </div>
+            <div class="os-texto solucao"><%= ordem.solucao %></div>
+        </div>
+    <% } %>
+
+    <!-- PEÇAS -->
+    <% if (ordem.pecas && ordem.pecas.length > 0) { %>
+        <div class="os-secao">
+            <div class="os-secao-titulo">
+                <i class="ti ti-package"></i> Peças utilizadas
+            </div>
+            <table class="os-pecas-tabela">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th style="width: 70px; text-align: center;">Qtd</th>
+                        <th style="width: 100px;">Valor unit.</th>
+                        <th style="width: 100px;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% ordem.pecas.forEach(p => { %>
+                        <tr>
+                            <td><%= p.descricao %></td>
+                            <td style="text-align: center;"><%= p.quantidade %></td>
+                            <td style="text-align: right;">R$ <%= p.valor_unitario.toFixed(2).replace('.', ',') %></td>
+                            <td style="text-align: right;"><strong>R$ <%= p.valor_total.toFixed(2).replace('.', ',') %></strong></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+
+    <!-- TOTAIS -->
+    <div class="os-totais">
+        <div class="os-totais-linha">
+            <span>Mão de obra:</span>
+            <strong>R$ <%= (ordem.valor_mao_obra || 0).toFixed(2).replace('.', ',') %></strong>
+        </div>
+        <div class="os-totais-linha">
+            <span>Peças:</span>
+            <strong>R$ <%= (ordem.valor_pecas || 0).toFixed(2).replace('.', ',') %></strong>
+        </div>
+        <div class="os-totais-total">
+            <span class="os-totais-total-label">Valor Total</span>
+            <span class="os-totais-total-valor">
+                R$ <%= (ordem.valor_total || 0).toFixed(2).replace('.', ',') %>
+            </span>
+        </div>
+    </div>
+
+    <!-- GARANTIA -->
+    <div class="os-garantia">
+        <i class="ti ti-shield-check"></i>
+        Este serviço tem garantia de <strong><%= ordem.garantia_dias %> dias</strong>
+    </div>
+
+    <!-- OBSERVAÇÕES PÚBLICAS -->
+    <% if (ordem.observacoes_publicas) { %>
+        <div class="os-secao" style="margin-top: 18px;">
+            <div class="os-secao-titulo">
+                <i class="ti ti-info-circle"></i> Observações
+            </div>
+            <div class="os-obs"><%= ordem.observacoes_publicas %></div>
+        </div>
+    <% } %>
+
+    <!-- ASSINATURAS -->
+    <div class="os-assinaturas">
+        <div class="os-assinatura">
+            <div class="os-assinatura-linha"></div>
+            <div class="os-assinatura-label">Cliente</div>
+        </div>
+        <div class="os-assinatura">
+            <div class="os-assinatura-linha"></div>
+            <div class="os-assinatura-label">Técnico Responsável</div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <div class="os-rodape">
+        All<strong>services</strong> • Manutenção inteligente, gestão simples
+        <br>
+        Documento gerado em <%= new Date().toLocaleString('pt-BR') %>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -3,15 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title><%= title %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f172a">
-    <meta name="description" content="Allservices - Manutenção inteligente, gestão simples. A plataforma de TI do futuro.">
 
+    <!-- Fontes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="/css/public.css">
+
+    <!-- Estilos da página (extraídos do EJS) -->
+    <%- typeof style !== 'undefined' ? style : '' %>
 </head>
 <body>
 
-    <!-- ===== NAVBAR ===== -->
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="container nav-container">
 
@@ -20,12 +31,8 @@
                 <span class="logo-text">All<strong>services</strong></span>
             </a>
 
-            <!-- Botão hambúrguer (mobile) -->
-            <button class="nav-toggle" id="navToggle" aria-label="Menu">
-                ☰
-            </button>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
 
-            <!-- Menu -->
             <nav class="nav-menu" id="navMenu">
                 <a href="/">Início</a>
                 <a href="/funcionalidades">Funcionalidades</a>
@@ -39,7 +46,6 @@
                 </div>
             </nav>
 
-            <!-- Ações (desktop) -->
             <div class="nav-actions">
                 <a href="/auth/login" class="btn-login">Entrar</a>
                 <a href="/contato" class="btn-cta">Quero conhecer</a>
@@ -48,12 +54,12 @@
         </div>
     </header>
 
-    <!-- ===== CONTEÚDO ===== -->
+    <!-- CONTEÚDO -->
     <main>
         <%- body %>
     </main>
 
-    <!-- ===== FOOTER ===== -->
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container footer-container">
 
@@ -109,7 +115,6 @@
                     navToggle.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
                 });
 
-                // Fechar ao clicar em link
                 navMenu.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         navMenu.classList.remove('active');

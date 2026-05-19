@@ -1,0 +1,91 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Lançamentos Vencidos</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Lançamentos pendentes com data de vencimento ultrapassada
+            </span>
+        </div>
+        <a href="/financeiro" class="btn btn-secondary">
+            <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <% if (vencidos.length === 0) { %>
+        <div class="detail-card" style="text-align: center; padding: 60px 20px;">
+            <i class="ti ti-circle-check" style="font-size: 56px; color: #4ade80;"></i>
+            <h3 style="font-family: 'Syne', sans-serif; font-size: 20px; margin-top: 14px; color: #4ade80;">
+                Nada vencido! 🎉
+            </h3>
+            <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 6px;">
+                Todos os seus lançamentos estão em dia.
+            </p>
+        </div>
+    <% } else { %>
+
+        <div style="background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); padding: 14px 18px; border-radius: 10px; margin-bottom: 18px; color: #f87171; font-size: 13px;">
+            <i class="ti ti-alert-triangle"></i>
+            <strong><%= vencidos.length %></strong> lançamento(s) vencido(s) precisam de atenção.
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Vencido em</th>
+                        <th>Dias em atraso</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% vencidos.forEach(v => { 
+                        const isReceita = v.tipo === 'receita';
+                        const cor = isReceita ? '#4ade80' : '#f87171';
+                        const hoje = new Date();
+                        const venc = new Date(v.data_vencimento + 'T00:00:00');
+                        const diasAtraso = Math.floor((hoje - venc) / (1000 * 60 * 60 * 24));
+                    %>
+                        <tr>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; background: <%= cor %>22; color: <%= cor %>;">
+                                    <i class="ti <%= isReceita ? 'ti-arrow-up' : 'ti-arrow-down' %>"></i>
+                                    <%= isReceita ? 'Receita' : 'Despesa' %>
+                                </span>
+                            </td>
+                            <td><strong><%= v.descricao %></strong></td>
+                            <td>
+                                <strong style="color: <%= cor %>;">
+                                    R$ <%= v.valor.toFixed(2).replace('.', ',') %>
+                                </strong>
+                            </td>
+                            <td><%= venc.toLocaleDateString('pt-BR') %></td>
+                            <td>
+                                <span style="background: rgba(248,113,113,0.15); color: #f87171; padding: 3px 10px; border-radius: 50px; font-size: 11px; font-weight: 700;">
+                                    <%= diasAtraso %> dia(s)
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <form action="/financeiro/<%= v.id %>/pagar" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn-sm btn-success" title="Marcar como pago">
+                                        <i class="ti ti-check"></i>
+                                    </button>
+                                </form>
+                                <a href="/financeiro/<%= v.id %>" class="btn-sm btn-info">
+                                    <i class="ti ti-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+    <% } %>
+
+</div>
+

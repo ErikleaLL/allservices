@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etiqueta - <%= dispositivo.qr_code %></title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1e1b3a 100%);
+    min-height: 100vh;
+    padding: 30px 15px;
+    color: #fff;
+}
+
+/* TOOLBAR (não imprime) */
+.toolbar {
+    max-width: 420px;
+    margin: 0 auto 25px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.toolbar button, .toolbar a {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.btn-print {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+}
+
+.btn-print:hover { transform: translateY(-2px); }
+
+.btn-back {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.btn-back:hover { background: rgba(255,255,255,0.15); }
+
+/* ETIQUETA */
+.etiqueta {
+    background: #fff;
+    color: #000;
+    border-radius: 16px;
+    padding: 0;
+    max-width: 420px;
+    margin: 0 auto;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.etiqueta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #7c3aed, #2563eb, #10b981, #f97316);
+}
+
+/* HEADER */
+.etiqueta-header {
+    padding: 22px 25px 18px;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1e1b3a 100%);
+    color: #fff;
+    text-align: center;
+}
+
+.etiqueta-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.etiqueta-logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #f97316, #f59e0b);
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(249,115,22,0.4);
+}
+
+.etiqueta-logo strong { color: #f97316; }
+
+.etiqueta-slogan {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 5px;
+    font-weight: 600;
+}
+
+/* CÓDIGO */
+.etiqueta-codigo-wrapper {
+    text-align: center;
+    padding: 20px 25px 0;
+}
+
+.etiqueta-codigo-label {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.etiqueta-codigo {
+    font-family: 'Syne', monospace;
+    font-size: 18px;
+    font-weight: 800;
+    background: #000;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 8px;
+    display: inline-block;
+    letter-spacing: 3px;
+}
+
+/* QR CODE */
+.etiqueta-qr-wrapper {
+    text-align: center;
+    padding: 18px 25px;
+}
+
+.etiqueta-qr {
+    background: #fff;
+    padding: 12px;
+    border: 3px solid #000;
+    border-radius: 12px;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.etiqueta-qr img {
+    display: block;
+    width: 220px;
+    height: 220px;
+}
+
+/* INSTRUÇÃO */
+.etiqueta-instrucao {
+    text-align: center;
+    padding: 0 25px 18px;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.etiqueta-instrucao i {
+    font-size: 18px;
+    color: #7c3aed;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+.etiqueta-instrucao strong {
+    color: #000;
+    font-weight: 700;
+}
+
+/* DADOS */
+.etiqueta-dados {
+    background: #f8fafc;
+    margin: 0 25px 18px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border-left: 4px solid #7c3aed;
+}
+
+.etiqueta-linha {
+    font-size: 12px;
+    margin-bottom: 6px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.etiqueta-linha:last-child { margin-bottom: 0; }
+
+.etiqueta-linha strong {
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.etiqueta-linha span {
+    color: #000;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+/* RODAPÉ */
+.etiqueta-rodape {
+    background: #000;
+    color: #fff;
+    padding: 12px 25px;
+    text-align: center;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.etiqueta-rodape strong {
+    color: #f97316;
+}
+
+/* IMPRESSÃO */
+@media print {
+    body {
+        background: #fff;
+        padding: 0;
+    }
+    
+    .toolbar { display: none; }
+    
+    .etiqueta {
+        box-shadow: none;
+        border: 2px solid #000;
+        page-break-inside: avoid;
+    }
+    
+    .etiqueta-header {
+        background: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .etiqueta-rodape {
+        background: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .etiqueta-dados {
+        background: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .etiqueta-codigo {
+        background: #000 !important;
+        color: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .etiqueta::before {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .etiqueta { max-width: 100%; }
+    .etiqueta-qr img { width: 180px; height: 180px; }
+}
+</style>
+
+<!-- Tabler Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+    <button class="btn-print" onclick="window.print()">
+        <i class="ti ti-printer"></i> Imprimir Etiqueta
+    </button>
+    <a href="/dispositivos/<%= dispositivo.id %>" class="btn-back">
+        <i class="ti ti-arrow-left"></i> Voltar
+    </a>
+</div>
+
+<!-- ETIQUETA -->
+<div class="etiqueta">
+
+    <div class="etiqueta-header">
+        <div class="etiqueta-logo">
+            <span class="etiqueta-logo-icon">⚡</span>
+            <span>All<strong>services</strong></span>
+        </div>
+        <div class="etiqueta-slogan">Manutenção inteligente</div>
+    </div>
+
+    <div class="etiqueta-codigo-wrapper">
+        <div class="etiqueta-codigo-label">Código de rastreamento</div>
+        <div class="etiqueta-codigo"><%= dispositivo.qr_code %></div>
+    </div>
+
+    <div class="etiqueta-qr-wrapper">
+        <div class="etiqueta-qr">
+            <img src="<%= qrImage %>" alt="QR Code">
+        </div>
+    </div>
+
+    <div class="etiqueta-instrucao">
+        <i class="ti ti-device-mobile"></i>
+        <strong>Escaneie com seu celular</strong><br>
+        para acompanhar o reparo em tempo real
+    </div>
+
+    <div class="etiqueta-dados">
+        <div class="etiqueta-linha">
+            <strong>Tipo</strong>
+            <span><%= dispositivo.tipo %></span>
+        </div>
+        <% if (dispositivo.marca || dispositivo.modelo) { %>
+            <div class="etiqueta-linha">
+                <strong>Modelo</strong>
+                <span><%= [dispositivo.marca, dispositivo.modelo].filter(Boolean).join(' ') %></span>
+            </div>
+        <% } %>
+        <% if (dispositivo.cliente_nome) { %>
+            <div class="etiqueta-linha">
+                <strong>Cliente</strong>
+                <span><%= dispositivo.cliente_nome %></span>
+            </div>
+        <% } %>
+        <div class="etiqueta-linha">
+            <strong>Entrada</strong>
+            <span><%= new Date(dispositivo.criado_em).toLocaleDateString('pt-BR') %></span>
+        </div>
+    </div>
+
+    <div class="etiqueta-rodape">
+        All<strong>services</strong> • TI Profissional
+    </div>
+
+</div>
+
+</body>
+</html>

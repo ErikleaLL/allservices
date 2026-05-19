@@ -1,0 +1,109 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Editar Dispositivo</h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                <%= dispositivo.qr_code %> • #<%= dispositivo.id %>
+            </span>
+        </div>
+        <a href="/dispositivos/<%= dispositivo.id %>" class="btn btn-secondary">
+            <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <div class="form-container">
+
+        <% if (error) { %>
+            <div class="alert alert-error">
+                <i class="ti ti-alert-circle"></i> <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/dispositivos/<%= dispositivo.id %>" method="POST">
+
+            <!-- CLIENTE -->
+            <div class="form-group">
+                <label for="cliente_id">Cliente *</label>
+                <select name="cliente_id" id="cliente_id" required>
+                    <option value="">— Selecione —</option>
+                    <% clientes.forEach(c => { %>
+                        <option value="<%= c.id %>" <%= dispositivo.cliente_id == c.id ? 'selected' : '' %>>
+                            <%= c.nome %><%= c.telefone ? ' • ' + c.telefone : '' %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <!-- TIPO -->
+            <div class="form-group">
+                <label for="tipo">Tipo *</label>
+                <select name="tipo" id="tipo" required>
+                    <% const tipos = ['Notebook','Desktop','All-in-One','Smartphone','Tablet','Impressora','Monitor','Periférico','Servidor','Roteador','Outro']; %>
+                    <% tipos.forEach(t => { %>
+                        <option value="<%= t %>" <%= dispositivo.tipo === t ? 'selected' : '' %>><%= t %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <!-- MARCA + MODELO -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" class="form-row">
+                <div class="form-group">
+                    <label for="marca">Marca</label>
+                    <input type="text" name="marca" id="marca" value="<%= dispositivo.marca || '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="modelo">Modelo</label>
+                    <input type="text" name="modelo" id="modelo" value="<%= dispositivo.modelo || '' %>">
+                </div>
+            </div>
+
+            <!-- NÚMERO DE SÉRIE -->
+            <div class="form-group">
+                <label for="numero_serie">Número de Série</label>
+                <input type="text" name="numero_serie" id="numero_serie" value="<%= dispositivo.numero_serie || '' %>">
+            </div>
+
+            <!-- STATUS -->
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" id="status">
+                    <% Object.entries(STATUS_LIST).forEach(([key, info]) => { %>
+                        <option value="<%= key %>" <%= dispositivo.status === key ? 'selected' : '' %>>
+                            <%= info.label %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <!-- PROBLEMA -->
+            <div class="form-group">
+                <label for="problema_relato">Problema relatado</label>
+                <textarea name="problema_relato" id="problema_relato" rows="4"><%= dispositivo.problema_relato || '' %></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="ti ti-check"></i> Salvar Alterações
+                </button>
+                <a href="/dispositivos/<%= dispositivo.id %>" class="btn btn-secondary">
+                    <i class="ti ti-x"></i> Cancelar
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<style>
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+

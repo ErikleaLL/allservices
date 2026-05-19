@@ -1,0 +1,207 @@
+
+<div class="content">
+
+    <div class="page-header">
+        <div>
+            <h2>Editar OS <span style="font-family: monospace; color: #a78bfa;"><%= ordem.numero_os %></span></h2>
+            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+                Criada em <%= new Date(ordem.criado_em).toLocaleString('pt-BR') %>
+            </span>
+        </div>
+        <a href="/ordens/<%= ordem.id %>" class="btn btn-secondary">
+            <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <div class="form-container" style="max-width: 900px;">
+
+        <% if (error) { %>
+            <div class="alert alert-error">
+                <i class="ti ti-alert-circle"></i> <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/ordens/<%= ordem.id %>" method="POST">
+
+            <!-- ===== STATUS ===== -->
+            <div style="background: rgba(124,58,237,0.05); border: 1px solid rgba(124,58,237,0.15); border-radius: 12px; padding: 18px; margin-bottom: 22px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                    <i class="ti ti-flag" style="color: #a78bfa; font-size: 18px;"></i>
+                    <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;">Status atual</h3>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <select name="status" required>
+                        <% Object.entries(STATUS_OS).forEach(([key, info]) => { %>
+                            <option value="<%= key %>" <%= ordem.status === key ? 'selected' : '' %>>
+                                <%= info.label %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ===== VÍNCULOS ===== -->
+            <div style="background: rgba(96,165,250,0.05); border: 1px solid rgba(96,165,250,0.15); border-radius: 12px; padding: 18px; margin-bottom: 22px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                    <i class="ti ti-link" style="color: #60a5fa; font-size: 18px;"></i>
+                    <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;">Vínculos</h3>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" class="grid-2">
+
+                    <div class="form-group">
+                        <label for="cliente_id">Cliente *</label>
+                        <select name="cliente_id" id="cliente_id" required>
+                            <% clientes.forEach(c => { %>
+                                <option value="<%= c.id %>" <%= ordem.cliente_id == c.id ? 'selected' : '' %>>
+                                    <%= c.nome %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dispositivo_id">Dispositivo *</label>
+                        <select name="dispositivo_id" id="dispositivo_id" required>
+                            <% dispositivos.forEach(d => { %>
+                                <option value="<%= d.id %>" <%= ordem.dispositivo_id == d.id ? 'selected' : '' %>>
+                                    <%= d.qr_code %> • <%= d.tipo %>
+                                    <%= d.marca ? ' • ' + d.marca : '' %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-group" style="margin-top: 12px; margin-bottom: 0;">
+                    <label for="tecnico_id">Técnico responsável</label>
+                    <select name="tecnico_id" id="tecnico_id">
+                        <option value="">— Não atribuído —</option>
+                        <% tecnicos.forEach(t => { %>
+                            <option value="<%= t.id %>" <%= ordem.tecnico_id == t.id ? 'selected' : '' %>>
+                                <%= t.nome %> (<%= t.role %>)
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ===== DIAGNÓSTICO ===== -->
+            <div style="background: rgba(96,165,250,0.05); border: 1px solid rgba(96,165,250,0.15); border-radius: 12px; padding: 18px; margin-bottom: 22px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                    <i class="ti ti-search" style="color: #60a5fa; font-size: 18px;"></i>
+                    <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;">Diagnóstico técnico</h3>
+                </div>
+
+                <div class="form-group">
+                    <label for="diagnostico">Diagnóstico</label>
+                    <textarea name="diagnostico" id="diagnostico" rows="3"><%= ordem.diagnostico || '' %></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao_servico">Serviço a executar</label>
+                    <textarea name="descricao_servico" id="descricao_servico" rows="3"><%= ordem.descricao_servico || '' %></textarea>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="solucao">Solução aplicada <span style="color: rgba(255,255,255,0.4); font-size: 11px;">(preencher após concluir)</span></label>
+                    <textarea name="solucao" id="solucao" rows="3" 
+                        placeholder="Descreva o que foi feito..."><%= ordem.solucao || '' %></textarea>
+                </div>
+            </div>
+
+            <!-- ===== VALORES ===== -->
+            <div style="background: rgba(74,222,128,0.05); border: 1px solid rgba(74,222,128,0.15); border-radius: 12px; padding: 18px; margin-bottom: 22px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                    <i class="ti ti-cash" style="color: #4ade80; font-size: 18px;"></i>
+                    <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;">Valores</h3>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;" class="grid-3">
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="valor_mao_obra">Mão de obra (R$)</label>
+                        <input type="number" step="0.01" min="0" 
+                            name="valor_mao_obra" id="valor_mao_obra" 
+                            value="<%= ordem.valor_mao_obra || 0 %>">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="valor_pecas">Peças (R$) <span style="font-size: 10px; color: rgba(255,255,255,0.4);">(auto)</span></label>
+                        <input type="number" step="0.01" min="0" 
+                            name="valor_pecas" id="valor_pecas" 
+                            value="<%= ordem.valor_pecas || 0 %>" readonly
+                            style="opacity: 0.7;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="garantia_dias">Garantia (dias)</label>
+                        <input type="number" min="0" 
+                            name="garantia_dias" id="garantia_dias" 
+                            value="<%= ordem.garantia_dias || 90 %>">
+                    </div>
+
+                </div>
+
+                <div style="background: rgba(74,222,128,0.1); padding: 12px 14px; border-radius: 8px; margin-top: 14px; text-align: center;">
+                    <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px;">
+                        Valor total estimado
+                    </div>
+                    <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #4ade80; margin-top: 4px;">
+                        R$ <%= ((ordem.valor_mao_obra || 0) + (ordem.valor_pecas || 0)).toFixed(2).replace('.', ',') %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PRAZOS E OBSERVAÇÕES ===== -->
+            <div style="background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.15); border-radius: 12px; padding: 18px; margin-bottom: 22px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                    <i class="ti ti-calendar" style="color: #fbbf24; font-size: 18px;"></i>
+                    <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;">Prazo e observações</h3>
+                </div>
+
+                <div class="form-group">
+                    <label for="prazo_entrega">Prazo de entrega</label>
+                    <input type="date" name="prazo_entrega" id="prazo_entrega" 
+                        value="<%= ordem.prazo_entrega || '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="observacoes_publicas">
+                        Observações para o cliente <span style="color: #4ade80; font-size: 11px;">(público)</span>
+                    </label>
+                    <textarea name="observacoes_publicas" id="observacoes_publicas" rows="2"><%= ordem.observacoes_publicas || '' %></textarea>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="observacoes_internas">
+                        Observações internas <span style="color: #fbbf24; font-size: 11px;">(privado)</span>
+                    </label>
+                    <textarea name="observacoes_internas" id="observacoes_internas" rows="2"><%= ordem.observacoes_internas || '' %></textarea>
+                </div>
+            </div>
+
+            <!-- AÇÕES -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="ti ti-check"></i> Salvar Alterações
+                </button>
+                <a href="/ordens/<%= ordem.id %>" class="btn btn-secondary">
+                    <i class="ti ti-x"></i> Cancelar
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<style>
+@media (max-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr !important; }
+    .grid-3 { grid-template-columns: 1fr !important; }
+}
+</style>
+

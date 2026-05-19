@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// 🌐 Rotas públicas (landing page + rastreio)
+// 🌐 Rotas públicas
 router.use('/', require('./publicRoutes'));
 
 // 🔐 Rotas privadas
@@ -11,8 +11,11 @@ router.use('/usuarios', require('./usuarioRoutes'));
 router.use('/leads', require('./leadRoutes'));
 router.use('/clientes', require('./clienteRoutes'));
 router.use('/dispositivos', require('./dispositivoRoutes'));
+router.use('/ordens', require('./ordemServicoRoutes'));
+router.use('/estoque', require('./estoqueRoutes'));
+router.use('/financeiro', require('./financeiroRoutes'));
 
-// Rota 404
+// 404
 router.use((req, res) => {
     res.status(404).send('Página não encontrada (404)');
 });

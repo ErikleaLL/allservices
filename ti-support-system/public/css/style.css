@@ -758,12 +758,6 @@ body {
 }
 
 /* ============================================
-   KANBAN ORDENS DE SERVIÇO
-============================================ */
-.kanban-wrapper {
-    padding: 0 28px 30px;
-    width: 100%;
-}
 
 .kanban-board {
     display: flex;
@@ -954,11 +948,6 @@ body {
     .kanban-coluna { flex: 0 0 260px; width: 260px; }
 }
 
-/* ===== AJUSTES KANBAN ===== */
-.kanban-wrapper {
-    padding-right: 30px !important;
-    padding-bottom: 40px !important;
-}
 
 .kanban-board {
     padding-right: 20px;
@@ -1062,4 +1051,468 @@ input, select, textarea {
 /* Códigos e números monoespaçados */
 code, .badge, [class*="numero_os"] {
     font-family: 'Geist Mono', 'Courier New', monospace !important;
+}
+
+/* ============================================
+
+.kanban-board {
+    padding-right: 30px !important;
+}
+
+/* Garante que a última coluna tenha respiro */
+.kanban-board > div:last-child {
+    margin-right: 30px;
+}
+
+/* Indicador visual de scroll */
+.kanban-wrapper::after {
+    content: '';
+    display: block;
+    height: 4px;
+    margin-top: 10px;
+    background: linear-gradient(90deg, transparent, rgba(124,58,237,0.3), transparent);
+    border-radius: 2px;
+    animation: scroll-hint 2s ease-in-out infinite;
+}
+
+@keyframes scroll-hint {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+    .kanban-wrapper {
+        padding: 0 16px 30px 16px !important;
+    }
+    .kanban-board {
+        padding-right: 20px !important;
+    }
+}
+
+/* ============================================
+
+.kanban-board {
+    display: inline-flex !important;
+    flex-wrap: nowrap !important;
+    gap: 14px !important;
+    padding: 0 14px 20px 14px !important;
+    min-width: max-content !important;
+}
+
+.kanban-coluna {
+    flex: 0 0 290px !important;
+    width: 290px !important;
+    min-width: 290px !important;
+    max-width: 290px !important;
+}
+
+/* Esconde a barra ::after antiga */
+.kanban-wrapper::after {
+    display: none !important;
+}
+
+/* Scrollbar customizada */
+.kanban-wrapper::-webkit-scrollbar {
+    height: 10px;
+}
+
+.kanban-wrapper::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.03);
+    border-radius: 5px;
+    margin: 0 14px;
+}
+
+.kanban-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(124,58,237,0.5);
+    border-radius: 5px;
+}
+
+.kanban-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(124,58,237,0.7);
+}
+
+@media (max-width: 768px) {
+    .kanban-wrapper {
+        margin: 0 16px 30px 16px !important;
+        width: calc(100% - 32px) !important;
+    }
+    .kanban-coluna {
+        flex: 0 0 260px !important;
+        width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
+    }
+}
+
+/* ============================================
+
+/* Cards menores */
+.kanban-card {
+    padding: 10px !important;
+}
+
+.kanban-card-cliente {
+    font-size: 12px !important;
+    margin-bottom: 4px !important;
+}
+
+.kanban-card-dispositivo {
+    font-size: 10px !important;
+    margin-bottom: 8px !important;
+}
+
+.kanban-card-numero {
+    font-size: 10px !important;
+}
+
+.kanban-card-data {
+    font-size: 9px !important;
+}
+
+.kanban-card-prazo {
+    font-size: 10px !important;
+}
+
+.kanban-card-valor {
+    font-size: 11px !important;
+}
+
+.kanban-card-tecnico {
+    font-size: 9.5px !important;
+    margin-top: 4px !important;
+}
+
+/* Header das colunas mais compacto */
+.kanban-coluna-titulo {
+    font-size: 11px !important;
+}
+
+.kanban-coluna-count {
+    font-size: 9px !important;
+}
+
+.kanban-coluna-icone {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 13px !important;
+}
+
+/* Em telas grandes (≥ 1400px), aumenta um pouquinho */
+@media (min-width: 1400px) {
+    .kanban-coluna {
+        flex: 0 0 230px !important;
+        width: 230px !important;
+        min-width: 230px !important;
+        max-width: 230px !important;
+    }
+}
+
+/* Em telas pequenas (≤ 768px) mantém tamanho confortável pra scroll */
+@media (max-width: 768px) {
+    .kanban-coluna {
+        flex: 0 0 240px !important;
+        width: 240px !important;
+        min-width: 240px !important;
+        max-width: 240px !important;
+    }
+}
+
+/* ============================================
+   KANBAN - VERSAO FINAL DEFINITIVA
+============================================ */
+.kanban-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 28px 30px 28px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.kanban-board {
+    display: flex;
+    gap: 14px;
+    padding-bottom: 10px;
+    width: max-content;
+    min-width: 100%;
+}
+
+.kanban-coluna {
+    flex: 0 0 250px;
+    width: 250px;
+    background: #13121f;
+    border: 0.5px solid rgba(255,255,255,0.07);
+    border-top: 3px solid var(--col-cor, #94a3b8);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 230px);
+}
+
+.kanban-coluna-header {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    flex-shrink: 0;
+}
+
+.kanban-header-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.kanban-coluna-icone {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.kanban-coluna-titulo {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.kanban-coluna-count {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+}
+
+.kanban-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 4px;
+}
+
+.kanban-card {
+    display: block;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 11px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    color: #fff;
+}
+
+.kanban-card:hover {
+    background: rgba(255,255,255,0.04);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
+.kanban-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 7px;
+}
+
+.kanban-card-numero {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #a78bfa;
+}
+
+.kanban-card-data {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+}
+
+.kanban-card-cliente {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 5px;
+    line-height: 1.3;
+}
+
+.kanban-card-dispositivo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+}
+
+.kanban-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 7px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.kanban-card-prazo {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+}
+
+.kanban-card-valor {
+    color: #4ade80;
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+.kanban-card-tecnico {
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 5px;
+}
+
+.kanban-vazio {
+    text-align: center;
+    padding: 25px 10px;
+    color: rgba(255,255,255,0.25);
+    font-size: 11.5px;
+}
+
+.kanban-vazio-icone {
+    font-size: 28px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Scrollbars */
+.kanban-wrapper::-webkit-scrollbar { height: 8px; }
+.kanban-wrapper::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 4px; }
+.kanban-wrapper::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.5); border-radius: 4px; }
+.kanban-wrapper::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,0.7); }
+
+.kanban-cards::-webkit-scrollbar { width: 4px; }
+.kanban-cards::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+@media (max-width: 768px) {
+    .kanban-wrapper { padding: 0 16px 30px 16px; }
+    .kanban-coluna { flex: 0 0 240px; width: 240px; }
+}
+
+/* ============================================
+   KANBAN - FIX FINAL (espaço lateral garantido)
+============================================ */
+
+/* Container raiz força overflow */
+.main-content {
+    overflow-x: hidden !important;
+}
+
+/* Wrapper do kanban com espaço duplo no final */
+.kanban-wrapper {
+    padding-right: 60px !important;
+}
+
+/* Última coluna ganha margem extra */
+.kanban-board > .kanban-coluna:last-child {
+    margin-right: 30px !important;
+}
+
+/* Garante que cards aparecem inteiros */
+.kanban-board {
+    padding-right: 30px !important;
+}
+
+/* ============================================
+   KANBAN - SUBIR PARA O TOPO
+============================================ */
+
+/* Remover altura mínima e deixar conteúdo fluir naturalmente */
+.kanban-coluna {
+    max-height: none !important;
+    min-height: 400px !important;
+    height: auto !important;
+}
+
+/* Wrapper colado no header */
+.kanban-wrapper {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Page header sem padding excessivo embaixo */
+.content + .kanban-wrapper {
+    margin-top: -10px !important;
+}
+
+/* Container kanban */
+.kanban-board {
+    align-items: flex-start !important;
+}
+
+/* ============================================
+   KANBAN - SUBIR AINDA MAIS
+============================================ */
+
+/* Remover qualquer padding/margem do content quando seguido de kanban */
+.content:has(+ .kanban-wrapper) {
+    padding-bottom: 0 !important;
+}
+
+/* Page header do kanban menor */
+.content:has(+ .kanban-wrapper) .page-header {
+    margin-bottom: 0 !important;
+    padding-bottom: 8px !important;
+    border-bottom: none !important;
+}
+
+/* Kanban colado no header */
+.kanban-wrapper {
+    margin-top: -15px !important;
+    padding-top: 0 !important;
+}
+
+/* Diminui altura mínima das colunas */
+.kanban-coluna {
+    min-height: 300px !important;
+}
+
+/* Diminui padding da topbar */
+.topbar {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+}
+
+/* ============================================
+   KANBAN - COLAR NO TOPO (DEFINITIVO)
+============================================ */
+
+/* Zera tudo */
+.content {
+    padding-bottom: 0 !important;
+}
+
+.kanban-wrapper {
+    margin-top: -200px !important;
+    padding-top: 70px !important;
+}
+
+/* Header do kanban absoluto sobre as colunas */
+body:has(.kanban-wrapper) .content {
+    padding-top: 15px !important;
+    padding-bottom: 0 !important;
+    position: relative;
+    z-index: 2;
+}
+
+body:has(.kanban-wrapper) .page-header {
+    margin-bottom: 5px !important;
+    padding-bottom: 5px !important;
+    border-bottom: none !important;
+}
+
+/* Colunas com altura confortável */
+.kanban-coluna {
+    min-height: 500px !important;
+    max-height: calc(100vh - 180px) !important;
 }

@@ -1,11 +1,9 @@
 
-<div class="content">
-
+<div class="content" style="padding-bottom: 0;">
     <div class="page-header">
         <div>
-            <h2>Visualização Kanban</h2>
             <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
-                Visão visual de todas as OS por status • Arraste horizontalmente para ver mais
+                <i class="ti ti-info-circle"></i> Arraste a barra abaixo para ver mais colunas →
             </span>
         </div>
         <div>
@@ -17,7 +15,6 @@
             </a>
         </div>
     </div>
-
 </div>
 
 <div class="kanban-wrapper">
@@ -27,7 +24,7 @@
             const ordensColuna = colunas[statusKey] || [];
         %>
 
-            <div class="kanban-coluna" style="border-top-color: <%= info.cor %>;">
+            <div class="kanban-coluna" style="--col-cor: <%= info.cor %>; border-top-color: <%= info.cor %>;">
 
                 <div class="kanban-coluna-header">
                     <div class="kanban-header-content">
@@ -69,9 +66,6 @@
                                 <div class="kanban-card-dispositivo">
                                     <i class="ti ti-device-laptop"></i>
                                     <%= os.dispositivo_tipo %>
-                                    <% if (os.dispositivo_marca) { %>
-                                        • <%= os.dispositivo_marca %>
-                                    <% } %>
                                 </div>
 
                                 <div class="kanban-card-footer">
@@ -102,9 +96,6 @@
             </div>
 
         <% }) %>
-
-        <!-- Espaçador final pra dar respiro -->
-        <div style="flex: 0 0 20px;"></div>
 
     </div>
 </div>

@@ -1,8 +1,8 @@
 const db = require('../config/database');
+const crypto = require('crypto');
 
 class OrdemServico {
 
-    // Listar todas com dados relacionados
     static findAll() {
         return db.prepare(`
             SELECT 
@@ -22,7 +22,6 @@ class OrdemServico {
         `).all();
     }
 
-    // Buscar por ID com tudo
     static findById(id) {
         const os = db.prepare(`
             SELECT 
@@ -46,12 +45,10 @@ class OrdemServico {
         `).get(id);
 
         if (os) {
-            // Buscar peças usadas
             os.pecas = db.prepare(`
                 SELECT * FROM os_pecas WHERE ordem_servico_id = ? ORDER BY id ASC
             `).all(id);
 
-            // Buscar histórico
             os.historico = db.prepare(`
                 SELECT h.*, u.nome as usuario_nome
                 FROM os_historico h
@@ -64,7 +61,34 @@ class OrdemServico {
         return os;
     }
 
-    // Buscar OS de um dispositivo
+    // 🎯 NOVO: Buscar OS pelo QR Code de garantia
+    static findByQrGarantia(qrCode) {
+        const os = db.prepare(`
+            SELECT 
+                os.*,
+                c.nome as cliente_nome,
+                c.telefone as cliente_telefone,
+                d.tipo as dispositivo_tipo,
+                d.marca as dispositivo_marca,
+                d.modelo as dispositivo_modelo,
+                d.numero_serie as dispositivo_serie,
+                u.nome as tecnico_nome
+            FROM ordens_servico os
+            LEFT JOIN clientes c ON os.cliente_id = c.id
+            LEFT JOIN dispositivos d ON os.dispositivo_id = d.id
+            LEFT JOIN usuarios u ON os.tecnico_id = u.id
+            WHERE os.qr_code_garantia = ?
+        `).get(qrCode);
+
+        if (os) {
+            os.pecas = db.prepare(`
+                SELECT * FROM os_pecas WHERE ordem_servico_id = ? ORDER BY id ASC
+            `).all(os.id);
+        }
+
+        return os;
+    }
+
     static findByDispositivo(dispositivoId) {
         return db.prepare(`
             SELECT * FROM ordens_servico 
@@ -73,7 +97,6 @@ class OrdemServico {
         `).all(dispositivoId);
     }
 
-    // Buscar OS de um cliente
     static findByCliente(clienteId) {
         return db.prepare(`
             SELECT * FROM ordens_servico 
@@ -82,7 +105,6 @@ class OrdemServico {
         `).all(clienteId);
     }
 
-    // Gerar próximo número de OS (formato: OS-2026-001)
     static gerarNumeroOS() {
         const ano = new Date().getFullYear();
         const ultima = db.prepare(`
@@ -100,7 +122,11 @@ class OrdemServico {
         return `OS-${ano}-${String(proximo).padStart(3, '0')}`;
     }
 
-    // Criar nova OS
+    // 🎯 NOVO: Gerar código único de garantia
+    static gerarCodigoGarantia() {
+        return 'GAR-' + crypto.randomBytes(5).toString('hex').toUpperCase();
+    }
+
     static create({ 
         dispositivo_id, cliente_id, tecnico_id, 
         diagnostico, descricao_servico, 
@@ -109,30 +135,29 @@ class OrdemServico {
         garantia_dias 
     }) {
         const numero_os = this.gerarNumeroOS();
+        const qr_code_garantia = this.gerarCodigoGarantia();
 
         const result = db.prepare(`
             INSERT INTO ordens_servico (
-                numero_os, dispositivo_id, cliente_id, tecnico_id,
+                numero_os, qr_code_garantia, dispositivo_id, cliente_id, tecnico_id,
                 diagnostico, descricao_servico,
                 valor_mao_obra, valor_pecas, valor_total,
                 prazo_entrega, observacoes_internas, observacoes_publicas,
                 garantia_dias, status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'orcamento')
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'orcamento')
         `).run(
-            numero_os, dispositivo_id, cliente_id, tecnico_id || null,
+            numero_os, qr_code_garantia, dispositivo_id, cliente_id, tecnico_id || null,
             diagnostico || null, descricao_servico || null,
             valor_mao_obra || 0, valor_pecas || 0, valor_total || 0,
             prazo_entrega || null, observacoes_internas || null, observacoes_publicas || null,
             garantia_dias || 90
         );
 
-        // Registrar no histórico
         this.registrarHistorico(result.lastInsertRowid, null, 'orcamento', 'OS criada', null);
 
         return this.findById(result.lastInsertRowid);
     }
 
-    // Atualizar OS
     static update(id, dados) {
         const {
             dispositivo_id, cliente_id, tecnico_id,
@@ -142,7 +167,6 @@ class OrdemServico {
             garantia_dias, status
         } = dados;
 
-        // Pega status anterior para histórico
         const atual = db.prepare('SELECT status FROM ordens_servico WHERE id = ?').get(id);
 
         db.prepare(`
@@ -162,7 +186,6 @@ class OrdemServico {
             id
         );
 
-        // Se mudou status, registrar
         if (atual && atual.status !== status) {
             this.registrarHistorico(id, atual.status, status, 'Status alterado', null);
         }
@@ -170,13 +193,11 @@ class OrdemServico {
         return this.findById(id);
     }
 
-    // Mudar apenas status
     static updateStatus(id, novoStatus, observacao, usuarioId) {
         const atual = db.prepare('SELECT status FROM ordens_servico WHERE id = ?').get(id);
         
         db.prepare(`UPDATE ordens_servico SET status = ? WHERE id = ?`).run(novoStatus, id);
         
-        // Se concluído, marcar data
         if (novoStatus === 'entregue') {
             db.prepare(`UPDATE ordens_servico SET concluido_em = CURRENT_TIMESTAMP WHERE id = ?`).run(id);
         }
@@ -186,17 +207,14 @@ class OrdemServico {
         }
     }
 
-    // Deletar OS
     static delete(id) {
         return db.prepare(`DELETE FROM ordens_servico WHERE id = ?`).run(id);
     }
 
-    // Contar total
     static count() {
         return db.prepare(`SELECT COUNT(*) as total FROM ordens_servico`).get().total;
     }
 
-    // Contar por status
     static countByStatus() {
         return db.prepare(`
             SELECT status, COUNT(*) as total 
@@ -205,7 +223,6 @@ class OrdemServico {
         `).all();
     }
 
-    // Receita do mês
     static receitaDoMes() {
         const result = db.prepare(`
             SELECT COALESCE(SUM(valor_total), 0) as total
@@ -216,8 +233,6 @@ class OrdemServico {
         return result.total || 0;
     }
 
-    // ===== PEÇAS =====
-    
     static adicionarPeca(osId, { descricao, quantidade, valor_unitario }) {
         const valor_total = quantidade * valor_unitario;
         
@@ -255,8 +270,6 @@ class OrdemServico {
         `).run(totalPecas, total, osId);
     }
 
-    // ===== HISTÓRICO =====
-    
     static registrarHistorico(osId, statusAnterior, statusNovo, observacao, usuarioId) {
         db.prepare(`
             INSERT INTO os_historico (ordem_servico_id, status_anterior, status_novo, observacao, usuario_id)

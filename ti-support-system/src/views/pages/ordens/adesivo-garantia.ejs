@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adesivo Garantia - <%= ordem.numero_os %></title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Geist', sans-serif;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1e1b3a 100%);
+    min-height: 100vh;
+    padding: 30px 15px;
+    color: #fff;
+}
+
+/* TOOLBAR */
+.toolbar {
+    max-width: 700px;
+    margin: 0 auto 25px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.toolbar button, .toolbar a {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.btn-print {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+}
+
+.btn-print:hover { transform: translateY(-2px); }
+
+.btn-back {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.toolbar-info {
+    width: 100%;
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* PÁGINA A4 com VÁRIOS adesivos */
+.pagina {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* ADESIVO COMPACTO */
+.adesivo {
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 10px;
+    overflow: hidden;
+    color: #000;
+    position: relative;
+    page-break-inside: avoid;
+}
+
+.adesivo::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #7c3aed, #2563eb, #10b981, #f97316);
+}
+
+/* HEADER COMPACTO */
+.adesivo-header {
+    background: #000;
+    color: #fff;
+    padding: 10px 14px;
+    text-align: center;
+}
+
+.adesivo-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.adesivo-logo-icon {
+    background: linear-gradient(135deg, #f97316, #f59e0b);
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.adesivo-logo strong { color: #f97316; }
+
+.adesivo-tipo {
+    font-size: 8px;
+    color: #fbbf24;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 2px;
+    font-weight: 700;
+}
+
+/* CORPO */
+.adesivo-body {
+    padding: 12px;
+    text-align: center;
+}
+
+.adesivo-qr-wrapper {
+    background: #fff;
+    padding: 6px;
+    border: 2px solid #000;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.adesivo-qr-wrapper img {
+    display: block;
+    width: 130px;
+    height: 130px;
+}
+
+.adesivo-codigo {
+    font-family: 'Geist', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    background: #000;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+.adesivo-instrucao {
+    font-size: 10px;
+    color: #444;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.adesivo-instrucao i {
+    color: #7c3aed;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.adesivo-instrucao strong {
+    color: #000;
+    font-weight: 700;
+}
+
+/* DADOS */
+.adesivo-dados {
+    background: #f5f5f5;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border-left: 3px solid #7c3aed;
+    margin-top: 6px;
+}
+
+.adesivo-linha {
+    font-size: 9.5px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+    gap: 6px;
+}
+
+.adesivo-linha:last-child { margin-bottom: 0; }
+
+.adesivo-linha strong {
+    color: #666;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 8px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.adesivo-linha span {
+    color: #000;
+    font-weight: 600;
+    text-align: right;
+}
+
+/* GARANTIA DESTAQUE */
+.adesivo-garantia-box {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: #fff;
+    padding: 6px 12px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.adesivo-garantia-box i {
+    font-size: 14px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.adesivo-garantia-box strong {
+    font-size: 14px;
+    letter-spacing: 0;
+}
+
+/* RODAPÉ */
+.adesivo-rodape {
+    background: #000;
+    color: #fbbf24;
+    padding: 5px;
+    text-align: center;
+    font-size: 7px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+
+/* IMPRESSÃO */
+@media print {
+    @page {
+        size: A4;
+        margin: 8mm;
+    }
+    
+    body {
+        background: #fff;
+        padding: 0;
+    }
+    
+    .toolbar { display: none; }
+    
+    .pagina {
+        box-shadow: none;
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .adesivo {
+        border: 2px solid #000;
+    }
+    
+    .adesivo-header,
+    .adesivo-rodape,
+    .adesivo-codigo,
+    .adesivo-dados,
+    .adesivo-garantia-box,
+    .adesivo::before {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 600px) {
+    .pagina {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+    <button class="btn-print" onclick="window.print()">
+        <i class="ti ti-printer"></i> Imprimir Adesivos
+    </button>
+    <a href="/ordens/<%= ordem.id %>" class="btn-back">
+        <i class="ti ti-arrow-left"></i> Voltar
+    </a>
+    <div class="toolbar-info">
+        💡 4 adesivos por folha A4 • Recorte e cole nas peças consertadas
+    </div>
+</div>
+
+<!-- 4 ADESIVOS POR FOLHA -->
+<div class="pagina">
+
+    <% for (let i = 0; i < 4; i++) { %>
+        <div class="adesivo">
+
+            <div class="adesivo-header">
+                <div class="adesivo-logo">
+                    <span class="adesivo-logo-icon">⚡</span>
+                    <span>All<strong>services</strong></span>
+                </div>
+                <div class="adesivo-tipo">🛡️ Garantia Digital</div>
+            </div>
+
+            <div class="adesivo-body">
+
+                <div class="adesivo-qr-wrapper">
+                    <img src="<%= qrImage %>" alt="QR Code">
+                </div>
+
+                <div>
+                    <div class="adesivo-codigo"><%= ordem.qr_code_garantia %></div>
+                </div>
+
+                <div class="adesivo-instrucao">
+                    <i class="ti ti-device-mobile"></i>
+                    <strong>Escaneie</strong> e veja sua garantia
+                </div>
+
+                <div class="adesivo-dados">
+                    <div class="adesivo-linha">
+                        <strong>OS</strong>
+                        <span><%= ordem.numero_os %></span>
+                    </div>
+                    <div class="adesivo-linha">
+                        <strong>Data</strong>
+                        <span>
+                            <% if (ordem.concluido_em) { %>
+                                <%= new Date(ordem.concluido_em).toLocaleDateString('pt-BR') %>
+                            <% } else { %>
+                                <%= new Date(ordem.criado_em).toLocaleDateString('pt-BR') %>
+                            <% } %>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="adesivo-garantia-box">
+                <i class="ti ti-shield-check"></i>
+                Garantia: <strong><%= ordem.garantia_dias %></strong> dias
+            </div>
+
+            <div class="adesivo-rodape">
+                Allservices • TI Profissional
+            </div>
+
+        </div>
+    <% } %>
+
+</div>
+
+</body>
+</html>

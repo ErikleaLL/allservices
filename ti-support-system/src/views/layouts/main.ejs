@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title || 'Allservices' %></title>
     
-    <!-- Fontes -->
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Fontes premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Tabler Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     
@@ -48,7 +51,7 @@
         <main class="main-content">
             <header class="topbar">
                 <div>
-                    <button class="menu-toggle" onclick="toggleMenu()" style="display:none; background:none; border:none; color:#fff; font-size:24px; margin-right:15px; cursor:pointer;">
+                    <button class="menu-toggle" onclick="toggleMenu()">
                         <i class="ti ti-menu-2"></i>
                     </button>
                     <h1><%= title %></h1>
@@ -68,16 +71,13 @@
             document.getElementById('sidebarOverlay').classList.toggle('active');
         }
         
-        // Destacar menu ativo
         const path = window.location.pathname;
         document.querySelectorAll('.sidebar a').forEach(link => {
-            if (link.getAttribute('href') === path) link.classList.add('active');
+            const href = link.getAttribute('href');
+            if (href && href !== '/' && path.startsWith(href)) {
+                link.classList.add('active');
+            }
         });
-
-        // Mostrar hambúrguer no mobile
-        if(window.innerWidth <= 768) {
-            document.querySelector('.menu-toggle').style.display = 'inline-block';
-        }
     </script>
 </body>
 </html>

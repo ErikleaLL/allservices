@@ -598,3 +598,47 @@ body {
 @media (min-width: 1440px) {
     .hero h1 { font-size: 58px; }
 }
+
+/* ============================================
+   FONTES PREMIUM (Landing Page)
+============================================ */
+
+body, input, select, textarea, button {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4,
+.hero h1,
+.section-title,
+.logo-text,
+.feature-card h3,
+.cta-section h2,
+.footer-logo {
+    font-family: 'Bricolage Grotesque', sans-serif !important;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.hero h1 {
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+}
+
+.btn-cta, .btn-login,
+.btn-hero-primary, .btn-hero-secondary {
+    font-family: 'Geist', sans-serif !important;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+}
+
+.nav-menu a {
+    font-family: 'Geist', sans-serif !important;
+    font-weight: 500;
+}
+
+.feature-badge, .hero-badge {
+    font-family: 'Geist', sans-serif !important;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}

@@ -2,8 +2,8 @@ const OrdemServico = require('../models/OrdemServico');
 const Cliente = require('../models/Cliente');
 const Dispositivo = require('../models/Dispositivo');
 const Usuario = require('../models/Usuario');
+const QRCode = require('qrcode');
 
-// Status das OS com cor, ícone e label
 const STATUS_OS = {
     'orcamento':         { label: 'Orçamento',         cor: '#fbbf24', icone: 'ti-file-dollar' },
     'aprovada':          { label: 'Aprovada',          cor: '#60a5fa', icone: 'ti-thumb-up' },
@@ -14,7 +14,15 @@ const STATUS_OS = {
     'cancelada':         { label: 'Cancelada',         cor: '#f87171', icone: 'ti-x' }
 };
 
-// Listar todas
+function getBaseUrl(req) {
+    if (process.env.PUBLIC_URL) return process.env.PUBLIC_URL;
+    const forwardedHost = req.get('x-forwarded-host');
+    const forwardedProto = req.get('x-forwarded-proto') || 'https';
+    if (forwardedHost) return `${forwardedProto}://${forwardedHost}`;
+    if (process.env.CODESPACE_NAME) return `https://${process.env.CODESPACE_NAME}-3000.app.github.dev`;
+    return `${req.protocol}://${req.get('host')}`;
+}
+
 exports.index = (req, res, next) => {
     try {
         const ordens = OrdemServico.findAll();
@@ -22,85 +30,52 @@ exports.index = (req, res, next) => {
         const statusCount = OrdemServico.countByStatus();
         const receitaMes = OrdemServico.receitaDoMes();
 
-        // Organiza estatísticas
         const stats = {
-            total,
-            orcamento: 0,
-            aprovada: 0,
-            em_execucao: 0,
-            aguardando_peca: 0,
-            pronta: 0,
-            entregue: 0,
-            cancelada: 0,
-            receitaMes
+            total, orcamento: 0, aprovada: 0, em_execucao: 0,
+            aguardando_peca: 0, pronta: 0, entregue: 0, cancelada: 0, receitaMes
         };
 
-        statusCount.forEach(s => {
-            stats[s.status] = s.total;
-        });
+        statusCount.forEach(s => { stats[s.status] = s.total; });
 
         res.render('pages/ordens/index', {
             title: 'Ordens de Serviço',
             layout: 'layouts/main',
-            ordens,
-            stats,
-            STATUS_OS
+            ordens, stats, STATUS_OS
         });
     } catch (error) { next(error); }
 };
 
-// Visão Kanban
 exports.kanban = (req, res, next) => {
     try {
         const ordens = OrdemServico.findAll();
-
-        // Agrupar por status
         const colunas = {};
-        Object.keys(STATUS_OS).forEach(key => {
-            colunas[key] = [];
-        });
-
-        ordens.forEach(os => {
-            if (colunas[os.status]) {
-                colunas[os.status].push(os);
-            }
-        });
+        Object.keys(STATUS_OS).forEach(key => { colunas[key] = []; });
+        ordens.forEach(os => { if (colunas[os.status]) colunas[os.status].push(os); });
 
         res.render('pages/ordens/kanban', {
             title: 'Kanban - Ordens de Serviço',
             layout: 'layouts/main',
-            colunas,
-            STATUS_OS
+            colunas, STATUS_OS
         });
     } catch (error) { next(error); }
 };
 
-// Formulário de criação
 exports.create = (req, res, next) => {
     try {
         const clientes = Cliente.findAll();
         const dispositivos = Dispositivo.findAll();
-        const tecnicos = Usuario.findAll().filter(u => 
-            u.role === 'tecnico' || u.role === 'admin'
-        );
-
-        // Pré-seleciona se vier do dispositivo
+        const tecnicos = Usuario.findAll().filter(u => u.role === 'tecnico' || u.role === 'admin');
         const dispositivoPreSelecionado = req.query.dispositivo_id || null;
 
         res.render('pages/ordens/create', {
             title: 'Nova Ordem de Serviço',
             layout: 'layouts/main',
-            clientes,
-            dispositivos,
-            tecnicos,
-            dispositivoPreSelecionado,
-            error: null,
-            STATUS_OS
+            clientes, dispositivos, tecnicos,
+            dispositivoPreSelecionado, error: null, STATUS_OS
         });
     } catch (error) { next(error); }
 };
 
-// Salvar nova OS
 exports.store = (req, res, next) => {
     try {
         const {
@@ -111,25 +86,19 @@ exports.store = (req, res, next) => {
             garantia_dias
         } = req.body;
 
-        if (!cliente_id || !dispositivo_id) {
-            return res.redirect('/ordens/create');
-        }
+        if (!cliente_id || !dispositivo_id) return res.redirect('/ordens/create');
 
         const valor_mao_obra_num = parseFloat(valor_mao_obra) || 0;
-        const valor_total = valor_mao_obra_num; // peças são adicionadas depois
 
         const nova = OrdemServico.create({
             dispositivo_id: parseInt(dispositivo_id),
             cliente_id: parseInt(cliente_id),
             tecnico_id: tecnico_id ? parseInt(tecnico_id) : null,
-            diagnostico,
-            descricao_servico,
+            diagnostico, descricao_servico,
             valor_mao_obra: valor_mao_obra_num,
             valor_pecas: 0,
-            valor_total,
-            prazo_entrega,
-            observacoes_internas,
-            observacoes_publicas,
+            valor_total: valor_mao_obra_num,
+            prazo_entrega, observacoes_internas, observacoes_publicas,
             garantia_dias: parseInt(garantia_dias) || 90
         });
 
@@ -137,7 +106,6 @@ exports.store = (req, res, next) => {
     } catch (error) { next(error); }
 };
 
-// Ver detalhes
 exports.show = (req, res, next) => {
     try {
         const ordem = OrdemServico.findById(req.params.id);
@@ -146,13 +114,11 @@ exports.show = (req, res, next) => {
         res.render('pages/ordens/show', {
             title: 'OS ' + ordem.numero_os,
             layout: 'layouts/main',
-            ordem,
-            STATUS_OS
+            ordem, STATUS_OS
         });
     } catch (error) { next(error); }
 };
 
-// Imprimir OS
 exports.imprimir = (req, res, next) => {
     try {
         const ordem = OrdemServico.findById(req.params.id);
@@ -161,43 +127,94 @@ exports.imprimir = (req, res, next) => {
         res.render('pages/ordens/imprimir', {
             title: 'Imprimir OS - ' + ordem.numero_os,
             layout: false,
-            ordem,
-            STATUS_OS
+            ordem, STATUS_OS
         });
     } catch (error) { next(error); }
 };
 
-// Editar
-exports.edit = (req, res, next) => {
+// 🎯 NOVO: Imprimir adesivo de garantia (cola na peça)
+exports.adesivoGarantia = async (req, res, next) => {
     try {
         const ordem = OrdemServico.findById(req.params.id);
         if (!ordem) return res.redirect('/ordens');
 
-        const clientes = Cliente.findAll();
-        const dispositivos = Dispositivo.findAll();
-        const tecnicos = Usuario.findAll().filter(u => 
-            u.role === 'tecnico' || u.role === 'admin'
-        );
+        const baseUrl = getBaseUrl(req);
+        const urlGarantia = baseUrl + '/garantia/' + ordem.qr_code_garantia;
 
-        res.render('pages/ordens/edit', {
-            title: 'Editar OS ' + ordem.numero_os,
-            layout: 'layouts/main',
-            ordem,
-            clientes,
-            dispositivos,
-            tecnicos,
-            STATUS_OS,
-            error: null
+        const qrImage = await QRCode.toDataURL(urlGarantia, {
+            width: 400,
+            margin: 1,
+            color: { dark: '#000', light: '#fff' }
+        });
+
+        res.render('pages/ordens/adesivo-garantia', {
+            title: 'Adesivo de Garantia - ' + ordem.numero_os,
+            layout: false,
+            ordem, qrImage, urlGarantia
         });
     } catch (error) { next(error); }
 };
 
-// Atualizar
+// 🎯 NOVO: Página pública de consulta da garantia
+exports.consultarGarantia = (req, res, next) => {
+    try {
+        const ordem = OrdemServico.findByQrGarantia(req.params.qrcode);
+
+        if (!ordem) {
+            return res.status(404).render('pages/public/garantia-naoencontrada', {
+                title: 'Garantia não encontrada',
+                layout: 'layouts/public'
+            });
+        }
+
+        // Calcular se a garantia está ativa
+        let garantiaAtiva = false;
+        let diasRestantes = 0;
+        let dataExpiracao = null;
+        let dataReferencia = ordem.concluido_em || ordem.criado_em;
+
+        if (ordem.garantia_dias && dataReferencia) {
+            const dataServ = new Date(dataReferencia);
+            dataExpiracao = new Date(dataServ.getTime() + (ordem.garantia_dias * 24 * 60 * 60 * 1000));
+            const hoje = new Date();
+            
+            if (dataExpiracao > hoje) {
+                garantiaAtiva = true;
+                diasRestantes = Math.ceil((dataExpiracao - hoje) / (1000 * 60 * 60 * 24));
+            }
+        }
+
+        res.render('pages/public/garantia', {
+            title: 'Garantia ' + ordem.numero_os,
+            layout: 'layouts/public',
+            ordem,
+            garantiaAtiva,
+            diasRestantes,
+            dataExpiracao
+        });
+    } catch (error) { next(error); }
+};
+
+exports.edit = (req, res, next) => {
+    try {
+        const ordem = OrdemServico.findById(req.params.id);
+        if (!ordem) return res.redirect('/ordens');
+        const clientes = Cliente.findAll();
+        const dispositivos = Dispositivo.findAll();
+        const tecnicos = Usuario.findAll().filter(u => u.role === 'tecnico' || u.role === 'admin');
+
+        res.render('pages/ordens/edit', {
+            title: 'Editar OS ' + ordem.numero_os,
+            layout: 'layouts/main',
+            ordem, clientes, dispositivos, tecnicos,
+            STATUS_OS, error: null
+        });
+    } catch (error) { next(error); }
+};
+
 exports.update = (req, res, next) => {
     try {
         const dados = req.body;
-        
-        // Converte números
         dados.valor_mao_obra = parseFloat(dados.valor_mao_obra) || 0;
         dados.valor_pecas = parseFloat(dados.valor_pecas) || 0;
         dados.valor_total = dados.valor_mao_obra + dados.valor_pecas;
@@ -208,33 +225,27 @@ exports.update = (req, res, next) => {
     } catch (error) { next(error); }
 };
 
-// Mudar status rápido
 exports.updateStatus = (req, res, next) => {
     try {
         const { status, observacao } = req.body;
         const usuarioId = req.session.user ? req.session.user.id : null;
-
         OrdemServico.updateStatus(req.params.id, status, observacao, usuarioId);
         res.redirect('/ordens/' + req.params.id);
     } catch (error) { next(error); }
 };
 
-// Adicionar peça
 exports.adicionarPeca = (req, res, next) => {
     try {
         const { descricao, quantidade, valor_unitario } = req.body;
-        
         OrdemServico.adicionarPeca(req.params.id, {
             descricao,
             quantidade: parseInt(quantidade) || 1,
             valor_unitario: parseFloat(valor_unitario) || 0
         });
-
         res.redirect('/ordens/' + req.params.id);
     } catch (error) { next(error); }
 };
 
-// Remover peça
 exports.removerPeca = (req, res, next) => {
     try {
         OrdemServico.removerPeca(req.params.pecaId);
@@ -242,7 +253,6 @@ exports.removerPeca = (req, res, next) => {
     } catch (error) { next(error); }
 };
 
-// Deletar OS
 exports.destroy = (req, res, next) => {
     try {
         OrdemServico.delete(req.params.id);

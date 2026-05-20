@@ -969,3 +969,97 @@ body {
         padding-right: 16px !important;
     }
 }
+
+/* ============================================
+   FONTES PREMIUM (Bricolage + Geist)
+============================================ */
+
+/* Fonte do corpo */
+body, input, select, textarea, button {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    letter-spacing: -0.01em;
+}
+
+/* Fonte dos títulos */
+h1, h2, h3, h4, h5, h6,
+.logo-text,
+.module-name,
+.stat-value,
+.stat-number,
+.page-header h2,
+.kanban-coluna-titulo {
+    font-family: 'Bricolage Grotesque', sans-serif !important;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+/* Logo com peso extra */
+.logo-text {
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+}
+
+/* Títulos do dashboard maiores e mais marcantes */
+.stat-value, .stat-number {
+    font-weight: 700 !important;
+    letter-spacing: -0.03em !important;
+}
+
+/* Page header com mais personalidade */
+.page-header h2 {
+    font-weight: 700 !important;
+    letter-spacing: -0.03em !important;
+    font-size: 24px;
+}
+
+/* Topbar mais clean */
+.topbar h1 {
+    font-family: 'Bricolage Grotesque', sans-serif !important;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+/* Labels mais sutis */
+.stat-label, 
+.detail-label,
+.module-desc {
+    font-family: 'Geist', sans-serif !important;
+    letter-spacing: 0.02em;
+}
+
+/* Botões com peso médio */
+.btn {
+    font-family: 'Geist', sans-serif !important;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+
+/* Sidebar links */
+.sidebar ul li a {
+    font-family: 'Geist', sans-serif !important;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+}
+
+/* Tabelas */
+.data-table th {
+    font-family: 'Geist', sans-serif !important;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.data-table td {
+    font-family: 'Geist', sans-serif !important;
+    font-weight: 400;
+}
+
+/* Inputs */
+input, select, textarea {
+    font-family: 'Geist', sans-serif !important;
+    font-weight: 400;
+}
+
+/* Códigos e números monoespaçados */
+code, .badge, [class*="numero_os"] {
+    font-family: 'Geist Mono', 'Courier New', monospace !important;
+}

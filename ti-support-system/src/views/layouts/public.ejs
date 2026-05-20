@@ -6,26 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f172a">
 
-    <!-- Fontes Google -->
+    <!-- Fontes premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Tabler Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="/css/public.css">
-
-    <!-- Estilos da página (extraídos do EJS) -->
+    
     <%- typeof style !== 'undefined' ? style : '' %>
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <header class="navbar">
         <div class="container nav-container">
-
             <a href="/" class="logo">
                 <span class="logo-icon">⚡</span>
                 <span class="logo-text">All<strong>services</strong></span>
@@ -50,19 +45,15 @@
                 <a href="/auth/login" class="btn-login">Entrar</a>
                 <a href="/contato" class="btn-cta">Quero conhecer</a>
             </div>
-
         </div>
     </header>
 
-    <!-- CONTEÚDO -->
     <main>
         <%- body %>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="container footer-container">
-
             <div class="footer-col">
                 <h3 class="footer-logo">⚡ All<strong>services</strong></h3>
                 <p>Manutenção inteligente, gestão simples.</p>
@@ -96,7 +87,6 @@
                     <li><a href="/auth/login">Área restrita</a></li>
                 </ul>
             </div>
-
         </div>
 
         <div class="footer-bottom">

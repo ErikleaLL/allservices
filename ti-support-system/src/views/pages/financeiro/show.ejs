@@ -21,7 +21,7 @@
     <div class="page-header">
         <div>
             <h2><%= lancamento.descricao %></h2>
-            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+            <span style="color: #94a3b8; font-size: 13px;">
                 Criado em <%= new Date(lancamento.criado_em).toLocaleString('pt-BR') %>
             </span>
         </div>
@@ -48,7 +48,7 @@
             <i class="ti <%= isReceita ? 'ti-arrow-up' : 'ti-arrow-down' %>"></i>
         </div>
         <div style="flex: 1;">
-            <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
                 <%= isReceita ? 'Receita' : 'Despesa' %>
             </div>
             <div style="font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: <%= cor %>;">
@@ -74,7 +74,7 @@
                         <%= lancamento.categoria %>
                     </span>
                 <% } else { %>
-                    <span style="color: rgba(255,255,255,0.3);">Sem categoria</span>
+                    <span style="color: #cbd5e1;">Sem categoria</span>
                 <% } %>
             </div>
         </div>
@@ -85,7 +85,7 @@
                 <% if (lancamento.data_vencimento) { %>
                     <%= new Date(lancamento.data_vencimento + 'T00:00:00').toLocaleDateString('pt-BR') %>
                 <% } else { %>
-                    <span style="color: rgba(255,255,255,0.3);">Não definido</span>
+                    <span style="color: #cbd5e1;">Não definido</span>
                 <% } %>
             </div>
         </div>

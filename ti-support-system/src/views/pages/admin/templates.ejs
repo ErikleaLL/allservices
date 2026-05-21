@@ -1,0 +1,874 @@
+<%- contentFor('title') %>
+Templates WhatsApp — Allservices
+
+<%- contentFor('body') %>
+
+<div class="admin-wrapper">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <a href="/admin" class="btn-back">
+        <i class="ti ti-arrow-left"></i>
+      </a>
+      <div class="page-icon">
+        <i class="ti ti-brand-whatsapp"></i>
+      </div>
+      <div>
+        <h1 class="page-title">Templates WhatsApp</h1>
+        <p class="page-subtitle">Mensagens automáticas enviadas aos clientes em cada etapa do atendimento</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flash Messages -->
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert--success">
+      <i class="ti ti-circle-check"></i>
+      <span><%= success %></span>
+    </div>
+  <% } %>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert--error">
+      <i class="ti ti-circle-x"></i>
+      <span><%= error %></span>
+    </div>
+  <% } %>
+
+  <!-- Legenda de variáveis -->
+  <div class="vars-card">
+    <div class="vars-card__header">
+      <i class="ti ti-code"></i>
+      <h4>Variáveis disponíveis nas mensagens</h4>
+      <button type="button" class="vars-toggle" id="varsToggle">
+        <i class="ti ti-chevron-down"></i>
+      </button>
+    </div>
+    <div class="vars-body" id="varsBody">
+      <div class="vars-grid">
+        <div class="var-item">
+          <code>{{cliente}}</code>
+          <span>Nome do cliente</span>
+        </div>
+        <div class="var-item">
+          <code>{{numero_os}}</code>
+          <span>Número da OS (ex: OS-0042)</span>
+        </div>
+        <div class="var-item">
+          <code>{{dispositivo}}</code>
+          <span>Descrição do dispositivo</span>
+        </div>
+        <div class="var-item">
+          <code>{{status}}</code>
+          <span>Status atual da OS</span>
+        </div>
+        <div class="var-item">
+          <code>{{tecnico}}</code>
+          <span>Nome do técnico responsável</span>
+        </div>
+        <div class="var-item">
+          <code>{{valor}}</code>
+          <span>Valor total da OS (R$)</span>
+        </div>
+        <div class="var-item">
+          <code>{{prazo}}</code>
+          <span>Prazo estimado de entrega</span>
+        </div>
+        <div class="var-item">
+          <code>{{garantia}}</code>
+          <span>Dias de garantia do serviço</span>
+        </div>
+        <div class="var-item">
+          <code>{{link_rastreio}}</code>
+          <span>Link público de rastreio da OS</span>
+        </div>
+        <div class="var-item">
+          <code>{{link_garantia}}</code>
+          <span>Link público da garantia</span>
+        </div>
+        <div class="var-item">
+          <code>{{empresa}}</code>
+          <span>Nome da empresa</span>
+        </div>
+        <div class="var-item">
+          <code>{{telefone}}</code>
+          <span>Telefone da empresa</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form action="/admin/templates" method="POST" class="admin-form">
+
+    <!-- Template: Recebimento -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <div class="template-badge template-badge--blue">
+          <i class="ti ti-package-import"></i>
+        </div>
+        <div>
+          <h3>Recebimento do Dispositivo</h3>
+          <span class="template-trigger">Enviado ao abrir uma nova OS</span>
+        </div>
+        <div class="template-actions-header">
+          <button type="button" class="btn-preview" data-target="tpl_recebimento">
+            <i class="ti ti-eye"></i> Preview
+          </button>
+        </div>
+      </div>
+      <div class="template-body">
+        <textarea
+          name="tpl_recebimento"
+          id="tpl_recebimento"
+          class="form-textarea"
+          rows="6"
+          placeholder="Digite a mensagem de recebimento..."
+        ><%= configs.tpl_recebimento || `Olá {{cliente}}! 👋
+
+Seu dispositivo *{{dispositivo}}* foi recebido com sucesso!
+
+📋 *OS:* {{numero_os}}
+🔧 *Técnico:* {{tecnico}}
+⏰ *Prazo estimado:* {{prazo}}
+
+Acompanhe o reparo em tempo real:
+🔗 {{link_rastreio}}
+
+— {{empresa}}` %></textarea>
+        <div class="textarea-footer">
+          <span class="char-count" id="count_tpl_recebimento">0 caracteres</span>
+          <button type="button" class="btn-reset" data-field="tpl_recebimento">
+            <i class="ti ti-refresh"></i> Restaurar padrão
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Template: Orçamento -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <div class="template-badge template-badge--orange">
+          <i class="ti ti-receipt"></i>
+        </div>
+        <div>
+          <h3>Envio de Orçamento</h3>
+          <span class="template-trigger">Enviado ao mudar status para "Aguardando Aprovação"</span>
+        </div>
+        <div class="template-actions-header">
+          <button type="button" class="btn-preview" data-target="tpl_orcamento">
+            <i class="ti ti-eye"></i> Preview
+          </button>
+        </div>
+      </div>
+      <div class="template-body">
+        <textarea
+          name="tpl_orcamento"
+          id="tpl_orcamento"
+          class="form-textarea"
+          rows="6"
+          placeholder="Digite a mensagem de orçamento..."
+        ><%= configs.tpl_orcamento || `Olá {{cliente}}! 📋
+
+O orçamento do seu *{{dispositivo}}* ficou pronto.
+
+💰 *Valor:* R$ {{valor}}
+📋 *OS:* {{numero_os}}
+
+Responda SIM para aprovar ou NÃO para cancelar.
+
+Acompanhe: {{link_rastreio}}
+
+— {{empresa}} | {{telefone}}` %></textarea>
+        <div class="textarea-footer">
+          <span class="char-count" id="count_tpl_orcamento">0 caracteres</span>
+          <button type="button" class="btn-reset" data-field="tpl_orcamento">
+            <i class="ti ti-refresh"></i> Restaurar padrão
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Template: Aprovação -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <div class="template-badge template-badge--purple">
+          <i class="ti ti-tool"></i>
+        </div>
+        <div>
+          <h3>Início do Reparo</h3>
+          <span class="template-trigger">Enviado ao mudar status para "Em Andamento"</span>
+        </div>
+        <div class="template-actions-header">
+          <button type="button" class="btn-preview" data-target="tpl_aprovado">
+            <i class="ti ti-eye"></i> Preview
+          </button>
+        </div>
+      </div>
+      <div class="template-body">
+        <textarea
+          name="tpl_aprovado"
+          id="tpl_aprovado"
+          class="form-textarea"
+          rows="5"
+          placeholder="Digite a mensagem de início do reparo..."
+        ><%= configs.tpl_aprovado || `Ótima notícia, {{cliente}}! 🔧
+
+O reparo do seu *{{dispositivo}}* começou!
+
+📋 *OS:* {{numero_os}}
+👨‍🔧 *Técnico:* {{tecnico}}
+
+Acompanhe: {{link_rastreio}}
+
+— {{empresa}}` %></textarea>
+        <div class="textarea-footer">
+          <span class="char-count" id="count_tpl_aprovado">0 caracteres</span>
+          <button type="button" class="btn-reset" data-field="tpl_aprovado">
+            <i class="ti ti-refresh"></i> Restaurar padrão
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Template: Concluído -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <div class="template-badge template-badge--green">
+          <i class="ti ti-circle-check"></i>
+        </div>
+        <div>
+          <h3>Serviço Concluído</h3>
+          <span class="template-trigger">Enviado ao mudar status para "Concluído"</span>
+        </div>
+        <div class="template-actions-header">
+          <button type="button" class="btn-preview" data-target="tpl_concluido">
+            <i class="ti ti-eye"></i> Preview
+          </button>
+        </div>
+      </div>
+      <div class="template-body">
+        <textarea
+          name="tpl_concluido"
+          id="tpl_concluido"
+          class="form-textarea"
+          rows="7"
+          placeholder="Digite a mensagem de conclusão..."
+        ><%= configs.tpl_concluido || `Seu dispositivo está pronto, {{cliente}}! ✅
+
+*{{dispositivo}}* foi consertado com sucesso!
+
+📋 *OS:* {{numero_os}}
+💰 *Valor:* R$ {{valor}}
+🛡️ *Garantia:* {{garantia}} dias
+
+Confira sua garantia digital:
+🔗 {{link_garantia}}
+
+Aguardamos sua retirada!
+— {{empresa}} | {{telefone}}` %></textarea>
+        <div class="textarea-footer">
+          <span class="char-count" id="count_tpl_concluido">0 caracteres</span>
+          <button type="button" class="btn-reset" data-field="tpl_concluido">
+            <i class="ti ti-refresh"></i> Restaurar padrão
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Template: Garantia -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <div class="template-badge template-badge--teal">
+          <i class="ti ti-shield-check"></i>
+        </div>
+        <div>
+          <h3>Acionamento de Garantia</h3>
+          <span class="template-trigger">Enviado quando o cliente aciona a garantia</span>
+        </div>
+        <div class="template-actions-header">
+          <button type="button" class="btn-preview" data-target="tpl_garantia">
+            <i class="ti ti-eye"></i> Preview
+          </button>
+        </div>
+      </div>
+      <div class="template-body">
+        <textarea
+          name="tpl_garantia"
+          id="tpl_garantia"
+          class="form-textarea"
+          rows="6"
+          placeholder="Digite a mensagem de garantia..."
+        ><%= configs.tpl_garantia || `Olá {{cliente}}! 🛡️
+
+Recebemos seu pedido de garantia para o serviço *{{numero_os}}*.
+
+Nossa equipe entrará em contato em breve para agendar o atendimento.
+
+Traga o comprovante da OS ou acesse:
+🔗 {{link_garantia}}
+
+— {{empresa}} | {{telefone}}` %></textarea>
+        <div class="textarea-footer">
+          <span class="char-count" id="count_tpl_garantia">0 caracteres</span>
+          <button type="button" class="btn-reset" data-field="tpl_garantia">
+            <i class="ti ti-refresh"></i> Restaurar padrão
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações -->
+    <div class="form-actions">
+      <a href="/admin" class="btn btn--ghost">
+        <i class="ti ti-x"></i>
+        Cancelar
+      </a>
+      <button type="submit" class="btn btn--primary">
+        <i class="ti ti-device-floppy"></i>
+        Salvar Templates
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+<!-- Modal Preview -->
+<div class="modal-overlay" id="previewModal">
+  <div class="modal">
+    <div class="modal__header">
+      <div class="modal__title">
+        <i class="ti ti-brand-whatsapp"></i>
+        <h4>Preview da Mensagem</h4>
+      </div>
+      <button class="modal__close" id="modalClose">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="whatsapp-bubble">
+        <div class="whatsapp-header">
+          <div class="whatsapp-avatar">
+            <i class="ti ti-building-store"></i>
+          </div>
+          <div>
+            <strong><%= configs.empresa_nome || 'Sua Empresa' %></strong>
+            <span>Empresa</span>
+          </div>
+        </div>
+        <div class="whatsapp-message" id="previewContent"></div>
+        <div class="whatsapp-time">agora ✓✓</div>
+      </div>
+      <p class="preview-note">
+        <i class="ti ti-info-circle"></i>
+        As variáveis <code>{{entre chaves}}</code> serão substituídas pelos dados reais ao enviar.
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+.admin-wrapper {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.btn-back {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #1e1b2e;
+  border: 1px solid rgba(15,23,42,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.btn-back:hover { background: #7c3aed; color: #fff; }
+.page-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #10b981, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.page-subtitle {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0.2rem 0 0;
+}
+
+/* Alerts */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.alert i { font-size: 1.2rem; flex-shrink: 0; }
+.alert--success {
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #34d399;
+}
+.alert--error {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.25);
+  color: #f87171;
+}
+
+/* Vars card */
+.vars-card {
+  background: #13121f;
+  border: 1px solid rgba(124,58,237,0.2);
+  border-radius: 14px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.vars-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.2rem;
+  cursor: pointer;
+}
+.vars-card__header i { color: #7c3aed; font-size: 1.1rem; }
+.vars-card__header h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+  flex: 1;
+}
+.vars-toggle {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.2rem;
+  transition: transform 0.2s;
+}
+.vars-toggle.open { transform: rotate(180deg); }
+.vars-body {
+  display: none;
+  padding: 0 1.2rem 1.2rem;
+}
+.vars-body.open { display: block; }
+.vars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem;
+}
+.var-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  background: #0a0a0f;
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.04);
+}
+.var-item code {
+  color: #a78bfa;
+  font-size: 0.78rem;
+  font-family: 'Geist', monospace;
+  white-space: nowrap;
+}
+.var-item span {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* Form */
+.admin-form { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.form-section {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.form-section__header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+  background: rgba(255,255,255,0.02);
+}
+.form-section__header h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0 0 0.15rem;
+}
+.template-trigger {
+  font-size: 0.78rem;
+  color: #475569;
+}
+.template-actions-header {
+  margin-left: auto;
+}
+.btn-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(15,23,42,0.04);
+  border: 1px solid rgba(15,23,42,0.06);
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Geist', sans-serif;
+}
+.btn-preview:hover { background: rgba(124,58,237,0.15); border-color: #7c3aed; color: #a78bfa; }
+
+/* Template badges */
+.template-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.template-badge--blue   { background: rgba(37,99,235,0.15); color: #60a5fa; }
+.template-badge--orange { background: rgba(249,115,22,0.15); color: #fb923c; }
+.template-badge--purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+.template-badge--green  { background: rgba(16,185,129,0.15); color: #34d399; }
+.template-badge--teal   { background: rgba(20,184,166,0.15); color: #2dd4bf; }
+
+.template-body { padding: 1.2rem 1.4rem; }
+
+.form-textarea {
+  width: 100%;
+  background: #0a0a0f;
+  border: 1px solid rgba(15,23,42,0.05);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  color: #f1f5f9;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+.form-textarea:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+}
+
+.textarea-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+}
+.char-count {
+  font-size: 0.78rem;
+  color: #475569;
+}
+.btn-reset {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  color: #475569;
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: 'Geist', sans-serif;
+  transition: color 0.2s;
+  padding: 0;
+}
+.btn-reset:hover { color: #f97316; }
+
+/* Actions */
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Geist', sans-serif;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn--primary {
+  background: linear-gradient(135deg, #10b981, #2563eb);
+  color: #fff;
+}
+.btn--primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16,185,129,0.3);
+}
+.btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(15,23,42,0.06);
+  color: #94a3b8;
+}
+.btn--ghost:hover { background: rgba(15,23,42,0.04); color: #f1f5f9; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.05);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+}
+.modal__title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #10b981;
+}
+.modal__title i { font-size: 1.3rem; }
+.modal__title h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0;
+}
+.modal__close {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+.modal__close:hover { color: #f1f5f9; background: rgba(15,23,42,0.04); }
+.modal__body { padding: 1.4rem; }
+
+/* WhatsApp bubble */
+.whatsapp-bubble {
+  background: #075e54;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.whatsapp-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: #128c7e;
+}
+.whatsapp-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(15,23,42,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.whatsapp-header strong {
+  display: block;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.whatsapp-header span {
+  font-size: 0.75rem;
+  color: #475569;
+}
+.whatsapp-message {
+  padding: 1rem;
+  font-size: 0.88rem;
+  color: #e8f5e9;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: 'Geist', sans-serif;
+}
+.whatsapp-time {
+  text-align: right;
+  padding: 0 1rem 0.75rem;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+.preview-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.5;
+}
+.preview-note i { font-size: 0.9rem; flex-shrink: 0; margin-top: 0.1rem; }
+.preview-note code {
+  color: #a78bfa;
+  font-family: 'Geist', monospace;
+  font-size: 0.75rem;
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+  .admin-wrapper { padding: 1rem; }
+  .page-title { font-size: 1.25rem; }
+  .vars-grid { grid-template-columns: 1fr 1fr; }
+  .form-actions { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+  .template-actions-header { display: none; }
+}
+</style>
+
+<script>
+/* ── Variáveis de padrão ── */
+const defaults = {
+  tpl_recebimento: `Olá {{cliente}}! 👋\n\nSeu dispositivo *{{dispositivo}}* foi recebido com sucesso!\n\n📋 *OS:* {{numero_os}}\n🔧 *Técnico:* {{tecnico}}\n⏰ *Prazo estimado:* {{prazo}}\n\nAcompanhe o reparo em tempo real:\n🔗 {{link_rastreio}}\n\n— {{empresa}}`,
+  tpl_orcamento:   `Olá {{cliente}}! 📋\n\nO orçamento do seu *{{dispositivo}}* ficou pronto.\n\n💰 *Valor:* R$ {{valor}}\n📋 *OS:* {{numero_os}}\n\nResponda SIM para aprovar ou NÃO para cancelar.\n\nAcompanhe: {{link_rastreio}}\n\n— {{empresa}} | {{telefone}}`,
+  tpl_aprovado:    `Ótima notícia, {{cliente}}! 🔧\n\nO reparo do seu *{{dispositivo}}* começou!\n\n📋 *OS:* {{numero_os}}\n👨‍🔧 *Técnico:* {{tecnico}}\n\nAcompanhe: {{link_rastreio}}\n\n— {{empresa}}`,
+  tpl_concluido:   `Seu dispositivo está pronto, {{cliente}}! ✅\n\n*{{dispositivo}}* foi consertado com sucesso!\n\n📋 *OS:* {{numero_os}}\n💰 *Valor:* R$ {{valor}}\n🛡️ *Garantia:* {{garantia}} dias\n\nConfira sua garantia digital:\n🔗 {{link_garantia}}\n\nAguardamos sua retirada!\n— {{empresa}} | {{telefone}}`,
+  tpl_garantia:    `Olá {{cliente}}! 🛡️\n\nRecebemos seu pedido de garantia para o serviço *{{numero_os}}*.\n\nNossa equipe entrará em contato em breve para agendar o atendimento.\n\nTraga o comprovante da OS ou acesse:\n🔗 {{link_garantia}}\n\n— {{empresa}} | {{telefone}}`
+};
+
+/* ── Contadores de caracteres ── */
+document.querySelectorAll('.form-textarea').forEach(ta => {
+  const counter = document.getElementById('count_' + ta.id);
+  const update = () => {
+    if (counter) counter.textContent = ta.value.length + ' caracteres';
+  };
+  ta.addEventListener('input', update);
+  update();
+});
+
+/* ── Restaurar padrão ── */
+document.querySelectorAll('.btn-reset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const field = btn.dataset.field;
+    const ta    = document.getElementById(field);
+    if (ta && defaults[field]) {
+      ta.value = defaults[field];
+      ta.dispatchEvent(new Event('input'));
+    }
+  });
+});
+
+/* ── Toggle vars ── */
+const varsToggle = document.getElementById('varsToggle');
+const varsBody   = document.getElementById('varsBody');
+varsToggle.addEventListener('click', () => {
+  varsBody.classList.toggle('open');
+  varsToggle.classList.toggle('open');
+});
+
+/* ── Preview Modal ── */
+const modal        = document.getElementById('previewModal');
+const previewContent = document.getElementById('previewContent');
+const modalClose   = document.getElementById('modalClose');
+
+document.querySelectorAll('.btn-preview').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.target;
+    const ta     = document.getElementById(target);
+    if (!ta) return;
+
+    /* Formata bold (*texto*) */
+    let text = ta.value
+      .replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+
+    previewContent.innerHTML = text;
+    modal.classList.add('open');
+  });
+});
+
+modalClose.addEventListener('click', () => modal.classList.remove('open'));
+modal.addEventListener('click', e => {
+  if (e.target === modal) modal.classList.remove('open');
+});
+
+/* Fecha com ESC */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') modal.classList.remove('open');
+});
+</script>

@@ -18,7 +18,7 @@
     <div class="page-header">
         <div>
             <h2><%= peca.nome %></h2>
-            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+            <span style="color: #94a3b8; font-size: 13px;">
                 Cadastrada em <%= new Date(peca.criado_em).toLocaleString('pt-BR') %>
             </span>
         </div>
@@ -38,12 +38,12 @@
             <i class="ti <%= statusIcone %>"></i>
         </div>
         <div style="flex: 1;">
-            <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
                 <%= statusTexto %>
             </div>
             <div style="font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: <%= statusCor %>; margin-top: 2px;">
                 <%= peca.quantidade %> 
-                <span style="font-size: 14px; color: rgba(255,255,255,0.4); font-weight: 500;">
+                <span style="font-size: 14px; color: #94a3b8; font-weight: 500;">
                     unidade(s) • mínimo: <%= peca.estoque_minimo %>
                 </span>
             </div>
@@ -70,7 +70,7 @@
                                 <%= peca.categoria_nome %>
                             </span>
                         <% } else { %>
-                            <span style="color: rgba(255,255,255,0.3);">Sem categoria</span>
+                            <span style="color: #cbd5e1;">Sem categoria</span>
                         <% } %>
                     </div>
                 </div>
@@ -81,10 +81,10 @@
                         <% if (peca.fornecedor_nome) { %>
                             <i class="ti ti-truck"></i> <%= peca.fornecedor_nome %>
                             <% if (peca.fornecedor_telefone) { %>
-                                <span style="color: rgba(255,255,255,0.4); margin-left: 8px;">• <%= peca.fornecedor_telefone %></span>
+                                <span style="color: #94a3b8; margin-left: 8px;">• <%= peca.fornecedor_telefone %></span>
                             <% } %>
                         <% } else { %>
-                            <span style="color: rgba(255,255,255,0.3);">Sem fornecedor</span>
+                            <span style="color: #cbd5e1;">Sem fornecedor</span>
                         <% } %>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                         <span style="color: <%= margem >= 30 ? '#4ade80' : '#fbbf24' %>; font-weight: 700;">
                             <%= margem %>%
                         </span>
-                        <span style="color: rgba(255,255,255,0.4); font-size: 12px; margin-left: 8px;">
+                        <span style="color: #94a3b8; font-size: 12px; margin-left: 8px;">
                             (lucro: R$ <%= ((peca.preco_venda || 0) - (peca.preco_custo || 0)).toFixed(2).replace('.', ',') %>/unid)
                         </span>
                     </div>
@@ -122,13 +122,13 @@
                     <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;">
                         <i class="ti ti-history" style="color: #94a3b8;"></i> Histórico de movimentações
                     </h3>
-                    <span style="font-size: 11px; color: rgba(255,255,255,0.4);">
+                    <span style="font-size: 11px; color: #94a3b8;">
                         <%= movimentacoes.length %> registro(s)
                     </span>
                 </div>
 
                 <% if (movimentacoes.length === 0) { %>
-                    <div style="text-align: center; padding: 30px 10px; color: rgba(255,255,255,0.3); font-style: italic; font-size: 13px;">
+                    <div style="text-align: center; padding: 30px 10px; color: #cbd5e1; font-style: italic; font-size: 13px;">
                         <i class="ti ti-arrow-bar-up" style="font-size: 28px; opacity: 0.5;"></i>
                         <p style="margin-top: 8px;">Nenhuma movimentação registrada.</p>
                         <p style="font-size: 11px; margin-top: 4px;">Use o painel à direita para registrar a primeira.</p>
@@ -139,7 +139,7 @@
                         const cor = isEntrada ? '#4ade80' : '#f87171';
                         const sinal = isEntrada ? '+' : '−';
                     %>
-                        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: <%= i < movimentacoes.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' %>;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: <%= i < movimentacoes.length - 1 ? '1px solid rgba(15,23,42,0.04)' : 'none' %>;">
                             <div style="width: 38px; height: 38px; border-radius: 50%; background: <%= cor %>22; color: <%= cor %>; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <i class="ti <%= isEntrada ? 'ti-arrow-down' : 'ti-arrow-up' %>"></i>
                             </div>
@@ -153,11 +153,11 @@
                                     </span>
                                 </div>
                                 <% if (m.motivo) { %>
-                                    <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 3px;">
+                                    <div style="font-size: 12px; color: #475569; margin-top: 3px;">
                                         <%= m.motivo %>
                                     </div>
                                 <% } %>
-                                <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px;">
+                                <div style="font-size: 11px; color: #94a3b8; margin-top: 3px;">
                                     <%= new Date(m.criado_em).toLocaleString('pt-BR') %>
                                     <% if (m.usuario_nome) { %>
                                         • por <%= m.usuario_nome %>
@@ -179,7 +179,7 @@
                 <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #4ade80;">
                     <i class="ti ti-arrow-down"></i> Entrada de estoque
                 </h3>
-                <p style="font-size: 11.5px; color: rgba(255,255,255,0.5); margin-bottom: 12px;">
+                <p style="font-size: 11.5px; color: #64748b; margin-bottom: 12px;">
                     Compra do fornecedor, devolução, etc.
                 </p>
 
@@ -207,7 +207,7 @@
                 <h3 style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #f87171;">
                     <i class="ti ti-arrow-up"></i> Saída de estoque
                 </h3>
-                <p style="font-size: 11.5px; color: rgba(255,255,255,0.5); margin-bottom: 12px;">
+                <p style="font-size: 11.5px; color: #64748b; margin-bottom: 12px;">
                     Venda, uso em OS, perda, etc.
                 </p>
 

@@ -1,0 +1,722 @@
+<%- contentFor('title') %>
+Backup do Banco — Allservices
+
+<%- contentFor('body') %>
+
+<div class="admin-wrapper">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <a href="/admin" class="btn-back">
+        <i class="ti ti-arrow-left"></i>
+      </a>
+      <div class="page-icon">
+        <i class="ti ti-database-export"></i>
+      </div>
+      <div>
+        <h1 class="page-title">Backup do Banco de Dados</h1>
+        <p class="page-subtitle">Faça o download completo do banco SQLite com todos os dados do sistema</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flash Messages -->
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert--success">
+      <i class="ti ti-circle-check"></i>
+      <span><%= success %></span>
+    </div>
+  <% } %>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert--error">
+      <i class="ti ti-circle-x"></i>
+      <span><%= error %></span>
+    </div>
+  <% } %>
+
+  <div class="backup-grid">
+
+    <!-- Card principal: Download -->
+    <div class="backup-main">
+
+      <!-- Status do banco -->
+      <div class="db-status-card">
+        <div class="db-status-card__icon">
+          <i class="ti ti-database"></i>
+        </div>
+        <div class="db-status-card__info">
+          <h3>database.sqlite</h3>
+          <p>Banco de dados principal do Allservices</p>
+        </div>
+        <div class="db-status-card__badge">
+          <i class="ti ti-circle-filled pulse"></i>
+          Conectado
+        </div>
+      </div>
+
+      <!-- Estatísticas do banco -->
+      <div class="db-stats">
+        <div class="db-stat">
+          <i class="ti ti-users"></i>
+          <div>
+            <strong><%= stats.usuarios %></strong>
+            <span>Usuários</span>
+          </div>
+        </div>
+        <div class="db-stat">
+          <i class="ti ti-address-book"></i>
+          <div>
+            <strong><%= stats.clientes %></strong>
+            <span>Clientes</span>
+          </div>
+        </div>
+        <div class="db-stat">
+          <i class="ti ti-clipboard-list"></i>
+          <div>
+            <strong><%= stats.ordens %></strong>
+            <span>Ordens de Serviço</span>
+          </div>
+        </div>
+        <div class="db-stat">
+          <i class="ti ti-package"></i>
+          <div>
+            <strong><%= stats.pecas %></strong>
+            <span>Peças</span>
+          </div>
+        </div>
+        <div class="db-stat">
+          <i class="ti ti-cash"></i>
+          <div>
+            <strong><%= stats.financeiro %></strong>
+            <span>Lançamentos</span>
+          </div>
+        </div>
+        <div class="db-stat">
+          <i class="ti ti-device-laptop"></i>
+          <div>
+            <strong><%= stats.dispositivos %></strong>
+            <span>Dispositivos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão de download -->
+      <div class="download-section">
+        <div class="download-icon">
+          <i class="ti ti-file-download"></i>
+        </div>
+        <div class="download-info">
+          <h4>Download do Backup Completo</h4>
+          <p>
+            Arquivo <code>.sqlite</code> com todas as tabelas, registros,
+            configurações e histórico do sistema.
+          </p>
+          <p class="download-warning">
+            <i class="ti ti-lock"></i>
+            Mantenha este arquivo em local seguro — ele contém dados sensíveis dos clientes.
+          </p>
+        </div>
+        <a href="/admin/backup/download" class="btn-download" id="btnDownload">
+          <i class="ti ti-download"></i>
+          <span>Baixar Backup Agora</span>
+          <small>allservices-backup-<%= new Date().toISOString().slice(0,10) %>.sqlite</small>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Sidebar: instruções e dicas -->
+    <div class="backup-sidebar">
+
+      <!-- Como usar -->
+      <div class="info-card">
+        <div class="info-card__header">
+          <i class="ti ti-help-circle"></i>
+          <h4>Como usar o backup</h4>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+              Clique em <strong>"Baixar Backup Agora"</strong>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+              Salve o arquivo <code>.sqlite</code> em local seguro (HD externo, nuvem)
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+              Para restaurar: substitua o arquivo em
+              <code>database/database.sqlite</code> e reinicie o servidor
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">
+              Recomendamos backup <strong>diário</strong> para ambientes de produção
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frequência recomendada -->
+      <div class="info-card">
+        <div class="info-card__header">
+          <i class="ti ti-calendar-check"></i>
+          <h4>Frequência recomendada</h4>
+        </div>
+        <div class="freq-list">
+          <div class="freq-item freq-item--green">
+            <i class="ti ti-check"></i>
+            <div>
+              <strong>Diário</strong>
+              <span>Para lojas com alto volume de OS</span>
+            </div>
+          </div>
+          <div class="freq-item freq-item--blue">
+            <i class="ti ti-check"></i>
+            <div>
+              <strong>Semanal</strong>
+              <span>Para pequenas assistências técnicas</span>
+            </div>
+          </div>
+          <div class="freq-item freq-item--orange">
+            <i class="ti ti-alert-triangle"></i>
+            <div>
+              <strong>Antes de atualizações</strong>
+              <span>Sempre faça backup antes de modificar o sistema</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- O que está incluído -->
+      <div class="info-card">
+        <div class="info-card__header">
+          <i class="ti ti-table"></i>
+          <h4>Tabelas incluídas no backup</h4>
+        </div>
+        <div class="tables-list">
+          <% const tabelas = [
+            { icon: 'ti-users',           name: 'usuarios' },
+            { icon: 'ti-address-book',    name: 'clientes' },
+            { icon: 'ti-device-laptop',   name: 'dispositivos' },
+            { icon: 'ti-clipboard-list',  name: 'ordens_servico' },
+            { icon: 'ti-package',         name: 'pecas' },
+            { icon: 'ti-category',        name: 'categorias' },
+            { icon: 'ti-truck',           name: 'fornecedores' },
+            { icon: 'ti-cash',            name: 'financeiro' },
+            { icon: 'ti-history',         name: 'os_historico' },
+            { icon: 'ti-puzzle',          name: 'os_pecas' },
+            { icon: 'ti-transfer',        name: 'movimentacoes_estoque' },
+            { icon: 'ti-speakerphone',    name: 'leads' },
+            { icon: 'ti-adjustments',     name: 'configuracoes' },
+            { icon: 'ti-shopping-cart',   name: 'vendas' }
+          ]; %>
+          <% tabelas.forEach(t => { %>
+            <div class="table-item">
+              <i class="ti <%= t.icon %>"></i>
+              <code><%= t.name %></code>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Aviso de segurança -->
+  <div class="security-notice">
+    <div class="security-notice__icon">
+      <i class="ti ti-shield-lock"></i>
+    </div>
+    <div class="security-notice__text">
+      <strong>Aviso de Segurança</strong>
+      <p>
+        O arquivo de backup contém <strong>todos os dados do sistema</strong>,
+        incluindo informações pessoais de clientes (nome, telefone, endereço),
+        dados financeiros e senhas criptografadas. Trate-o como informação
+        confidencial e nunca compartilhe publicamente.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.admin-wrapper {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.btn-back {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #1e1b2e;
+  border: 1px solid rgba(15,23,42,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.btn-back:hover { background: #7c3aed; color: #fff; }
+.page-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f97316, #ef4444);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.page-subtitle {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0.2rem 0 0;
+}
+
+/* Alerts */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.alert i { font-size: 1.2rem; flex-shrink: 0; }
+.alert--success {
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #34d399;
+}
+.alert--error {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.25);
+  color: #f87171;
+}
+
+/* Layout */
+.backup-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Card principal */
+.backup-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Status do banco */
+.db-status-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #13121f;
+  border: 1px solid rgba(16,185,129,0.2);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+}
+.db-status-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(16,185,129,0.12);
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+.db-status-card__info { flex: 1; min-width: 0; }
+.db-status-card__info h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 0.2rem;
+  font-family: 'Geist', monospace;
+}
+.db-status-card__info p {
+  font-size: 0.83rem;
+  color: #64748b;
+  margin: 0;
+}
+.db-status-card__badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #10b981;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pulse {
+  font-size: 0.55rem;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+/* Stats */
+.db-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+.db-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+.db-stat i {
+  font-size: 1.3rem;
+  color: #f97316;
+  flex-shrink: 0;
+}
+.db-stat strong {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  line-height: 1;
+}
+.db-stat span {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Download section */
+.download-section {
+  background: #13121f;
+  border: 1px solid rgba(249,115,22,0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+}
+.download-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(249,115,22,0.2), rgba(239,68,68,0.2));
+  border: 1px solid rgba(249,115,22,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #f97316;
+}
+.download-info h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 0.5rem;
+}
+.download-info p {
+  font-size: 0.87rem;
+  color: #64748b;
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+  max-width: 400px;
+}
+.download-info code {
+  color: #fb923c;
+  font-family: 'Geist', monospace;
+  font-size: 0.85rem;
+}
+.download-warning {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: #f87171 !important;
+  font-size: 0.8rem !important;
+}
+.download-warning i { font-size: 0.9rem; }
+
+.btn-download {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  background: linear-gradient(135deg, #f97316, #ef4444);
+  color: #fff;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(249,115,22,0.3);
+  min-width: 280px;
+}
+.btn-download i { font-size: 1.5rem; }
+.btn-download span { font-size: 1rem; }
+.btn-download small {
+  font-size: 0.72rem;
+  opacity: 0.8;
+  font-family: 'Geist', monospace;
+  font-weight: 400;
+}
+.btn-download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(249,115,22,0.45);
+}
+.btn-download:active { transform: translateY(0); }
+.btn-download.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Sidebar */
+.backup-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.info-card {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.info-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.2rem;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+  background: rgba(255,255,255,0.02);
+}
+.info-card__header i { color: #f97316; font-size: 1.1rem; }
+.info-card__header h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+/* Steps */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0.75rem 1.2rem;
+}
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.step:last-child { border-bottom: none; }
+.step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(249,115,22,0.15);
+  border: 1px solid rgba(249,115,22,0.3);
+  color: #f97316;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.step-text {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+.step-text strong { color: #f1f5f9; }
+.step-text code {
+  color: #fb923c;
+  font-family: 'Geist', monospace;
+  font-size: 0.78rem;
+}
+
+/* Freq list */
+.freq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0.5rem 1.2rem;
+}
+.freq-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.freq-item:last-child { border-bottom: none; }
+.freq-item i { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+.freq-item--green i { color: #10b981; }
+.freq-item--blue i  { color: #2563eb; }
+.freq-item--orange i { color: #f97316; }
+.freq-item strong {
+  display: block;
+  font-size: 0.85rem;
+  color: #f1f5f9;
+  font-weight: 600;
+}
+.freq-item span {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* Tables list */
+.tables-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  padding: 0.9rem 1.2rem;
+}
+.table-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.table-item i { font-size: 0.85rem; color: #475569; }
+.table-item code {
+  font-family: 'Geist', monospace;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Security notice */
+.security-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: rgba(239,68,68,0.06);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+}
+.security-notice__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(239,68,68,0.12);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.security-notice__text strong {
+  display: block;
+  color: #f87171;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+.security-notice__text p {
+  font-size: 0.83rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+.security-notice__text strong span { color: #f1f5f9; }
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .backup-grid {
+    grid-template-columns: 1fr;
+  }
+  .backup-sidebar {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .admin-wrapper { padding: 1rem; }
+  .page-title { font-size: 1.25rem; }
+  .db-stats { grid-template-columns: repeat(2, 1fr); }
+  .tables-list { grid-template-columns: 1fr; }
+  .backup-sidebar { grid-template-columns: 1fr; }
+  .btn-download { min-width: unset; width: 100%; }
+}
+</style>
+
+<script>
+/* Feedback visual ao clicar no download */
+const btn = document.getElementById('btnDownload');
+if (btn) {
+  btn.addEventListener('click', function () {
+    const span = this.querySelector('span');
+    const originalText = span.textContent;
+    span.textContent = 'Gerando arquivo...';
+    this.classList.add('loading');
+    setTimeout(() => {
+      span.textContent = originalText;
+      this.classList.remove('loading');
+    }, 3000);
+  });
+}
+</script>

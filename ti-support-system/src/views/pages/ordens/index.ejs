@@ -5,7 +5,7 @@
     <div class="page-header">
         <div>
             <h2>Ordens de Serviço</h2>
-            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+            <span style="color: #94a3b8; font-size: 13px;">
                 <%= stats.total %> ordem(ns) no total
             </span>
         </div>
@@ -23,27 +23,27 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 25px;">
 
         <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #fbbf24;">
-            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Orçamentos</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 600;">Orçamentos</div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.orcamento %></div>
         </div>
 
         <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #60a5fa;">
-            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Aprovadas</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 600;">Aprovadas</div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.aprovada %></div>
         </div>
 
         <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #a78bfa;">
-            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Em execução</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 600;">Em execução</div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.em_execucao %></div>
         </div>
 
         <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #4ade80;">
-            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Prontas</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 600;">Prontas</div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.pronta %></div>
         </div>
 
         <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #94a3b8;">
-            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Entregues</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 600;">Entregues</div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.entregue %></div>
         </div>
 
@@ -93,7 +93,7 @@
                             </td>
                             <td>
                                 <strong><%= os.cliente_nome || '-' %></strong>
-                                <div style="font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 2px;">
+                                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
                                     <i class="ti ti-device-laptop"></i>
                                     <%= os.dispositivo_tipo %>
                                     <% if (os.dispositivo_marca) { %>
@@ -112,7 +112,7 @@
                                     R$ <%= (os.valor_total || 0).toFixed(2).replace('.', ',') %>
                                 </strong>
                                 <% if (os.valor_pecas > 0) { %>
-                                    <div style="font-size: 10.5px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                    <div style="font-size: 10.5px; color: #94a3b8; margin-top: 2px;">
                                         + R$ <%= os.valor_pecas.toFixed(2).replace('.', ',') %> peças
                                     </div>
                                 <% } %>
@@ -121,12 +121,12 @@
                                 <% if (os.prazo_entrega) { %>
                                     <%= new Date(os.prazo_entrega).toLocaleDateString('pt-BR') %>
                                 <% } else { %>
-                                    <span style="color: rgba(255,255,255,0.3);">-</span>
+                                    <span style="color: #cbd5e1;">-</span>
                                 <% } %>
                             </td>
                             <td style="font-size: 12.5px;">
                                 <%= new Date(os.criado_em).toLocaleDateString('pt-BR') %>
-                                <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
                                     <%= new Date(os.criado_em).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) %>
                                 </div>
                             </td>

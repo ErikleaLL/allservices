@@ -4,7 +4,7 @@
     <div class="page-header">
         <div>
             <h2>Estoque</h2>
-            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+            <span style="color: #94a3b8; font-size: 13px;">
                 <%= stats.totalItens %> peça(s) cadastrada(s)
             </span>
         </div>
@@ -33,17 +33,17 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 25px;">
 
         <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #a78bfa;">
-            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Total de peças</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 600;">Total de peças</div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px;"><%= stats.totalItens %></div>
         </div>
 
         <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #fbbf24;">
-            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Estoque baixo</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 600;">Estoque baixo</div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px; color: #fbbf24;"><%= stats.baixoEstoque %></div>
         </div>
 
         <div style="background: #13121f; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; border-left: 3px solid #f87171;">
-            <div style="font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; font-weight: 600;">Sem estoque</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 600;">Sem estoque</div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-top: 4px; color: #f87171;"><%= stats.semEstoque %></div>
         </div>
 
@@ -112,7 +112,7 @@
                             <td>
                                 <strong><%= p.nome %></strong>
                                 <% if (p.fornecedor_nome) { %>
-                                    <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
                                         <i class="ti ti-truck"></i> <%= p.fornecedor_nome %>
                                     </div>
                                 <% } %>
@@ -123,19 +123,19 @@
                                         <%= p.categoria_nome %>
                                     </span>
                                 <% } else { %>
-                                    <span style="color: rgba(255,255,255,0.3); font-size: 12px;">Sem categoria</span>
+                                    <span style="color: #cbd5e1; font-size: 12px;">Sem categoria</span>
                                 <% } %>
                             </td>
                             <td>
                                 <strong style="font-size: 16px; color: <%= statusCor %>;">
                                     <%= p.quantidade %>
                                 </strong>
-                                <div style="font-size: 10.5px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                <div style="font-size: 10.5px; color: #94a3b8; margin-top: 2px;">
                                     mín: <%= p.estoque_minimo %>
                                 </div>
                             </td>
                             <td>
-                                <span style="color: rgba(255,255,255,0.6); font-size: 12.5px;">
+                                <span style="color: #64748b; font-size: 12.5px;">
                                     R$ <%= (p.preco_custo || 0).toFixed(2).replace('.', ',') %>
                                 </span>
                             </td>

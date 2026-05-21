@@ -1,0 +1,690 @@
+<%- contentFor('title') %>
+Configurações do Sistema — Allservices
+
+<%- contentFor('body') %>
+
+<div class="admin-wrapper">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <a href="/admin" class="btn-back">
+        <i class="ti ti-arrow-left"></i>
+      </a>
+      <div class="page-icon page-icon--blue">
+        <i class="ti ti-settings-2"></i>
+      </div>
+      <div>
+        <h1 class="page-title">Configurações do Sistema</h1>
+        <p class="page-subtitle">Comportamento geral da plataforma, prazos e regras de negócio</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flash Messages -->
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert--success">
+      <i class="ti ti-circle-check"></i>
+      <span><%= success %></span>
+    </div>
+  <% } %>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert--error">
+      <i class="ti ti-circle-x"></i>
+      <span><%= error %></span>
+    </div>
+  <% } %>
+
+  <form action="/admin/sistema" method="POST" class="admin-form">
+
+    <!-- Seção: Ordens de Serviço -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-clipboard-list"></i>
+        <h3>Ordens de Serviço</h3>
+      </div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-shield-check"></i>
+            Garantia Padrão (dias)
+          </label>
+          <div class="input-with-suffix">
+            <input
+              type="number"
+              name="garantia_padrao"
+              class="form-input"
+              value="<%= configs.garantia_padrao || 90 %>"
+              min="0"
+              max="3650"
+              placeholder="90"
+            />
+            <span class="input-suffix">dias</span>
+          </div>
+          <span class="form-hint">Aplicado automaticamente ao concluir uma OS</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-clock"></i>
+            Prazo Padrão de Reparo (dias)
+          </label>
+          <div class="input-with-suffix">
+            <input
+              type="number"
+              name="prazo_padrao"
+              class="form-input"
+              value="<%= configs.prazo_padrao || 3 %>"
+              min="1"
+              max="365"
+              placeholder="3"
+            />
+            <span class="input-suffix">dias úteis</span>
+          </div>
+          <span class="form-hint">Preenchido por padrão na criação de novas OS</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-hash"></i>
+            Prefixo do Número da OS
+          </label>
+          <input
+            type="text"
+            name="os_prefixo"
+            class="form-input"
+            value="<%= configs.os_prefixo || 'OS' %>"
+            placeholder="OS"
+            maxlength="5"
+          />
+          <span class="form-hint">Ex: "OS" gera OS-0001, OS-0002...</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-sort-ascending-numbers"></i>
+            Próximo Número da OS
+          </label>
+          <input
+            type="number"
+            name="os_proximo_numero"
+            class="form-input"
+            value="<%= configs.os_proximo_numero || 1 %>"
+            min="1"
+            placeholder="1"
+          />
+          <span class="form-hint">Número sequencial da próxima OS criada</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Seção: Estoque -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-package"></i>
+        <h3>Estoque</h3>
+      </div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-alert-triangle"></i>
+            Estoque Mínimo Padrão
+          </label>
+          <div class="input-with-suffix">
+            <input
+              type="number"
+              name="estoque_minimo_padrao"
+              class="form-input"
+              value="<%= configs.estoque_minimo_padrao || 5 %>"
+              min="0"
+              placeholder="5"
+            />
+            <span class="input-suffix">unidades</span>
+          </div>
+          <span class="form-hint">Alerta quando o estoque de uma peça cair abaixo deste valor</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-toggle-left"></i>
+            Controle de Estoque
+          </label>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input
+                type="checkbox"
+                name="estoque_ativo"
+                value="1"
+                <%= configs.estoque_ativo == '1' ? 'checked' : '' %>
+              />
+              <span class="toggle__slider"></span>
+            </label>
+            <span class="toggle-label">Descontar peças do estoque ao vincular em OS</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Seção: Financeiro -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-cash"></i>
+        <h3>Financeiro</h3>
+      </div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-currency-dollar"></i>
+            Moeda
+          </label>
+          <select name="moeda" class="form-input form-select">
+            <option value="BRL" <%= (configs.moeda || 'BRL') === 'BRL' ? 'selected' : '' %>>
+              🇧🇷 Real Brasileiro (R$)
+            </option>
+            <option value="USD" <%= configs.moeda === 'USD' ? 'selected' : '' %>>
+              🇺🇸 Dólar Americano ($)
+            </option>
+            <option value="EUR" <%= configs.moeda === 'EUR' ? 'selected' : '' %>>
+              🇪🇺 Euro (€)
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-bell"></i>
+            Alertar Vencimentos (dias antes)
+          </label>
+          <div class="input-with-suffix">
+            <input
+              type="number"
+              name="alerta_vencimento_dias"
+              class="form-input"
+              value="<%= configs.alerta_vencimento_dias || 3 %>"
+              min="1"
+              max="30"
+              placeholder="3"
+            />
+            <span class="input-suffix">dias</span>
+          </div>
+          <span class="form-hint">Contas a pagar/receber serão destacadas X dias antes do vencimento</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Seção: Segurança -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-lock"></i>
+        <h3>Segurança &amp; Acesso</h3>
+      </div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-clock-hour-4"></i>
+            Tempo de Sessão (minutos)
+          </label>
+          <div class="input-with-suffix">
+            <input
+              type="number"
+              name="sessao_minutos"
+              class="form-input"
+              value="<%= configs.sessao_minutos || 480 %>"
+              min="30"
+              max="1440"
+              placeholder="480"
+            />
+            <span class="input-suffix">min</span>
+          </div>
+          <span class="form-hint">Sessão expira após inatividade (mín: 30, máx: 1440)</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-toggle-left"></i>
+            Registro Público
+          </label>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input
+                type="checkbox"
+                name="registro_publico"
+                value="1"
+                <%= configs.registro_publico == '1' ? 'checked' : '' %>
+              />
+              <span class="toggle__slider"></span>
+            </label>
+            <span class="toggle-label">Permitir auto-cadastro de técnicos pela página pública</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-toggle-left"></i>
+            Modo Manutenção
+          </label>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input
+                type="checkbox"
+                name="modo_manutencao"
+                value="1"
+                <%= configs.modo_manutencao == '1' ? 'checked' : '' %>
+              />
+              <span class="toggle__slider toggle__slider--danger"></span>
+            </label>
+            <span class="toggle-label toggle-label--danger">
+              Bloquear acesso ao sistema (apenas admin consegue entrar)
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Seção: Aparência -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-palette"></i>
+        <h3>Aparência</h3>
+      </div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-color-swatch"></i>
+            Cor de Destaque Principal
+          </label>
+          <div class="color-picker-group">
+            <input
+              type="color"
+              name="cor_primaria"
+              class="color-input"
+              value="<%= configs.cor_primaria || '#7c3aed' %>"
+              id="corPrimaria"
+            />
+            <input
+              type="text"
+              class="form-input color-text"
+              id="corPrimariaText"
+              value="<%= configs.cor_primaria || '#7c3aed' %>"
+              placeholder="#7c3aed"
+              maxlength="7"
+            />
+            <div class="color-preview" id="colorPreview"
+              style="background: <%= configs.cor_primaria || '#7c3aed' %>">
+            </div>
+          </div>
+          <span class="form-hint">Cor principal dos botões, ícones e destaques do sistema</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-photo"></i>
+            Itens por Página (tabelas)
+          </label>
+          <select name="itens_por_pagina" class="form-input form-select">
+            <option value="10" <%= (configs.itens_por_pagina || '10') === '10' ? 'selected' : '' %>>10 itens</option>
+            <option value="25" <%= configs.itens_por_pagina === '25' ? 'selected' : '' %>>25 itens</option>
+            <option value="50" <%= configs.itens_por_pagina === '50' ? 'selected' : '' %>>50 itens</option>
+            <option value="100" <%= configs.itens_por_pagina === '100' ? 'selected' : '' %>>100 itens</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Ações -->
+    <div class="form-actions">
+      <a href="/admin" class="btn btn--ghost">
+        <i class="ti ti-x"></i>
+        Cancelar
+      </a>
+      <button type="submit" class="btn btn--primary">
+        <i class="ti ti-device-floppy"></i>
+        Salvar Configurações
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+<style>
+.admin-wrapper {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.btn-back {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #1e1b2e;
+  border: 1px solid rgba(15,23,42,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.btn-back:hover { background: #7c3aed; color: #fff; }
+.page-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.page-subtitle {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0.2rem 0 0;
+}
+
+/* Alerts */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.alert i { font-size: 1.2rem; flex-shrink: 0; }
+.alert--success {
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #34d399;
+}
+.alert--error {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.25);
+  color: #f87171;
+}
+
+/* Form */
+.admin-form { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.form-section {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.form-section__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+  background: rgba(255,255,255,0.02);
+}
+.form-section__header i { color: #2563eb; font-size: 1.1rem; }
+.form-section__header h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  padding: 1.4rem;
+}
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group--full { grid-column: 1 / -1; }
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.form-label i { font-size: 0.9rem; color: #2563eb; }
+
+.form-input {
+  background: #0a0a0f;
+  border: 1px solid rgba(15,23,42,0.05);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  color: #f1f5f9;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.92rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+.form-input::placeholder { color: #334155; }
+.form-select { cursor: pointer; appearance: none; }
+
+.form-hint {
+  font-size: 0.78rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+/* Input com sufixo */
+.input-with-suffix {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.input-with-suffix .form-input {
+  border-radius: 10px 0 0 10px;
+  border-right: none;
+}
+.input-suffix {
+  background: #1e1b2e;
+  border: 1px solid rgba(15,23,42,0.05);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.82rem;
+  color: #64748b;
+  white-space: nowrap;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Toggle */
+.toggle-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+}
+.toggle { position: relative; display: inline-flex; cursor: pointer; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle__slider {
+  width: 48px;
+  height: 26px;
+  background: #1e1b2e;
+  border: 1px solid rgba(15,23,42,0.06);
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.25s;
+  flex-shrink: 0;
+}
+.toggle__slider::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #475569;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.25s, background 0.25s;
+}
+.toggle input:checked + .toggle__slider {
+  background: rgba(37,99,235,0.25);
+  border-color: #2563eb;
+}
+.toggle input:checked + .toggle__slider::after {
+  transform: translateX(22px);
+  background: #2563eb;
+}
+.toggle__slider--danger {}
+.toggle input:checked + .toggle__slider--danger {
+  background: rgba(239,68,68,0.2);
+  border-color: #ef4444;
+}
+.toggle input:checked + .toggle__slider--danger::after {
+  background: #ef4444;
+}
+.toggle-label {
+  font-size: 0.87rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+.toggle-label--danger { color: #f87171; }
+
+/* Color picker */
+.color-picker-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.color-input {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(15,23,42,0.06);
+  background: transparent;
+  cursor: pointer;
+  padding: 2px;
+  flex-shrink: 0;
+}
+.color-text {
+  flex: 1;
+  font-family: 'Geist', monospace;
+  letter-spacing: 0.05em;
+}
+.color-preview {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 2px solid rgba(15,23,42,0.06);
+  transition: background 0.2s;
+}
+
+/* Actions */
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Geist', sans-serif;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn--primary {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #fff;
+}
+.btn--primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+}
+.btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(15,23,42,0.06);
+  color: #94a3b8;
+}
+.btn--ghost:hover { background: rgba(15,23,42,0.04); color: #f1f5f9; }
+
+@media (max-width: 640px) {
+  .admin-wrapper { padding: 1rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 1.25rem; }
+  .form-actions { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+}
+</style>
+
+<script>
+/* Sincroniza color picker ↔ campo texto ↔ preview */
+const colorInput = document.getElementById('corPrimaria');
+const colorText  = document.getElementById('corPrimariaText');
+const colorPrev  = document.getElementById('colorPreview');
+
+colorInput.addEventListener('input', () => {
+  colorText.value      = colorInput.value;
+  colorPrev.style.background = colorInput.value;
+});
+
+colorText.addEventListener('input', () => {
+  const v = colorText.value;
+  if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+    colorInput.value           = v;
+    colorPrev.style.background = v;
+  }
+});
+</script>

@@ -4,7 +4,7 @@
     <div class="page-header">
         <div>
             <h2>Editar OS <span style="font-family: monospace; color: #a78bfa;"><%= ordem.numero_os %></span></h2>
-            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+            <span style="color: #94a3b8; font-size: 13px;">
                 Criada em <%= new Date(ordem.criado_em).toLocaleString('pt-BR') %>
             </span>
         </div>
@@ -105,7 +105,7 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
-                    <label for="solucao">Solução aplicada <span style="color: rgba(255,255,255,0.4); font-size: 11px;">(preencher após concluir)</span></label>
+                    <label for="solucao">Solução aplicada <span style="color: #94a3b8; font-size: 11px;">(preencher após concluir)</span></label>
                     <textarea name="solucao" id="solucao" rows="3" 
                         placeholder="Descreva o que foi feito..."><%= ordem.solucao || '' %></textarea>
                 </div>
@@ -128,7 +128,7 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label for="valor_pecas">Peças (R$) <span style="font-size: 10px; color: rgba(255,255,255,0.4);">(auto)</span></label>
+                        <label for="valor_pecas">Peças (R$) <span style="font-size: 10px; color: #94a3b8;">(auto)</span></label>
                         <input type="number" step="0.01" min="0" 
                             name="valor_pecas" id="valor_pecas" 
                             value="<%= ordem.valor_pecas || 0 %>" readonly
@@ -145,7 +145,7 @@
                 </div>
 
                 <div style="background: rgba(74,222,128,0.1); padding: 12px 14px; border-radius: 8px; margin-top: 14px; text-align: center;">
-                    <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px;">
+                    <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">
                         Valor total estimado
                     </div>
                     <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #4ade80; margin-top: 4px;">

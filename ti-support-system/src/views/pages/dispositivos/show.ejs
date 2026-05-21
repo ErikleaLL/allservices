@@ -4,7 +4,7 @@
     <div class="page-header">
         <div>
             <h2>Dispositivo #<%= dispositivo.id %></h2>
-            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+            <span style="color: #94a3b8; font-size: 13px;">
                 Cadastrado em <%= new Date(dispositivo.criado_em).toLocaleString('pt-BR') %>
             </span>
         </div>
@@ -25,7 +25,7 @@
             <i class="ti <%= statusAtual.icone %>"></i>
         </div>
         <div style="flex: 1;">
-            <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
                 Status Atual
             </div>
             <div style="font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: <%= statusAtual.cor %>; margin-top: 2px;">
@@ -69,7 +69,7 @@
                     <% if (dispositivo.numero_serie) { %>
                         <span style="font-family: monospace;"><%= dispositivo.numero_serie %></span>
                     <% } else { %>
-                        <span style="color: rgba(255,255,255,0.3);">Não informado</span>
+                        <span style="color: #cbd5e1;">Não informado</span>
                     <% } %>
                 </div>
             </div>
@@ -82,12 +82,12 @@
                             <i class="ti ti-user"></i> <%= dispositivo.cliente_nome %>
                         </a>
                         <% if (dispositivo.cliente_telefone) { %>
-                            <div style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;">
+                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">
                                 <i class="ti ti-phone"></i> <%= dispositivo.cliente_telefone %>
                             </div>
                         <% } %>
                     <% } else { %>
-                        <span style="color: rgba(255,255,255,0.3);">Sem cliente</span>
+                        <span style="color: #cbd5e1;">Sem cliente</span>
                     <% } %>
                 </div>
             </div>
@@ -126,7 +126,7 @@
                 <i class="ti ti-qrcode" style="color: #a78bfa;"></i>
                 QR Code de Rastreamento
             </h3>
-            <p style="color: rgba(255,255,255,0.4); font-size: 12px; margin-bottom: 18px;">
+            <p style="color: #94a3b8; font-size: 12px; margin-bottom: 18px;">
                 Cliente escaneia e acompanha o reparo
             </p>
 
@@ -135,7 +135,7 @@
             </div>
 
             <div style="background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.07); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
-                <div style="font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600;">
+                <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600;">
                     Link público
                 </div>
                 <div style="font-family: monospace; font-size: 11px; color: #a78bfa; word-break: break-all;">

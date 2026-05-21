@@ -4,7 +4,7 @@
     <div class="page-header">
         <div>
             <h2>Dispositivos</h2>
-            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+            <span style="color: #94a3b8; font-size: 13px;">
                 Total: <%= total %> dispositivo(s) cadastrado(s)
             </span>
         </div>
@@ -47,7 +47,7 @@
                             <td>
                                 <strong><%= d.tipo %></strong>
                                 <% if (d.marca || d.modelo) { %>
-                                    <div style="font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 2px;">
+                                    <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
                                         <%= [d.marca, d.modelo].filter(Boolean).join(' • ') %>
                                     </div>
                                 <% } %>
@@ -56,12 +56,12 @@
                                 <% if (d.cliente_nome) { %>
                                     <%= d.cliente_nome %>
                                     <% if (d.cliente_telefone) { %>
-                                        <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                        <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
                                             <i class="ti ti-phone"></i> <%= d.cliente_telefone %>
                                         </div>
                                     <% } %>
                                 <% } else { %>
-                                    <span style="color: rgba(255,255,255,0.3);">Sem cliente</span>
+                                    <span style="color: #cbd5e1;">Sem cliente</span>
                                 <% } %>
                             </td>
                             <td>
@@ -72,7 +72,7 @@
                             </td>
                             <td style="font-size: 12.5px;">
                                 <%= new Date(d.criado_em).toLocaleDateString('pt-BR') %>
-                                <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
                                     <%= new Date(d.criado_em).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) %>
                                 </div>
                             </td>

@@ -2,6 +2,7 @@ const OrdemServico = require('../models/OrdemServico');
 const Cliente = require('../models/Cliente');
 const Dispositivo = require('../models/Dispositivo');
 const Usuario = require('../models/Usuario');
+const Peca = require('../models/Peca');
 const QRCode = require('qrcode');
 
 const STATUS_OS = {
@@ -30,17 +31,13 @@ exports.index = (req, res, next) => {
         const statusCount = OrdemServico.countByStatus();
         const receitaMes = OrdemServico.receitaDoMes();
 
-        const stats = {
-            total, orcamento: 0, aprovada: 0, em_execucao: 0,
-            aguardando_peca: 0, pronta: 0, entregue: 0, cancelada: 0, receitaMes
-        };
-
+        const stats = { total, orcamento: 0, aprovada: 0, em_execucao: 0, aguardando_peca: 0, pronta: 0, entregue: 0, cancelada: 0, receitaMes };
         statusCount.forEach(s => { stats[s.status] = s.total; });
 
-        res.render('pages/ordens/index', {
-            title: 'Ordens de Serviço',
-            layout: 'layouts/main',
-            ordens, stats, STATUS_OS
+        res.render('pages/ordens/index', { 
+            title: 'Ordens de Serviço', 
+            layout: 'layouts/main', 
+            ordens, stats, STATUS_OS 
         });
     } catch (error) { next(error); }
 };
@@ -51,11 +48,10 @@ exports.kanban = (req, res, next) => {
         const colunas = {};
         Object.keys(STATUS_OS).forEach(key => { colunas[key] = []; });
         ordens.forEach(os => { if (colunas[os.status]) colunas[os.status].push(os); });
-
-        res.render('pages/ordens/kanban', {
-            title: 'Kanban - Ordens de Serviço',
-            layout: 'layouts/main',
-            colunas, STATUS_OS
+        res.render('pages/ordens/kanban', { 
+            title: 'Kanban - Ordens de Serviço', 
+            layout: 'layouts/main', 
+            colunas, STATUS_OS 
         });
     } catch (error) { next(error); }
 };
@@ -68,24 +64,17 @@ exports.create = (req, res, next) => {
         const dispositivoPreSelecionado = req.query.dispositivo_id || null;
 
         res.render('pages/ordens/create', {
-            title: 'Nova Ordem de Serviço',
+            title: 'Nova Ordem de Serviço', 
             layout: 'layouts/main',
-            clientes, dispositivos, tecnicos,
-            dispositivoPreSelecionado, error: null, STATUS_OS
+            clientes, dispositivos, tecnicos, dispositivoPreSelecionado, 
+            error: null, STATUS_OS
         });
     } catch (error) { next(error); }
 };
 
 exports.store = (req, res, next) => {
     try {
-        const {
-            dispositivo_id, cliente_id, tecnico_id,
-            diagnostico, descricao_servico,
-            valor_mao_obra, prazo_entrega,
-            observacoes_internas, observacoes_publicas,
-            garantia_dias
-        } = req.body;
-
+        const { dispositivo_id, cliente_id, tecnico_id, diagnostico, descricao_servico, valor_mao_obra, prazo_entrega, observacoes_internas, observacoes_publicas, garantia_dias } = req.body;
         if (!cliente_id || !dispositivo_id) return res.redirect('/ordens/create');
 
         const valor_mao_obra_num = parseFloat(valor_mao_obra) || 0;
@@ -96,8 +85,7 @@ exports.store = (req, res, next) => {
             tecnico_id: tecnico_id ? parseInt(tecnico_id) : null,
             diagnostico, descricao_servico,
             valor_mao_obra: valor_mao_obra_num,
-            valor_pecas: 0,
-            valor_total: valor_mao_obra_num,
+            valor_pecas: 0, valor_total: valor_mao_obra_num,
             prazo_entrega, observacoes_internas, observacoes_publicas,
             garantia_dias: parseInt(garantia_dias) || 90
         });
@@ -110,11 +98,16 @@ exports.show = (req, res, next) => {
     try {
         const ordem = OrdemServico.findById(req.params.id);
         if (!ordem) return res.redirect('/ordens');
+        
+        const pecasEstoque = Peca.findAll().filter(p => p.quantidade > 0);
 
         res.render('pages/ordens/show', {
-            title: 'OS ' + ordem.numero_os,
+            title: 'OS ' + ordem.numero_os, 
             layout: 'layouts/main',
-            ordem, STATUS_OS
+            ordem, 
+            STATUS_OS, 
+            pecasEstoque,
+            query: req.query || {}
         });
     } catch (error) { next(error); }
 };
@@ -123,16 +116,14 @@ exports.imprimir = (req, res, next) => {
     try {
         const ordem = OrdemServico.findById(req.params.id);
         if (!ordem) return res.redirect('/ordens');
-
-        res.render('pages/ordens/imprimir', {
-            title: 'Imprimir OS - ' + ordem.numero_os,
-            layout: false,
-            ordem, STATUS_OS
+        res.render('pages/ordens/imprimir', { 
+            title: 'Imprimir OS - ' + ordem.numero_os, 
+            layout: false, 
+            ordem, STATUS_OS 
         });
     } catch (error) { next(error); }
 };
 
-// 🎯 NOVO: Imprimir adesivo de garantia (cola na peça)
 exports.adesivoGarantia = async (req, res, next) => {
     try {
         const ordem = OrdemServico.findById(req.params.id);
@@ -141,43 +132,36 @@ exports.adesivoGarantia = async (req, res, next) => {
         const baseUrl = getBaseUrl(req);
         const urlGarantia = baseUrl + '/garantia/' + ordem.qr_code_garantia;
 
-        const qrImage = await QRCode.toDataURL(urlGarantia, {
-            width: 400,
-            margin: 1,
-            color: { dark: '#000', light: '#fff' }
+        const qrImage = await QRCode.toDataURL(urlGarantia, { 
+            width: 400, margin: 1, 
+            color: { dark: '#000', light: '#fff' } 
         });
 
         res.render('pages/ordens/adesivo-garantia', {
             title: 'Adesivo de Garantia - ' + ordem.numero_os,
-            layout: false,
+            layout: false, 
             ordem, qrImage, urlGarantia
         });
     } catch (error) { next(error); }
 };
 
-// 🎯 NOVO: Página pública de consulta da garantia
 exports.consultarGarantia = (req, res, next) => {
     try {
         const ordem = OrdemServico.findByQrGarantia(req.params.qrcode);
-
         if (!ordem) {
             return res.status(404).render('pages/public/garantia-naoencontrada', {
-                title: 'Garantia não encontrada',
+                title: 'Garantia não encontrada', 
                 layout: 'layouts/public'
             });
         }
 
-        // Calcular se a garantia está ativa
-        let garantiaAtiva = false;
-        let diasRestantes = 0;
-        let dataExpiracao = null;
+        let garantiaAtiva = false, diasRestantes = 0, dataExpiracao = null;
         let dataReferencia = ordem.concluido_em || ordem.criado_em;
 
         if (ordem.garantia_dias && dataReferencia) {
             const dataServ = new Date(dataReferencia);
             dataExpiracao = new Date(dataServ.getTime() + (ordem.garantia_dias * 24 * 60 * 60 * 1000));
             const hoje = new Date();
-            
             if (dataExpiracao > hoje) {
                 garantiaAtiva = true;
                 diasRestantes = Math.ceil((dataExpiracao - hoje) / (1000 * 60 * 60 * 24));
@@ -185,12 +169,9 @@ exports.consultarGarantia = (req, res, next) => {
         }
 
         res.render('pages/public/garantia', {
-            title: 'Garantia ' + ordem.numero_os,
+            title: 'Garantia ' + ordem.numero_os, 
             layout: 'layouts/public',
-            ordem,
-            garantiaAtiva,
-            diasRestantes,
-            dataExpiracao
+            ordem, garantiaAtiva, diasRestantes, dataExpiracao
         });
     } catch (error) { next(error); }
 };
@@ -204,10 +185,10 @@ exports.edit = (req, res, next) => {
         const tecnicos = Usuario.findAll().filter(u => u.role === 'tecnico' || u.role === 'admin');
 
         res.render('pages/ordens/edit', {
-            title: 'Editar OS ' + ordem.numero_os,
+            title: 'Editar OS ' + ordem.numero_os, 
             layout: 'layouts/main',
-            ordem, clientes, dispositivos, tecnicos,
-            STATUS_OS, error: null
+            ordem, clientes, dispositivos, tecnicos, STATUS_OS, 
+            error: null
         });
     } catch (error) { next(error); }
 };
@@ -219,7 +200,6 @@ exports.update = (req, res, next) => {
         dados.valor_pecas = parseFloat(dados.valor_pecas) || 0;
         dados.valor_total = dados.valor_mao_obra + dados.valor_pecas;
         dados.garantia_dias = parseInt(dados.garantia_dias) || 90;
-
         OrdemServico.update(req.params.id, dados);
         res.redirect('/ordens/' + req.params.id);
     } catch (error) { next(error); }
@@ -246,9 +226,30 @@ exports.adicionarPeca = (req, res, next) => {
     } catch (error) { next(error); }
 };
 
+exports.adicionarPecaEstoque = (req, res, next) => {
+    try {
+        const { peca_id, quantidade } = req.body;
+        const usuarioId = req.session.user ? req.session.user.id : null;
+        
+        const resultado = OrdemServico.adicionarPecaEstoque(
+            req.params.id,
+            parseInt(peca_id),
+            parseInt(quantidade) || 1,
+            usuarioId
+        );
+
+        if (resultado.erro) {
+            return res.redirect('/ordens/' + req.params.id + '?erro=' + encodeURIComponent(resultado.erro));
+        }
+
+        res.redirect('/ordens/' + req.params.id);
+    } catch (error) { next(error); }
+};
+
 exports.removerPeca = (req, res, next) => {
     try {
-        OrdemServico.removerPeca(req.params.pecaId);
+        const usuarioId = req.session.user ? req.session.user.id : null;
+        OrdemServico.removerPeca(req.params.pecaId, usuarioId);
         res.redirect('/ordens/' + req.params.id);
     } catch (error) { next(error); }
 };

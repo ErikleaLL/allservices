@@ -1,0 +1,919 @@
+<%- contentFor('title') %>
+Estatísticas — Allservices
+
+<%- contentFor('body') %>
+
+<div class="admin-wrapper">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <a href="/admin" class="btn-back">
+        <i class="ti ti-arrow-left"></i>
+      </a>
+      <div class="page-icon">
+        <i class="ti ti-chart-bar"></i>
+      </div>
+      <div>
+        <h1 class="page-title">Estatísticas Avançadas</h1>
+        <p class="page-subtitle">Visão completa do desempenho da assistência técnica</p>
+      </div>
+    </div>
+    <div class="page-header-right">
+      <span class="update-badge">
+        <i class="ti ti-refresh"></i>
+        Atualizado agora
+      </span>
+    </div>
+  </div>
+
+  <!-- KPIs principais -->
+  <div class="kpi-grid">
+
+    <div class="kpi-card kpi-card--purple">
+      <div class="kpi-card__icon">
+        <i class="ti ti-clipboard-list"></i>
+      </div>
+      <div class="kpi-card__data">
+        <span class="kpi-value"><%= estat.total_os || 0 %></span>
+        <span class="kpi-label">Total de OS</span>
+      </div>
+      <div class="kpi-card__trend">
+        <i class="ti ti-trending-up"></i>
+        <span>todas</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-card--green">
+      <div class="kpi-card__icon">
+        <i class="ti ti-circle-check"></i>
+      </div>
+      <div class="kpi-card__data">
+        <span class="kpi-value"><%= estat.os_concluidas || 0 %></span>
+        <span class="kpi-label">OS Concluídas</span>
+      </div>
+      <div class="kpi-card__trend">
+        <i class="ti ti-check"></i>
+        <span>
+          <%= estat.total_os > 0
+            ? Math.round((estat.os_concluidas / estat.total_os) * 100)
+            : 0 %>%
+        </span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-card--blue">
+      <div class="kpi-card__icon">
+        <i class="ti ti-users"></i>
+      </div>
+      <div class="kpi-card__data">
+        <span class="kpi-value"><%= estat.total_clientes || 0 %></span>
+        <span class="kpi-label">Clientes Cadastrados</span>
+      </div>
+      <div class="kpi-card__trend">
+        <i class="ti ti-user-plus"></i>
+        <span>ativos</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-card--orange">
+      <div class="kpi-card__icon">
+        <i class="ti ti-cash"></i>
+      </div>
+      <div class="kpi-card__data">
+        <span class="kpi-value">
+          R$ <%= (estat.receita_total || 0).toLocaleString('pt-BR', {minimumFractionDigits:2}) %>
+        </span>
+        <span class="kpi-label">Receita Total</span>
+      </div>
+      <div class="kpi-card__trend">
+        <i class="ti ti-trending-up"></i>
+        <span>acumulado</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-card--red">
+      <div class="kpi-card__icon">
+        <i class="ti ti-credit-card-off"></i>
+      </div>
+      <div class="kpi-card__data">
+        <span class="kpi-value">
+          R$ <%= (estat.despesa_total || 0).toLocaleString('pt-BR', {minimumFractionDigits:2}) %>
+        </span>
+        <span class="kpi-label">Despesas Totais</span>
+      </div>
+      <div class="kpi-card__trend">
+        <i class="ti ti-trending-down"></i>
+        <span>acumulado</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-card--teal">
+      <div class="kpi-card__icon">
+        <i class="ti ti-chart-line"></i>
+      </div>
+      <div class="kpi-card__data">
+        <span class="kpi-value">
+          R$ <%= ((estat.receita_total || 0) - (estat.despesa_total || 0)).toLocaleString('pt-BR', {minimumFractionDigits:2}) %>
+        </span>
+        <span class="kpi-label">Lucro Líquido</span>
+      </div>
+      <div class="kpi-card__trend">
+        <i class="ti ti-coin"></i>
+        <span>resultado</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Gráficos -->
+  <div class="charts-grid">
+
+    <!-- OS por Status -->
+    <div class="chart-card">
+      <div class="chart-card__header">
+        <div class="chart-card__title">
+          <i class="ti ti-clipboard-list"></i>
+          <h3>OS por Status</h3>
+        </div>
+        <span class="chart-total"><%= estat.total_os || 0 %> total</span>
+      </div>
+      <div class="chart-card__body">
+        <canvas id="chartStatus" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Receita vs Despesa -->
+    <div class="chart-card">
+      <div class="chart-card__header">
+        <div class="chart-card__title">
+          <i class="ti ti-chart-bar"></i>
+          <h3>Receita vs Despesa</h3>
+        </div>
+        <span class="chart-total">últimos 6 meses</span>
+      </div>
+      <div class="chart-card__body">
+        <canvas id="chartFinanceiro" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- OS por Mês -->
+    <div class="chart-card chart-card--wide">
+      <div class="chart-card__header">
+        <div class="chart-card__title">
+          <i class="ti ti-chart-line"></i>
+          <h3>Ordens de Serviço por Mês</h3>
+        </div>
+        <span class="chart-total">últimos 12 meses</span>
+      </div>
+      <div class="chart-card__body">
+        <canvas id="chartOsMes" height="160"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tabelas analíticas -->
+  <div class="tables-grid">
+
+    <!-- Top Serviços -->
+    <div class="table-card">
+      <div class="table-card__header">
+        <i class="ti ti-tool"></i>
+        <h3>Serviços Mais Realizados</h3>
+      </div>
+      <div class="table-card__body">
+        <% if (estat.top_servicos && estat.top_servicos.length > 0) { %>
+          <% estat.top_servicos.forEach((s, i) => { %>
+            <div class="rank-item">
+              <div class="rank-num rank-num--<%= i < 3 ? ['gold','silver','bronze'][i] : 'default' %>">
+                <%= i + 1 %>
+              </div>
+              <div class="rank-info">
+                <span class="rank-name"><%= s.descricao || 'Serviço ' + (i+1) %></span>
+                <div class="rank-bar-wrap">
+                  <div class="rank-bar"
+                    style="width: <%= estat.top_servicos[0].total > 0 ? Math.round((s.total / estat.top_servicos[0].total) * 100) : 0 %>%">
+                  </div>
+                </div>
+              </div>
+              <span class="rank-count"><%= s.total %></span>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="empty-state">
+            <i class="ti ti-tool"></i>
+            <p>Nenhum serviço registrado ainda</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Top Técnicos -->
+    <div class="table-card">
+      <div class="table-card__header">
+        <i class="ti ti-users-group"></i>
+        <h3>Técnicos Mais Produtivos</h3>
+      </div>
+      <div class="table-card__body">
+        <% if (estat.top_tecnicos && estat.top_tecnicos.length > 0) { %>
+          <% estat.top_tecnicos.forEach((t, i) => { %>
+            <div class="rank-item">
+              <div class="rank-num rank-num--<%= i < 3 ? ['gold','silver','bronze'][i] : 'default' %>">
+                <%= i + 1 %>
+              </div>
+              <div class="rank-info">
+                <span class="rank-name"><%= t.nome || 'Técnico ' + (i+1) %></span>
+                <div class="rank-bar-wrap">
+                  <div class="rank-bar rank-bar--blue"
+                    style="width: <%= estat.top_tecnicos[0].total > 0 ? Math.round((t.total / estat.top_tecnicos[0].total) * 100) : 0 %>%">
+                  </div>
+                </div>
+              </div>
+              <span class="rank-count"><%= t.total %> OS</span>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="empty-state">
+            <i class="ti ti-users"></i>
+            <p>Nenhum técnico com OS registrada</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Peças mais usadas -->
+    <div class="table-card">
+      <div class="table-card__header">
+        <i class="ti ti-package"></i>
+        <h3>Peças Mais Utilizadas</h3>
+      </div>
+      <div class="table-card__body">
+        <% if (estat.top_pecas && estat.top_pecas.length > 0) { %>
+          <% estat.top_pecas.forEach((p, i) => { %>
+            <div class="rank-item">
+              <div class="rank-num rank-num--<%= i < 3 ? ['gold','silver','bronze'][i] : 'default' %>">
+                <%= i + 1 %>
+              </div>
+              <div class="rank-info">
+                <span class="rank-name"><%= p.nome %></span>
+                <div class="rank-bar-wrap">
+                  <div class="rank-bar rank-bar--green"
+                    style="width: <%= estat.top_pecas[0].total > 0 ? Math.round((p.total / estat.top_pecas[0].total) * 100) : 0 %>%">
+                  </div>
+                </div>
+              </div>
+              <span class="rank-count"><%= p.total %>x</span>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="empty-state">
+            <i class="ti ti-package"></i>
+            <p>Nenhuma peça vinculada a OS</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Indicadores rápidos -->
+    <div class="table-card">
+      <div class="table-card__header">
+        <i class="ti ti-dashboard"></i>
+        <h3>Indicadores de Saúde</h3>
+      </div>
+      <div class="table-card__body">
+
+        <div class="health-item">
+          <div class="health-info">
+            <span class="health-label">Taxa de conclusão</span>
+            <span class="health-value">
+              <%= estat.total_os > 0
+                ? Math.round((estat.os_concluidas / estat.total_os) * 100)
+                : 0 %>%
+            </span>
+          </div>
+          <div class="health-bar-wrap">
+            <div class="health-bar health-bar--green"
+              style="width: <%= estat.total_os > 0 ? Math.round((estat.os_concluidas / estat.total_os) * 100) : 0 %>%">
+            </div>
+          </div>
+        </div>
+
+        <div class="health-item">
+          <div class="health-info">
+            <span class="health-label">OS em andamento</span>
+            <span class="health-value health-value--blue">
+              <%= estat.os_andamento || 0 %>
+            </span>
+          </div>
+          <div class="health-bar-wrap">
+            <div class="health-bar health-bar--blue"
+              style="width: <%= estat.total_os > 0 ? Math.round(((estat.os_andamento||0) / estat.total_os) * 100) : 0 %>%">
+            </div>
+          </div>
+        </div>
+
+        <div class="health-item">
+          <div class="health-info">
+            <span class="health-label">Aguardando aprovação</span>
+            <span class="health-value health-value--orange">
+              <%= estat.os_aguardando || 0 %>
+            </span>
+          </div>
+          <div class="health-bar-wrap">
+            <div class="health-bar health-bar--orange"
+              style="width: <%= estat.total_os > 0 ? Math.round(((estat.os_aguardando||0) / estat.total_os) * 100) : 0 %>%">
+            </div>
+          </div>
+        </div>
+
+        <div class="health-item">
+          <div class="health-info">
+            <span class="health-label">Estoque com alerta</span>
+            <span class="health-value health-value--red">
+              <%= estat.pecas_alerta || 0 %> peças
+            </span>
+          </div>
+          <div class="health-bar-wrap">
+            <div class="health-bar health-bar--red"
+              style="width: <%= estat.total_pecas > 0 ? Math.min(Math.round(((estat.pecas_alerta||0) / estat.total_pecas) * 100), 100) : 0 %>%">
+            </div>
+          </div>
+        </div>
+
+        <div class="health-item">
+          <div class="health-info">
+            <span class="health-label">Contas vencidas</span>
+            <span class="health-value health-value--red">
+              <%= estat.financeiro_vencido || 0 %>
+            </span>
+          </div>
+          <div class="health-bar-wrap">
+            <div class="health-bar health-bar--red"
+              style="width: <%= estat.financeiro_vencido > 0 ? Math.min(estat.financeiro_vencido * 10, 100) : 0 %>%">
+            </div>
+          </div>
+        </div>
+
+        <div class="health-item">
+          <div class="health-info">
+            <span class="health-label">Leads capturados</span>
+            <span class="health-value health-value--purple">
+              <%= estat.total_leads || 0 %>
+            </span>
+          </div>
+          <div class="health-bar-wrap">
+            <div class="health-bar health-bar--purple"
+              style="width: <%= Math.min((estat.total_leads || 0) * 5, 100) %>%">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+.admin-wrapper {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.btn-back {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #1e1b2e;
+  border: 1px solid rgba(15,23,42,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.btn-back:hover { background: #7c3aed; color: #fff; }
+.page-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ef4444, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.page-subtitle {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0.2rem 0 0;
+}
+.update-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.2);
+  color: #10b981;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.kpi-card {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 14px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: transform 0.2s;
+}
+.kpi-card:hover { transform: translateY(-2px); }
+.kpi-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+.kpi-card__data { flex: 1; }
+.kpi-value {
+  display: block;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.2;
+  margin-bottom: 0.2rem;
+  word-break: break-all;
+}
+.kpi-label {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+.kpi-card__trend {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* KPI variantes */
+.kpi-card--purple { border-color: rgba(124,58,237,0.2); }
+.kpi-card--purple .kpi-card__icon { background: rgba(124,58,237,0.15); color: #a78bfa; }
+.kpi-card--purple .kpi-card__trend { color: #a78bfa; }
+
+.kpi-card--green { border-color: rgba(16,185,129,0.2); }
+.kpi-card--green .kpi-card__icon { background: rgba(16,185,129,0.15); color: #10b981; }
+.kpi-card--green .kpi-card__trend { color: #10b981; }
+
+.kpi-card--blue { border-color: rgba(37,99,235,0.2); }
+.kpi-card--blue .kpi-card__icon { background: rgba(37,99,235,0.15); color: #60a5fa; }
+.kpi-card--blue .kpi-card__trend { color: #60a5fa; }
+
+.kpi-card--orange { border-color: rgba(249,115,22,0.2); }
+.kpi-card--orange .kpi-card__icon { background: rgba(249,115,22,0.15); color: #fb923c; }
+.kpi-card--orange .kpi-card__trend { color: #fb923c; }
+
+.kpi-card--red { border-color: rgba(239,68,68,0.2); }
+.kpi-card--red .kpi-card__icon { background: rgba(239,68,68,0.15); color: #f87171; }
+.kpi-card--red .kpi-card__trend { color: #f87171; }
+
+.kpi-card--teal { border-color: rgba(20,184,166,0.2); }
+.kpi-card--teal .kpi-card__icon { background: rgba(20,184,166,0.15); color: #2dd4bf; }
+.kpi-card--teal .kpi-card__trend { color: #2dd4bf; }
+
+/* Charts Grid */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.chart-card {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.chart-card--wide { grid-column: 1 / -1; }
+.chart-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.3rem;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+}
+.chart-card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.chart-card__title i { color: #7c3aed; font-size: 1.1rem; }
+.chart-card__title h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+}
+.chart-total {
+  font-size: 0.78rem;
+  color: #475569;
+  background: rgba(255,255,255,0.04);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+.chart-card__body {
+  padding: 1.2rem;
+  position: relative;
+}
+
+/* Tables Grid */
+.tables-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+.table-card {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.table-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.3rem;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+  background: rgba(255,255,255,0.02);
+}
+.table-card__header i { color: #7c3aed; font-size: 1.1rem; }
+.table-card__header h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+}
+.table-card__body { padding: 1rem 1.3rem; }
+
+/* Rank items */
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.rank-item:last-child { border-bottom: none; }
+.rank-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.rank-num--gold   { background: rgba(251,191,36,0.2); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.rank-num--silver { background: rgba(148,163,184,0.15); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25); }
+.rank-num--bronze { background: rgba(180,83,9,0.15); color: #b45309; border: 1px solid rgba(180,83,9,0.25); }
+.rank-num--default { background: rgba(15,23,42,0.04); color: #475569; border: 1px solid rgba(15,23,42,0.05); }
+
+.rank-info { flex: 1; min-width: 0; }
+.rank-name {
+  display: block;
+  font-size: 0.83rem;
+  color: #e2e8f0;
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rank-bar-wrap {
+  height: 4px;
+  background: rgba(15,23,42,0.04);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.rank-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  transition: width 1s ease;
+}
+.rank-bar--blue  { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+.rank-bar--green { background: linear-gradient(90deg, #10b981, #34d399); }
+
+.rank-count {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+/* Health indicators */
+.health-item {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.health-item:last-child { border-bottom: none; }
+.health-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+.health-label { font-size: 0.82rem; color: #64748b; }
+.health-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #10b981;
+}
+.health-value--blue   { color: #60a5fa; }
+.health-value--orange { color: #fb923c; }
+.health-value--red    { color: #f87171; }
+.health-value--purple { color: #a78bfa; }
+.health-bar-wrap {
+  height: 5px;
+  background: rgba(15,23,42,0.04);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.health-bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 1.2s ease;
+}
+.health-bar--green  { background: linear-gradient(90deg, #10b981, #34d399); }
+.health-bar--blue   { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+.health-bar--orange { background: linear-gradient(90deg, #f97316, #fb923c); }
+.health-bar--red    { background: linear-gradient(90deg, #ef4444, #f87171); }
+.health-bar--purple { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 1rem;
+  color: #334155;
+}
+.empty-state i { font-size: 2rem; }
+.empty-state p { font-size: 0.83rem; margin: 0; }
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .charts-grid { grid-template-columns: 1fr; }
+  .chart-card--wide { grid-column: 1; }
+  .tables-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .admin-wrapper { padding: 1rem; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-title { font-size: 1.25rem; }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+/* ── Dados vindos do controller ── */
+const dadosStatus = <%- JSON.stringify(estat.por_status || []) %>;
+const dadosFinanceiro = <%- JSON.stringify(estat.financeiro_mensal || []) %>;
+const dadosOsMes = <%- JSON.stringify(estat.os_por_mes || []) %>;
+
+/* ── Configuração global Chart.js ── */
+Chart.defaults.color = '#64748b';
+Chart.defaults.font.family = "'Geist', sans-serif";
+Chart.defaults.font.size = 12;
+
+/* ── Gráfico 1: OS por Status (Doughnut) ── */
+const ctxStatus = document.getElementById('chartStatus');
+if (ctxStatus) {
+  const labels = dadosStatus.map(d => d.status || 'Sem status');
+  const values = dadosStatus.map(d => d.total || 0);
+  const cores = {
+    'aberta':              '#60a5fa',
+    'em_andamento':        '#a78bfa',
+    'aguardando_peca':     '#fb923c',
+    'aguardando_aprovacao':'#fbbf24',
+    'concluida':           '#34d399',
+    'entregue':            '#2dd4bf',
+    'cancelada':           '#f87171'
+  };
+  const bgColors = labels.map(l => cores[l] || '#475569');
+
+  new Chart(ctxStatus, {
+    type: 'doughnut',
+    data: {
+      labels: labels.map(l => l.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())),
+      datasets: [{
+        data: values,
+        backgroundColor: bgColors,
+        borderColor: '#0a0a0f',
+        borderWidth: 3,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '65%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 12,
+            usePointStyle: true,
+            pointStyleWidth: 8,
+            font: { size: 11 }
+          }
+        },
+        tooltip: {
+          backgroundColor: '#13121f',
+          borderColor: 'rgba(15,23,42,0.06)',
+          borderWidth: 1,
+          titleColor: '#f1f5f9',
+          bodyColor: '#94a3b8',
+          padding: 12,
+          callbacks: {
+            label: ctx => ` ${ctx.parsed} OS`
+          }
+        }
+      }
+    }
+  });
+}
+
+/* ── Gráfico 2: Receita vs Despesa (Bar) ── */
+const ctxFin = document.getElementById('chartFinanceiro');
+if (ctxFin) {
+  const meses  = dadosFinanceiro.map(d => d.mes || '');
+  const rec    = dadosFinanceiro.map(d => d.receita || 0);
+  const desp   = dadosFinanceiro.map(d => d.despesa || 0);
+
+  new Chart(ctxFin, {
+    type: 'bar',
+    data: {
+      labels: meses,
+      datasets: [
+        {
+          label: 'Receita',
+          data: rec,
+          backgroundColor: 'rgba(16,185,129,0.7)',
+          borderColor: '#10b981',
+          borderWidth: 1,
+          borderRadius: 6
+        },
+        {
+          label: 'Despesa',
+          data: desp,
+          backgroundColor: 'rgba(239,68,68,0.7)',
+          borderColor: '#ef4444',
+          borderWidth: 1,
+          borderRadius: 6
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { usePointStyle: true, padding: 12, font: { size: 11 } }
+        },
+        tooltip: {
+          backgroundColor: '#13121f',
+          borderColor: 'rgba(15,23,42,0.06)',
+          borderWidth: 1,
+          titleColor: '#f1f5f9',
+          bodyColor: '#94a3b8',
+          padding: 12,
+          callbacks: {
+            label: ctx => ` R$ ${ctx.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits:2})}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#475569' }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#475569',
+            callback: v => 'R$ ' + v.toLocaleString('pt-BR')
+          }
+        }
+      }
+    }
+  });
+}
+
+/* ── Gráfico 3: OS por Mês (Line) ── */
+const ctxMes = document.getElementById('chartOsMes');
+if (ctxMes) {
+  const meses = dadosOsMes.map(d => d.mes || '');
+  const tots  = dadosOsMes.map(d => d.total || 0);
+
+  new Chart(ctxMes, {
+    type: 'line',
+    data: {
+      labels: meses,
+      datasets: [{
+        label: 'Ordens de Serviço',
+        data: tots,
+        borderColor: '#7c3aed',
+        backgroundColor: 'rgba(124,58,237,0.1)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#7c3aed',
+        pointBorderColor: '#0a0a0f',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#13121f',
+          borderColor: 'rgba(15,23,42,0.06)',
+          borderWidth: 1,
+          titleColor: '#f1f5f9',
+          bodyColor: '#94a3b8',
+          padding: 12,
+          callbacks: {
+            label: ctx => ` ${ctx.parsed.y} OS abertas`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#475569' }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#475569', stepSize: 1 },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+</script>

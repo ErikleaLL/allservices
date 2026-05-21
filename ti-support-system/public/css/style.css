@@ -1516,3 +1516,652 @@ body:has(.kanban-wrapper) .page-header {
     min-height: 500px !important;
     max-height: calc(100vh - 180px) !important;
 }
+
+/* ============================================
+   SISTEMA DE TEMAS (Claro / Escuro)
+============================================ */
+
+/* TEMA ESCURO (padrão) */
+:root {
+    --t-bg-main: #0a0a0f;
+    --t-bg-sidebar: #0d0c14;
+    --t-bg-card: #13121f;
+    --t-bg-hover: rgba(255,255,255,0.04);
+    --t-bg-input: #0a0a0f;
+    
+    --t-text: #ffffff;
+    --t-text-muted: rgba(255,255,255,0.6);
+    --t-text-faded: rgba(255,255,255,0.4);
+    
+    --t-border: rgba(255,255,255,0.07);
+    --t-border-strong: rgba(255,255,255,0.12);
+    
+    --t-shadow: rgba(0,0,0,0.3);
+}
+
+/* TEMA CLARO */
+body.tema-claro {
+    --t-bg-main: #f4f6f9;
+    --t-bg-sidebar: #ffffff;
+    --t-bg-card: #ffffff;
+    --t-bg-hover: rgba(0,0,0,0.04);
+    --t-bg-input: #f8fafc;
+    
+    --t-text: #0f172a;
+    --t-text-muted: rgba(15,23,42,0.7);
+    --t-text-faded: rgba(15,23,42,0.5);
+    
+    --t-border: rgba(15,23,42,0.08);
+    --t-border-strong: rgba(15,23,42,0.15);
+    
+    --t-shadow: rgba(0,0,0,0.08);
+}
+
+/* APLICAR VARIÁVEIS NOS ELEMENTOS */
+body {
+    background: var(--t-bg-main) !important;
+    color: var(--t-text) !important;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidebar {
+    background: var(--t-bg-sidebar) !important;
+    border-right: 1px solid var(--t-border) !important;
+}
+
+.sidebar ul li a {
+    color: var(--t-text-muted) !important;
+}
+
+.sidebar ul li a:hover {
+    background: var(--t-bg-hover) !important;
+    color: var(--t-text) !important;
+}
+
+/* Manter item ativo roxo nos 2 temas */
+.sidebar ul li a.active {
+    background: rgba(124,58,237,0.18) !important;
+    color: #a78bfa !important;
+}
+
+.topbar {
+    background: var(--t-bg-main) !important;
+    border-bottom: 1px solid var(--t-border) !important;
+}
+
+.topbar h1 {
+    color: var(--t-text) !important;
+}
+
+.user-info span {
+    background: var(--t-bg-card) !important;
+    color: var(--t-text-muted) !important;
+    border: 1px solid var(--t-border) !important;
+}
+
+/* Cards e containers */
+.stat, .stat-card,
+.module-card,
+.detail-card,
+.form-container,
+.table-container,
+.kanban-coluna {
+    background: var(--t-bg-card) !important;
+    border-color: var(--t-border) !important;
+    color: var(--t-text);
+}
+
+/* Tabelas */
+.data-table thead {
+    background: var(--t-bg-card) !important;
+}
+
+.data-table th {
+    color: var(--t-text-faded) !important;
+    border-bottom: 1px solid var(--t-border) !important;
+}
+
+.data-table td {
+    color: var(--t-text-muted) !important;
+    border-bottom: 1px solid var(--t-border) !important;
+}
+
+.data-table tbody tr:hover {
+    background: var(--t-bg-hover) !important;
+}
+
+.data-table strong {
+    color: var(--t-text) !important;
+}
+
+/* Inputs / Selects / Textareas */
+input, select, textarea {
+    background: var(--t-bg-input) !important;
+    color: var(--t-text) !important;
+    border-color: var(--t-border-strong) !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--t-text-faded) !important;
+}
+
+/* Page header */
+.page-header {
+    border-bottom: 1px solid var(--t-border) !important;
+}
+
+.page-header h2 {
+    color: var(--t-text) !important;
+}
+
+/* Detail rows */
+.detail-row {
+    border-bottom: 1px solid var(--t-border) !important;
+}
+
+.detail-label {
+    color: var(--t-text-faded) !important;
+}
+
+.detail-value {
+    color: var(--t-text) !important;
+}
+
+/* Form labels */
+.form-container label {
+    color: var(--t-text) !important;
+}
+
+/* Stat labels e valores */
+.stat-label, .stat-info .stat-label {
+    color: var(--t-text-faded) !important;
+}
+
+.stat-value, .stat-number {
+    color: var(--t-text) !important;
+}
+
+/* Module cards */
+.module-name {
+    color: var(--t-text) !important;
+}
+
+.module-desc {
+    color: var(--t-text-faded) !important;
+}
+
+/* Botões secundários */
+.btn-secondary {
+    background: var(--t-bg-card) !important;
+    color: var(--t-text-muted) !important;
+    border: 1px solid var(--t-border-strong) !important;
+}
+
+.btn-secondary:hover {
+    background: var(--t-bg-hover) !important;
+    color: var(--t-text) !important;
+}
+
+/* Sombras */
+.sidebar, .topbar {
+    box-shadow: 0 4px 12px var(--t-shadow);
+}
+
+/* Kanban cards */
+.kanban-card {
+    background: var(--t-bg-hover) !important;
+    border: 1px solid var(--t-border) !important;
+    color: var(--t-text);
+}
+
+.kanban-card-cliente {
+    color: var(--t-text) !important;
+}
+
+.kanban-card-dispositivo {
+    color: var(--t-text-muted) !important;
+}
+
+.kanban-vazio {
+    color: var(--t-text-faded) !important;
+}
+
+/* Empty states em tabelas */
+.data-table .empty {
+    color: var(--t-text-faded) !important;
+}
+
+/* BOTÃO DE TROCAR TEMA */
+.theme-toggle {
+    background: var(--t-bg-card);
+    border: 1px solid var(--t-border-strong);
+    color: var(--t-text);
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--t-bg-hover);
+    transform: scale(1.05);
+}
+
+.theme-toggle .icone-sol { display: none; }
+.theme-toggle .icone-lua { display: inline; }
+
+body.tema-claro .theme-toggle .icone-sol { display: inline; }
+body.tema-claro .theme-toggle .icone-lua { display: none; }
+
+/* ============================================
+   AJUSTES TEMA CLARO - SIDEBAR
+============================================ */
+
+/* Logo da sidebar */
+body.tema-claro .sidebar-logo {
+    border-bottom: 1px solid var(--t-border) !important;
+}
+
+body.tema-claro .logo-text {
+    color: #0f172a !important;
+}
+
+/* Divisores entre seções */
+body.tema-claro .sidebar > div {
+    background: rgba(0,0,0,0.06) !important;
+}
+
+/* Ícones da sidebar no tema claro */
+body.tema-claro .sidebar ul li a i {
+    color: #475569;
+}
+
+body.tema-claro .sidebar ul li a:hover i {
+    color: #0f172a;
+}
+
+body.tema-claro .sidebar ul li a.active i {
+    color: #7c3aed !important;
+}
+
+/* Scrollbar da sidebar no claro */
+body.tema-claro .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.1);
+}
+
+/* ============================================
+   AJUSTES TEMA CLARO - CARDS E STATS
+============================================ */
+
+/* Sombras suaves nos cards */
+body.tema-claro .stat,
+body.tema-claro .stat-card,
+body.tema-claro .module-card,
+body.tema-claro .detail-card,
+body.tema-claro .form-container {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+body.tema-claro .stat:hover,
+body.tema-claro .stat-card:hover,
+body.tema-claro .module-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
+}
+
+/* Module cards com hover */
+body.tema-claro .module-card {
+    border: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+/* ============================================
+   AJUSTES TEMA CLARO - TABELAS
+============================================ */
+
+body.tema-claro .table-container {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+body.tema-claro .data-table thead {
+    background: #f8fafc !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+}
+
+body.tema-claro .data-table tbody tr:hover {
+    background: #f8fafc !important;
+}
+
+/* ============================================
+   AJUSTES TEMA CLARO - DASHBOARD
+============================================ */
+
+body.tema-claro .stat {
+    border-left-width: 3px !important;
+    border-left-style: solid !important;
+}
+
+/* Indicadores secundários do dashboard */
+body.tema-claro [style*="background: rgba(74,222,128,0.05)"] {
+    background: rgba(74,222,128,0.1) !important;
+}
+
+body.tema-claro [style*="background: rgba(248,113,113,0.05)"] {
+    background: rgba(248,113,113,0.1) !important;
+}
+
+body.tema-claro [style*="background: rgba(124,58,237,0.05)"] {
+    background: rgba(124,58,237,0.1) !important;
+}
+
+body.tema-claro [style*="background: rgba(96,165,250,0.05)"] {
+    background: rgba(96,165,250,0.1) !important;
+}
+
+/* Bottom widgets do dashboard */
+body.tema-claro [style*="background:#13121f"] {
+    background: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+/* ============================================
+   AJUSTES TEMA CLARO - FORMULÁRIOS
+============================================ */
+
+body.tema-claro input,
+body.tema-claro select,
+body.tema-claro textarea {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+body.tema-claro input:focus,
+body.tema-claro select:focus,
+body.tema-claro textarea:focus {
+    border-color: #7c3aed !important;
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.1) !important;
+}
+
+/* ============================================
+   AJUSTES TEMA CLARO - KANBAN
+============================================ */
+
+body.tema-claro .kanban-coluna {
+    background: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+body.tema-claro .kanban-card {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+body.tema-claro .kanban-card:hover {
+    background: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+body.tema-claro .kanban-coluna-count {
+    color: #64748b !important;
+}
+
+/* ============================================
+   AJUSTES TEMA CLARO - DETALHES (show pages)
+============================================ */
+
+body.tema-claro [style*="background: rgba(255,255,255,0.03)"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+
+/* Códigos monoespaçados em fundos claros */
+body.tema-claro [style*="background: rgba(124,58,237,0.15)"] {
+    background: rgba(124,58,237,0.12) !important;
+}
+
+/* Backgrounds genéricos escuros */
+body.tema-claro [style*="background:#0a0a0f"] {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* ============================================
+   AJUSTES TEMA CLARO - INLINE BACKGROUNDS
+============================================ */
+
+/* Cards com background #13121f (escuro hardcoded) */
+body.tema-claro [style*="background: #13121f"],
+body.tema-claro [style*="background:#13121f"],
+body.tema-claro [style*="background: rgba(19, 18, 31"] {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+/* Texto dentro desses cards */
+body.tema-claro [style*="background: #13121f"] *,
+body.tema-claro [style*="background:#13121f"] *,
+body.tema-claro [style*="background: rgba(19, 18, 31"] * {
+    color: inherit;
+}
+
+/* Stats grid (cards de números no topo) */
+body.tema-claro .stats-grid > div {
+    background: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+/* Texto em rgba branco fica escuro */
+body.tema-claro [style*="color: rgba(255,255,255,0.4)"],
+body.tema-claro [style*="color: rgba(255,255,255,0.5)"],
+body.tema-claro [style*="color: rgba(255,255,255,0.6)"] {
+    color: #64748b !important;
+}
+
+body.tema-claro [style*="color: rgba(255,255,255,0.7)"],
+body.tema-claro [style*="color: rgba(255,255,255,0.8)"],
+body.tema-claro [style*="color: #fff"] {
+    color: #0f172a !important;
+}
+
+/* MAS NÃO mudar texto que já está colorido (verde, vermelho, etc) */
+body.tema-claro [style*="color: #4ade80"],
+body.tema-claro [style*="color:#4ade80"] {
+    color: #16a34a !important;
+}
+
+body.tema-claro [style*="color: #f87171"],
+body.tema-claro [style*="color:#f87171"] {
+    color: #dc2626 !important;
+}
+
+body.tema-claro [style*="color: #fbbf24"],
+body.tema-claro [style*="color:#fbbf24"] {
+    color: #d97706 !important;
+}
+
+body.tema-claro [style*="color: #60a5fa"],
+body.tema-claro [style*="color:#60a5fa"] {
+    color: #2563eb !important;
+}
+
+body.tema-claro [style*="color: #a78bfa"],
+body.tema-claro [style*="color:#a78bfa"] {
+    color: #7c3aed !important;
+}
+
+/* Borders escuros viram claros */
+body.tema-claro [style*="border: 0.5px solid rgba(255,255,255,0.07)"],
+body.tema-claro [style*="border: 1px solid rgba(255,255,255,0.05)"],
+body.tema-claro [style*="border: 1px solid rgba(255,255,255,0.08)"] {
+    border-color: rgba(0,0,0,0.08) !important;
+}
+
+/* Borders pontilhadas internas */
+body.tema-claro [style*="border-bottom: 0.5px solid rgba(255,255,255"],
+body.tema-claro [style*="border-top: 0.5px solid rgba(255,255,255"],
+body.tema-claro [style*="border-bottom: 1px solid rgba(255,255,255"] {
+    border-color: rgba(0,0,0,0.08) !important;
+}
+
+/* Backgrounds suaves coloridos no tema claro ficam mais visíveis */
+body.tema-claro [style*="background: rgba(74,222,128,0.15)"] {
+    background: rgba(74,222,128,0.18) !important;
+}
+
+body.tema-claro [style*="background: rgba(124,58,237,0.15)"] {
+    background: rgba(124,58,237,0.12) !important;
+}
+
+body.tema-claro [style*="background: rgba(251,191,36,0.15)"] {
+    background: rgba(251,191,36,0.18) !important;
+}
+
+body.tema-claro [style*="background: rgba(248,113,113,0.15)"] {
+    background: rgba(248,113,113,0.15) !important;
+}
+
+/* Botões com background escuro */
+body.tema-claro .btn-secondary {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-color: #cbd5e1 !important;
+}
+
+body.tema-claro .btn-secondary:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+/* Botões pequenos no tema claro */
+body.tema-claro .btn-sm.btn-info {
+    background: rgba(96,165,250,0.15) !important;
+    color: #2563eb !important;
+}
+
+body.tema-claro .btn-sm.btn-warning {
+    background: rgba(251,191,36,0.18) !important;
+    color: #d97706 !important;
+}
+
+body.tema-claro .btn-sm.btn-danger {
+    background: rgba(248,113,113,0.15) !important;
+    color: #dc2626 !important;
+}
+
+body.tema-claro .btn-sm.btn-success {
+    background: rgba(74,222,128,0.18) !important;
+    color: #16a34a !important;
+}
+
+/* Topbar */
+body.tema-claro .topbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+/* ============================================
+   AJUSTES TEMA CLARO - TEXTOS QUE SOMEM
+============================================ */
+
+/* Todos os textos brancos hardcoded viram escuros */
+body.tema-claro [style*="color:#fff"],
+body.tema-claro [style*="color: #fff"],
+body.tema-claro [style*="color:#ffffff"],
+body.tema-claro [style*="color: #ffffff"] {
+    color: #0f172a !important;
+}
+
+/* Textos com rgba branco em qualquer opacidade */
+body.tema-claro [style*="color: rgba(255,255,255"],
+body.tema-claro [style*="color:rgba(255,255,255"] {
+    color: #475569 !important;
+}
+
+/* Textos muito faded ficam um pouco mais escuros */
+body.tema-claro [style*="rgba(255,255,255,0.3)"],
+body.tema-claro [style*="rgba(255,255,255,0.35)"],
+body.tema-claro [style*="rgba(255,255,255,0.4)"] {
+    color: #94a3b8 !important;
+}
+
+/* Especificamente para atividades e listas */
+body.tema-claro .detail-card,
+body.tema-claro .stat,
+body.tema-claro .stat-card,
+body.tema-claro .module-card {
+    color: #0f172a !important;
+}
+
+body.tema-claro .detail-card *,
+body.tema-claro .stat *,
+body.tema-claro .stat-card *,
+body.tema-claro .module-card * {
+    color: inherit;
+}
+
+/* MAS preservar cores específicas (verde, vermelho, roxo, etc) */
+body.tema-claro [style*="color: #4ade80"] *,
+body.tema-claro [style*="color:#4ade80"] * { color: #16a34a !important; }
+
+body.tema-claro [style*="color: #f87171"] *,
+body.tema-claro [style*="color:#f87171"] * { color: #dc2626 !important; }
+
+body.tema-claro [style*="color: #fbbf24"] *,
+body.tema-claro [style*="color:#fbbf24"] * { color: #d97706 !important; }
+
+body.tema-claro [style*="color: #60a5fa"] *,
+body.tema-claro [style*="color:#60a5fa"] * { color: #2563eb !important; }
+
+body.tema-claro [style*="color: #a78bfa"] *,
+body.tema-claro [style*="color:#a78bfa"] * { color: #7c3aed !important; }
+
+/* Forçar TODOS os elementos básicos a respeitarem o tema */
+body.tema-claro h1,
+body.tema-claro h2,
+body.tema-claro h3,
+body.tema-claro h4,
+body.tema-claro h5,
+body.tema-claro h6 {
+    color: #0f172a !important;
+}
+
+body.tema-claro p,
+body.tema-claro span,
+body.tema-claro div {
+    /* não força para não quebrar elementos coloridos */
+}
+
+/* Específico: textos de "atividade recente" e widgets */
+body.tema-claro [style*="font-family:'Syne'"],
+body.tema-claro [style*="font-family: 'Syne'"],
+body.tema-claro [style*="font-family:'Bricolage Grotesque'"],
+body.tema-claro [style*="font-family: 'Bricolage Grotesque'"] {
+    color: #0f172a !important;
+}
+
+/* Quando o texto for filho de elemento com cor específica, manter a cor */
+body.tema-claro [style*="background:#13121f"] [style*="color:#fff"],
+body.tema-claro [style*="background: #13121f"] [style*="color: #fff"] {
+    color: #0f172a !important;
+}
+
+/* Forçar texto em widgets do dashboard */
+body.tema-claro .bottom-widgets * {
+    color: inherit;
+}
+
+body.tema-claro .bottom-widgets > div {
+    color: #0f172a !important;
+}
+
+/* Page header subtítulos */
+body.tema-claro .page-header span {
+    color: #64748b !important;
+}

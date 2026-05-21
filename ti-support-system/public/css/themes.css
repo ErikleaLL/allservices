@@ -1,0 +1,530 @@
+/* ════════════════════════════════════════════════════════════
+   ALLSERVICES — SISTEMA DE TEMAS v4 (LIGHT + DARK)
+   Estratégia: texto escuro UNIVERSAL no light, com exceções pontuais
+   ════════════════════════════════════════════════════════════ */
+
+/* ─── TEMA LIGHT ─── */
+:root,
+[data-theme="light"] {
+  --bg-primary:    #f8fafc;
+  --bg-secondary:  #ffffff;
+  --bg-tertiary:   #f1f5f9;
+  --bg-hover:      rgba(15,23,42,0.04);
+
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #64748b;
+  --text-dim:       #94a3b8;
+
+  --border-color:   rgba(15,23,42,0.10);
+  --border-strong:  rgba(15,23,42,0.18);
+
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04);
+  --shadow-md: 0 4px 12px rgba(15,23,42,0.06);
+  --shadow-lg: 0 8px 24px rgba(15,23,42,0.10);
+
+  --input-bg:     #ffffff;
+  --input-border: rgba(15,23,42,0.14);
+
+  --sidebar-bg:     #ffffff;
+  --sidebar-text:   #475569;
+  --topbar-bg:      #ffffff;
+
+  --action-blue:    #2563eb;
+  --action-green:   #059669;
+  --action-orange:  #d97706;
+  --action-red:     #dc2626;
+  --action-purple:  #7c3aed;
+}
+
+/* ─── TEMA DARK ─── */
+[data-theme="dark"] {
+  --bg-primary:    #0a0a0f;
+  --bg-secondary:  #13121f;
+  --bg-tertiary:   #1e1b2e;
+  --bg-hover:      rgba(255,255,255,0.04);
+
+  --text-primary:   #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted:     #64748b;
+  --text-dim:       #475569;
+
+  --border-color:   rgba(255,255,255,0.06);
+  --border-strong:  rgba(255,255,255,0.12);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+
+  --input-bg:     #0a0a0f;
+  --input-border: rgba(255,255,255,0.08);
+
+  --sidebar-bg:     #13121f;
+  --sidebar-text:   #94a3b8;
+  --topbar-bg:      #0a0a0f;
+
+  --action-blue:    #60a5fa;
+  --action-green:   #34d399;
+  --action-orange:  #fb923c;
+  --action-red:     #f87171;
+  --action-purple:  #a78bfa;
+}
+
+/* ════════════════════════════════════════════════════════════
+   LIGHT MODE — ESTRATÉGIA UNIVERSAL
+   ════════════════════════════════════════════════════════════ */
+
+/* ─── BASE ─── */
+[data-theme="light"] body,
+[data-theme="light"] .app-container,
+[data-theme="light"] .main-content,
+[data-theme="light"] main {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   REGRA UNIVERSAL: TODO texto dentro de .main-content fica escuro
+   (depois fazemos exceções pra botões coloridos)
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .main-content,
+[data-theme="light"] .main-content * {
+  color: var(--text-primary);
+}
+
+/* Textos secundários/muted continuam discretos */
+[data-theme="light"] .main-content .text-muted,
+[data-theme="light"] .main-content .subtitle,
+[data-theme="light"] .main-content .page-subtitle,
+[data-theme="light"] .main-content small,
+[data-theme="light"] .main-content .help-text,
+[data-theme="light"] .main-content .form-hint,
+[data-theme="light"] .main-content .meta,
+[data-theme="light"] .main-content .info-label,
+[data-theme="light"] .main-content th {
+  color: var(--text-muted) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOPBAR
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .topbar,
+[data-theme="light"] header.topbar {
+  background: var(--topbar-bg) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="light"] .topbar h1,
+[data-theme="light"] .topbar h2 {
+  color: var(--text-primary) !important;
+}
+[data-theme="light"] .menu-toggle,
+[data-theme="light"] .menu-toggle i {
+  color: var(--text-secondary) !important;
+}
+
+/* Badge "Administrador" */
+[data-theme="light"] .user-info,
+[data-theme="light"] .user-info span {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SIDEBAR
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .sidebar {
+  background: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-md);
+}
+[data-theme="light"] .sidebar ul li a {
+  color: var(--sidebar-text) !important;
+}
+[data-theme="light"] .sidebar ul li a:hover {
+  background: rgba(124,58,237,0.08) !important;
+  color: var(--action-purple) !important;
+}
+[data-theme="light"] .sidebar ul li a.active {
+  background: rgba(124,58,237,0.12) !important;
+  color: var(--action-purple) !important;
+}
+[data-theme="light"] .logo-text {
+  color: var(--text-primary) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CARDS GENÉRICOS — fundo branco
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .card,
+[data-theme="light"] .stat-card,
+[data-theme="light"] .info-card,
+[data-theme="light"] .form-section,
+[data-theme="light"] .table-card,
+[data-theme="light"] .chart-card,
+[data-theme="light"] .admin-card,
+[data-theme="light"] .kpi-card,
+[data-theme="light"] .module-card,
+[data-theme="light"] .vars-card,
+[data-theme="light"] .download-section,
+[data-theme="light"] .db-status-card,
+[data-theme="light"] .dashboard-card,
+[data-theme="light"] .widget,
+[data-theme="light"] .kanban-column,
+[data-theme="light"] .lead-card,
+[data-theme="light"] .acesso-card,
+[data-theme="light"] .quick-access-card {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ═══════════════════════════════════════════════════════
+   CARDS COM GRADIENTE/COLORIDOS DO DASHBOARD
+   Mantém fundo escuro/colorido + texto branco preservado
+   ═══════════════════════════════════════════════════════ */
+
+/* Cards de KPI do dashboard que usam gradiente escuro */
+[data-theme="light"] [style*="linear-gradient"],
+[data-theme="light"] [class*="gradient"] {
+  /* preserva a aparência original */
+}
+
+/* Cards específicos do dashboard (receita, OS, clientes, estoque) */
+[data-theme="light"] .stat-card[style*="gradient"],
+[data-theme="light"] .stat-card[style*="background: #"],
+[data-theme="light"] .dashboard-stat {
+  color: #ffffff;
+}
+[data-theme="light"] .stat-card[style*="gradient"] *,
+[data-theme="light"] .dashboard-stat * {
+  color: inherit !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   HEADINGS
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6,
+[data-theme="light"] .page-title {
+  color: var(--text-primary) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TABELAS
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] table,
+[data-theme="light"] .data-table,
+[data-theme="light"] .tabela {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+[data-theme="light"] table thead,
+[data-theme="light"] table thead tr,
+[data-theme="light"] table thead th,
+[data-theme="light"] table th {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+[data-theme="light"] table tbody td,
+[data-theme="light"] table td {
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+  background: var(--bg-secondary) !important;
+}
+[data-theme="light"] table tbody tr:hover td {
+  background: var(--bg-hover) !important;
+}
+
+[data-theme="light"] .table-wrapper,
+[data-theme="light"] .tabela-wrapper,
+[data-theme="light"] .table-container,
+[data-theme="light"] .table-responsive {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOTÕES DE AÇÃO (Ver / Editar / Excluir)
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .btn-ver,
+[data-theme="light"] .btn-view,
+[data-theme="light"] [class*="btn-ver"]:not([class*="btn-vermelho"]),
+[data-theme="light"] [class*="btn-view"] {
+  background: rgba(37,99,235,0.12) !important;
+  color: var(--action-blue) !important;
+  border: 1px solid rgba(37,99,235,0.25) !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .btn-editar,
+[data-theme="light"] .btn-edit,
+[data-theme="light"] [class*="btn-editar"],
+[data-theme="light"] [class*="btn-edit"] {
+  background: rgba(217,119,6,0.12) !important;
+  color: var(--action-orange) !important;
+  border: 1px solid rgba(217,119,6,0.25) !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .btn-excluir,
+[data-theme="light"] .btn-delete,
+[data-theme="light"] .btn-remove,
+[data-theme="light"] [class*="btn-excluir"],
+[data-theme="light"] [class*="btn-delete"] {
+  background: rgba(220,38,38,0.12) !important;
+  color: var(--action-red) !important;
+  border: 1px solid rgba(220,38,38,0.25) !important;
+  font-weight: 600 !important;
+}
+
+/* Hover */
+[data-theme="light"] .btn-ver:hover,
+[data-theme="light"] [class*="btn-ver"]:hover {
+  background: var(--action-blue) !important; color: #fff !important;
+}
+[data-theme="light"] .btn-editar:hover,
+[data-theme="light"] [class*="btn-editar"]:hover {
+  background: var(--action-orange) !important; color: #fff !important;
+}
+[data-theme="light"] .btn-excluir:hover,
+[data-theme="light"] [class*="btn-excluir"]:hover {
+  background: var(--action-red) !important; color: #fff !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOTÕES PRIMÁRIOS (preservar texto branco)
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .btn-primary,
+[data-theme="light"] .btn--primary,
+[data-theme="light"] .btn-novo,
+[data-theme="light"] [class*="btn-novo"],
+[data-theme="light"] .btn-criar,
+[data-theme="light"] .btn-add,
+[data-theme="light"] .btn-download,
+[data-theme="light"] .btn-success {
+  color: #ffffff !important;
+}
+[data-theme="light"] .btn-primary *,
+[data-theme="light"] .btn--primary *,
+[data-theme="light"] .btn-novo *,
+[data-theme="light"] [class*="btn-novo"] *,
+[data-theme="light"] .btn-download *,
+[data-theme="light"] .btn-success * {
+  color: #ffffff !important;
+}
+
+/* Botões ghost / secondary */
+[data-theme="light"] .btn--ghost,
+[data-theme="light"] .btn-secondary {
+  background: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   INPUTS
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select,
+[data-theme="light"] .form-input,
+[data-theme="light"] .form-textarea,
+[data-theme="light"] .form-select {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--input-border) !important;
+  color: var(--text-primary) !important;
+}
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: var(--text-dim) !important;
+}
+[data-theme="light"] input:focus,
+[data-theme="light"] textarea:focus,
+[data-theme="light"] select:focus,
+[data-theme="light"] .form-input:focus {
+  border-color: var(--action-purple) !important;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.15) !important;
+  outline: none;
+}
+[data-theme="light"] .input-suffix {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--input-border) !important;
+  color: var(--text-muted) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODAIS
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .modal {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-lg);
+}
+[data-theme="light"] .modal-overlay {
+  background: rgba(15,23,42,0.4) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   HEADERS DE SEÇÃO
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .form-section__header,
+[data-theme="light"] .info-card__header,
+[data-theme="light"] .table-card__header,
+[data-theme="light"] .chart-card__header,
+[data-theme="light"] .card-header,
+[data-theme="light"] .section-header {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   DASHBOARD ESPECÍFICO
+   Cards coloridos (receita verde, OS amarelo, clientes azul, etc)
+   ═══════════════════════════════════════════════════════ */
+
+/* Cards de stats COM background escuro/gradiente preservam texto branco */
+[data-theme="light"] .stat-card-dark,
+[data-theme="light"] .stat-card[style*="background: #0a0a0f"],
+[data-theme="light"] .stat-card[style*="background: #13121f"],
+[data-theme="light"] .stat-card[style*="background:#0a0a0f"],
+[data-theme="light"] .stat-card[style*="background:#13121f"] {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+}
+
+/* Cards de indicadores (verde/vermelho/azul claros) */
+[data-theme="light"] .indicator-card,
+[data-theme="light"] [class*="indicator"] {
+  color: var(--text-primary) !important;
+}
+[data-theme="light"] .indicator-card *,
+[data-theme="light"] [class*="indicator"] * {
+  color: inherit;
+}
+
+/* Acesso rápido (cards com ícone colorido) */
+[data-theme="light"] .acesso-rapido,
+[data-theme="light"] .quick-access {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+[data-theme="light"] .acesso-rapido *,
+[data-theme="light"] .quick-access * {
+  color: var(--text-primary);
+}
+[data-theme="light"] .acesso-rapido small,
+[data-theme="light"] .quick-access small {
+  color: var(--text-muted) !important;
+}
+
+/* Widgets do dashboard (Ordens recentes, Atividade) */
+[data-theme="light"] .widget-card,
+[data-theme="light"] .recent-orders,
+[data-theme="light"] .recent-activity {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+[data-theme="light"] .widget-card *,
+[data-theme="light"] .recent-orders *,
+[data-theme="light"] .recent-activity * {
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════
+   FORÇA BRUTA — hardcoded inline
+   ═══════════════════════════════════════════════════════ */
+
+/* Backgrounds escuros viram brancos */
+[data-theme="light"] [style*="background: #13121f"],
+[data-theme="light"] [style*="background:#13121f"],
+[data-theme="light"] [style*="background: #0a0a0f"],
+[data-theme="light"] [style*="background:#0a0a0f"],
+[data-theme="light"] [style*="background: #1e1b2e"],
+[data-theme="light"] [style*="background:#1e1b2e"],
+[data-theme="light"] [style*="background-color: #13121f"],
+[data-theme="light"] [style*="background-color:#13121f"],
+[data-theme="light"] [style*="background-color: #0a0a0f"],
+[data-theme="light"] [style*="background-color:#0a0a0f"] {
+  background: var(--bg-secondary) !important;
+}
+
+/* Bordas brancas viram cinzas */
+[data-theme="light"] [style*="border: 1px solid rgba(255,255,255"],
+[data-theme="light"] [style*="border-color: rgba(255,255,255"] {
+  border-color: var(--border-color) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   EXCEÇÕES — preservar branco em logos/icons com gradiente real
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .logo-icon,
+[data-theme="light"] .logo-icon i,
+[data-theme="light"] .page-icon,
+[data-theme="light"] .page-icon i,
+[data-theme="light"] .icon-gradient,
+[data-theme="light"] .icon-gradient i {
+  color: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BADGES, TAGS, STATUS
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] .badge,
+[data-theme="light"] .tag,
+[data-theme="light"] .status-badge {
+  border: 1px solid var(--border-color);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] ::-webkit-scrollbar { width: 10px; height: 10px; }
+[data-theme="light"] ::-webkit-scrollbar-track { background: #f1f5f9; }
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ─── CODE ─── */
+[data-theme="light"] code {
+  background: var(--bg-tertiary);
+  color: var(--action-purple);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+}
+
+/* ─── TRANSIÇÃO SUAVE ─── */
+*, *::before, *::after {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.15s ease;
+}
+img, svg, .theme-toggle__icon {
+  transition: none !important;
+}

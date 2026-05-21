@@ -18,10 +18,10 @@
         </div>
         <div>
             <a href="/ordens/<%= ordem.id %>/imprimir" target="_blank" class="btn btn-success">
-                <i class="ti ti-printer"></i> Imprimir OS
+                <i class="ti ti-printer"></i> Imprimir
             </a>
             <a href="/ordens/<%= ordem.id %>/adesivo-garantia" target="_blank" class="btn btn-primary">
-                <i class="ti ti-shield-check"></i> Adesivo Garantia
+                <i class="ti ti-shield-check"></i> Adesivo
             </a>
             <a href="/ordens/<%= ordem.id %>/edit" class="btn btn-warning">
                 <i class="ti ti-edit"></i> Editar
@@ -32,10 +32,17 @@
         </div>
     </div>
 
+    <% if (typeof query !== 'undefined' && query.erro) { %>
+        <div class="alert alert-error">
+            <i class="ti ti-alert-circle"></i> <%= query.erro %>
+        </div>
+    <% } %>
+
     <div style="display: grid; grid-template-columns: 1fr 350px; gap: 20px;" class="os-grid">
 
         <div>
 
+            <!-- CLIENTE + DISPOSITIVO -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 18px;" class="grid-2">
 
                 <div class="detail-card" style="margin-bottom: 0;">
@@ -47,18 +54,10 @@
                         <%= ordem.cliente_nome %>
                     </div>
                     <% if (ordem.cliente_telefone) { %>
-                        <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 3px;">
+                        <div style="font-size: 12px; color: rgba(255,255,255,0.6);">
                             <i class="ti ti-phone"></i> <%= ordem.cliente_telefone %>
                         </div>
                     <% } %>
-                    <% if (ordem.cliente_email) { %>
-                        <div style="font-size: 12px; color: rgba(255,255,255,0.6);">
-                            <i class="ti ti-mail"></i> <%= ordem.cliente_email %>
-                        </div>
-                    <% } %>
-                    <a href="/clientes/<%= ordem.cliente_id %>" style="display: inline-block; margin-top: 10px; font-size: 11px; color: #a78bfa; text-decoration: none;">
-                        Ver perfil <i class="ti ti-external-link"></i>
-                    </a>
                 </div>
 
                 <div class="detail-card" style="margin-bottom: 0;">
@@ -69,15 +68,9 @@
                     <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">
                         <%= ordem.dispositivo_tipo %>
                     </div>
-                    <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 3px;">
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.6);">
                         <%= [ordem.dispositivo_marca, ordem.dispositivo_modelo].filter(Boolean).join(' ') %>
                     </div>
-                    <div style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #a78bfa; background: rgba(124,58,237,0.1); padding: 3px 8px; border-radius: 4px; display: inline-block; margin-top: 6px;">
-                        <%= ordem.dispositivo_qr_code %>
-                    </div>
-                    <a href="/dispositivos/<%= ordem.dispositivo_id %>" style="display: block; margin-top: 10px; font-size: 11px; color: #a78bfa; text-decoration: none;">
-                        Ver dispositivo <i class="ti ti-external-link"></i>
-                    </a>
                 </div>
 
             </div>
@@ -102,56 +95,47 @@
                         <i class="ti ti-printer"></i> Imprimir
                     </a>
                 </div>
-                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(74,222,128,0.15); font-size: 12px; color: rgba(255,255,255,0.6);">
-                    💡 <strong>Dica:</strong> Cole o adesivo na peça consertada. O cliente escaneia em casa e vê a garantia.
+            </div>
+
+            <!-- DIAGNÓSTICO -->
+            <% if (ordem.diagnostico || ordem.descricao_servico || ordem.solucao) { %>
+                <div class="detail-card">
+                    <% if (ordem.diagnostico) { %>
+                        <div style="margin-bottom: 18px;">
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;">
+                                <i class="ti ti-search" style="color: #60a5fa;"></i> Diagnóstico
+                            </div>
+                            <div style="background: rgba(96,165,250,0.05); border-left: 3px solid #60a5fa; padding: 12px 14px; border-radius: 6px; font-size: 14px; line-height: 1.5;">
+                                <%= ordem.diagnostico %>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <% if (ordem.descricao_servico) { %>
+                        <div style="margin-bottom: 18px;">
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;">
+                                <i class="ti ti-tools" style="color: #a78bfa;"></i> Serviço
+                            </div>
+                            <div style="background: rgba(124,58,237,0.05); border-left: 3px solid #a78bfa; padding: 12px 14px; border-radius: 6px; font-size: 14px; line-height: 1.5;">
+                                <%= ordem.descricao_servico %>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <% if (ordem.solucao) { %>
+                        <div>
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;">
+                                <i class="ti ti-check" style="color: #4ade80;"></i> Solução
+                            </div>
+                            <div style="background: rgba(74,222,128,0.05); border-left: 3px solid #4ade80; padding: 12px 14px; border-radius: 6px; font-size: 14px; line-height: 1.5;">
+                                <%= ordem.solucao %>
+                            </div>
+                        </div>
+                    <% } %>
                 </div>
-            </div>
+            <% } %>
 
-            <div class="detail-card">
-
-                <% if (ordem.diagnostico) { %>
-                    <div style="margin-bottom: 18px;">
-                        <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;">
-                            <i class="ti ti-search" style="color: #60a5fa;"></i> Diagnóstico
-                        </div>
-                        <div style="background: rgba(96,165,250,0.05); border-left: 3px solid #60a5fa; padding: 12px 14px; border-radius: 6px; color: #fff; font-size: 14px; line-height: 1.5;">
-                            <%= ordem.diagnostico %>
-                        </div>
-                    </div>
-                <% } %>
-
-                <% if (ordem.descricao_servico) { %>
-                    <div style="margin-bottom: 18px;">
-                        <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;">
-                            <i class="ti ti-tools" style="color: #a78bfa;"></i> Serviço a executar
-                        </div>
-                        <div style="background: rgba(124,58,237,0.05); border-left: 3px solid #a78bfa; padding: 12px 14px; border-radius: 6px; color: #fff; font-size: 14px; line-height: 1.5;">
-                            <%= ordem.descricao_servico %>
-                        </div>
-                    </div>
-                <% } %>
-
-                <% if (ordem.solucao) { %>
-                    <div>
-                        <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;">
-                            <i class="ti ti-check" style="color: #4ade80;"></i> Solução aplicada
-                        </div>
-                        <div style="background: rgba(74,222,128,0.05); border-left: 3px solid #4ade80; padding: 12px 14px; border-radius: 6px; color: #fff; font-size: 14px; line-height: 1.5;">
-                            <%= ordem.solucao %>
-                        </div>
-                    </div>
-                <% } %>
-
-                <% if (!ordem.diagnostico && !ordem.descricao_servico && !ordem.solucao) { %>
-                    <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.3); font-style: italic;">
-                        Nenhum diagnóstico cadastrado.
-                        <a href="/ordens/<%= ordem.id %>/edit" style="color: #a78bfa;">Adicionar</a>
-                    </div>
-                <% } %>
-
-            </div>
-
-            <!-- PEÇAS -->
+            <!-- PEÇAS USADAS -->
             <div class="detail-card">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -168,7 +152,14 @@
                         <% ordem.pecas.forEach(peca => { %>
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                                 <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 600;"><%= peca.descricao %></div>
+                                    <div style="font-size: 13px; font-weight: 600;">
+                                        <%= peca.descricao %>
+                                        <% if (peca.peca_id) { %>
+                                            <span style="background: rgba(74,222,128,0.15); color: #4ade80; padding: 2px 7px; border-radius: 50px; font-size: 9px; font-weight: 700; text-transform: uppercase; margin-left: 6px;">
+                                                <i class="ti ti-link"></i> Estoque
+                                            </span>
+                                        <% } %>
+                                    </div>
                                     <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
                                         <%= peca.quantidade %>x R$ <%= peca.valor_unitario.toFixed(2).replace('.', ',') %>
                                     </div>
@@ -190,79 +181,84 @@
                     </div>
                 <% } %>
 
-                <form action="/ordens/<%= ordem.id %>/pecas" method="POST" style="margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1);">
-                    <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 8px; font-weight: 600;">
-                        + Adicionar peça:
+                <!-- ADICIONAR DO ESTOQUE -->
+                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1);">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <i class="ti ti-package" style="color: #4ade80;"></i>
+                        <span style="font-size: 12px; color: #4ade80; font-weight: 700;">
+                            ADICIONAR DO ESTOQUE
+                        </span>
                     </div>
-                    <div style="display: grid; grid-template-columns: 2fr 70px 100px auto; gap: 8px;" class="add-peca-grid">
+
+                    <% if (typeof pecasEstoque !== 'undefined' && pecasEstoque.length > 0) { %>
+                        <form action="/ordens/<%= ordem.id %>/pecas/estoque" method="POST" style="display: grid; grid-template-columns: 1fr 80px auto; gap: 8px;">
+                            <select name="peca_id" required style="padding: 9px; border: 1px solid rgba(255,255,255,0.12); background: #0a0a0f; color: #fff; border-radius: 6px; font-size: 13px;">
+                                <option value="">— Selecione —</option>
+                                <% pecasEstoque.forEach(p => { %>
+                                    <option value="<%= p.id %>">
+                                        <%= p.nome %> (<%= p.quantidade %> em estoque)
+                                    </option>
+                                <% }) %>
+                            </select>
+                            <input type="number" name="quantidade" min="1" value="1" required 
+                                style="padding: 9px; border: 1px solid rgba(255,255,255,0.12); background: #0a0a0f; color: #fff; border-radius: 6px; font-size: 13px;">
+                            <button type="submit" class="btn btn-success" style="padding: 0 14px;">
+                                <i class="ti ti-plus"></i>
+                            </button>
+                        </form>
+                    <% } else { %>
+                        <div style="background: rgba(251,191,36,0.1); padding: 10px; border-radius: 6px; font-size: 12px; color: #fbbf24;">
+                            Sem peças disponíveis no estoque.
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- ADICIONAR MANUAL -->
+                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1);">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <i class="ti ti-edit" style="color: #fbbf24;"></i>
+                        <span style="font-size: 12px; color: #fbbf24; font-weight: 700;">
+                            ADICIONAR PEÇA MANUAL
+                        </span>
+                    </div>
+
+                    <form action="/ordens/<%= ordem.id %>/pecas" method="POST" style="display: grid; grid-template-columns: 2fr 70px 100px auto; gap: 8px;">
                         <input type="text" name="descricao" required placeholder="Nome da peça" 
                             style="padding: 9px; border: 1px solid rgba(255,255,255,0.12); background: #0a0a0f; color: #fff; border-radius: 6px; font-size: 13px;">
                         <input type="number" name="quantidade" min="1" value="1" required 
-                            style="padding: 9px; border: 1px solid rgba(255,255,255,0.12); background: #0a0a0f; color: #fff; border-radius: 6px; font-size: 13px;" 
-                            placeholder="Qtd">
+                            style="padding: 9px; border: 1px solid rgba(255,255,255,0.12); background: #0a0a0f; color: #fff; border-radius: 6px; font-size: 13px;">
                         <input type="number" name="valor_unitario" min="0" step="0.01" required placeholder="Valor R$" 
                             style="padding: 9px; border: 1px solid rgba(255,255,255,0.12); background: #0a0a0f; color: #fff; border-radius: 6px; font-size: 13px;">
-                        <button type="submit" class="btn btn-primary" style="padding: 0 14px;">
+                        <button type="submit" class="btn btn-warning" style="padding: 0 14px;">
                             <i class="ti ti-plus"></i>
                         </button>
-                    </div>
-                </form>
-            </div>
-
-            <% if (ordem.historico && ordem.historico.length > 0) { %>
-                <div class="detail-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
-                        <i class="ti ti-history" style="color: #94a3b8; font-size: 18px;"></i>
-                        <h3 style="font-size: 14px; font-weight: 700;">Histórico de mudanças</h3>
-                    </div>
-
-                    <% ordem.historico.forEach((h, i) => { 
-                        const hInfo = STATUS_OS[h.status_novo] || { label: h.status_novo, cor: '#94a3b8', icone: 'ti-help' };
-                    %>
-                        <div style="display: flex; gap: 12px; padding: 10px 0; border-bottom: <%= i < ordem.historico.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' %>;">
-                            <div style="width: 30px; height: 30px; border-radius: 50%; background: <%= hInfo.cor %>22; color: <%= hInfo.cor %>; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <i class="ti <%= hInfo.icone %>"></i>
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="font-size: 13px;">
-                                    <strong><%= hInfo.label %></strong>
-                                </div>
-                                <% if (h.observacao) { %>
-                                    <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px;">
-                                        <%= h.observacao %>
-                                    </div>
-                                <% } %>
-                                <div style="font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 4px;">
-                                    <%= new Date(h.criado_em).toLocaleString('pt-BR') %>
-                                </div>
-                            </div>
-                        </div>
-                    <% }) %>
+                    </form>
                 </div>
-            <% } %>
+            </div>
 
         </div>
 
+        <!-- COLUNA DIREITA -->
         <div>
 
             <div class="detail-card" style="background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(74,222,128,0.02));">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
                     <i class="ti ti-cash" style="color: #4ade80; font-size: 18px;"></i>
-                    <h3 style="font-size: 14px; font-weight: 700;">Resumo financeiro</h3>
+                    <h3 style="font-size: 14px; font-weight: 700;">Resumo</h3>
                 </div>
 
                 <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;">
-                    <span style="color: rgba(255,255,255,0.6);">Mão de obra:</span>
+                    <span>Mão de obra:</span>
                     <strong>R$ <%= (ordem.valor_mao_obra || 0).toFixed(2).replace('.', ',') %></strong>
                 </div>
 
                 <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; border-bottom: 1px dashed rgba(255,255,255,0.1);">
-                    <span style="color: rgba(255,255,255,0.6);">Peças:</span>
+                    <span>Peças:</span>
                     <strong>R$ <%= (ordem.valor_pecas || 0).toFixed(2).replace('.', ',') %></strong>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; padding: 14px 0 6px; font-size: 16px;">
-                    <span style="color: #fff; font-weight: 700;">TOTAL:</span>
+                <div style="display: flex; justify-content: space-between; padding: 14px 0 6px;">
+                    <span style="font-weight: 700;">TOTAL:</span>
                     <strong style="color: #4ade80; font-size: 22px;">
                         R$ <%= (ordem.valor_total || 0).toFixed(2).replace('.', ',') %>
                     </strong>
@@ -270,9 +266,7 @@
             </div>
 
             <div class="detail-card">
-                <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">
-                    Atualizar status
-                </h3>
+                <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Status</h3>
                 <form action="/ordens/<%= ordem.id %>/status" method="POST">
                     <div class="form-group">
                         <select name="status" required style="width: 100%; padding: 10px; border: 1px solid rgba(255,255,255,0.12); background: #0a0a0f; color: #fff; border-radius: 8px;">
@@ -283,46 +277,10 @@
                             <% }) %>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <input type="text" name="observacao" placeholder="Observação (opcional)" 
-                            style="width: 100%; padding: 10px; border: 1px solid rgba(255,255,255,0.12); background: #0a0a0f; color: #fff; border-radius: 8px;">
-                    </div>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">
                         <i class="ti ti-refresh"></i> Atualizar
                     </button>
                 </form>
-            </div>
-
-            <div class="detail-card">
-                <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">
-                    Informações
-                </h3>
-
-                <% if (ordem.tecnico_nome) { %>
-                    <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12.5px;">
-                        <span style="color: rgba(255,255,255,0.5);">Técnico:</span>
-                        <strong><%= ordem.tecnico_nome %></strong>
-                    </div>
-                <% } %>
-
-                <% if (ordem.prazo_entrega) { %>
-                    <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12.5px;">
-                        <span style="color: rgba(255,255,255,0.5);">Prazo:</span>
-                        <strong><%= new Date(ordem.prazo_entrega + 'T00:00:00').toLocaleDateString('pt-BR') %></strong>
-                    </div>
-                <% } %>
-
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12.5px;">
-                    <span style="color: rgba(255,255,255,0.5);">Garantia:</span>
-                    <strong style="color: #4ade80;"><%= ordem.garantia_dias %> dias</strong>
-                </div>
-
-                <% if (ordem.concluido_em) { %>
-                    <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12.5px;">
-                        <span style="color: rgba(255,255,255,0.5);">Concluída em:</span>
-                        <strong><%= new Date(ordem.concluido_em).toLocaleDateString('pt-BR') %></strong>
-                    </div>
-                <% } %>
             </div>
 
             <form action="/ordens/<%= ordem.id %>/delete" method="POST" onsubmit="return confirm('Excluir esta OS?')">
@@ -343,7 +301,6 @@
 }
 @media (max-width: 700px) {
     .grid-2 { grid-template-columns: 1fr !important; }
-    .add-peca-grid { grid-template-columns: 1fr 1fr !important; }
 }
 </style>
 

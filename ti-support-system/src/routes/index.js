@@ -14,6 +14,7 @@ router.use('/dispositivos', require('./dispositivoRoutes'));
 router.use('/ordens', require('./ordemServicoRoutes'));
 router.use('/estoque', require('./estoqueRoutes'));
 router.use('/financeiro', require('./financeiroRoutes'));
+router.use('/admin', require('./adminRoutes'));
 
 // 404
 router.use((req, res) => {

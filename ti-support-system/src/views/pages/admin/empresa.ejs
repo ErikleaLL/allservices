@@ -1,0 +1,501 @@
+<%- contentFor('title') %>
+Dados da Empresa — Allservices
+
+<%- contentFor('body') %>
+
+<div class="admin-wrapper">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <a href="/admin" class="btn-back">
+        <i class="ti ti-arrow-left"></i>
+      </a>
+      <div class="page-icon">
+        <i class="ti ti-building-store"></i>
+      </div>
+      <div>
+        <h1 class="page-title">Dados da Empresa</h1>
+        <p class="page-subtitle">Informações que aparecem nos documentos, QR Codes e página pública</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flash Messages -->
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert--success">
+      <i class="ti ti-circle-check"></i>
+      <span><%= success %></span>
+    </div>
+  <% } %>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert--error">
+      <i class="ti ti-circle-x"></i>
+      <span><%= error %></span>
+    </div>
+  <% } %>
+
+  <!-- Formulário -->
+  <form action="/admin/empresa" method="POST" class="admin-form">
+
+    <!-- Seção: Identificação -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-id-badge"></i>
+        <h3>Identificação</h3>
+      </div>
+      <div class="form-grid">
+
+        <div class="form-group form-group--full">
+          <label class="form-label">
+            <i class="ti ti-building"></i>
+            Nome da Empresa
+          </label>
+          <input
+            type="text"
+            name="empresa_nome"
+            class="form-input"
+            value="<%= configs.empresa_nome || '' %>"
+            placeholder="Ex: TechFix Assistência Técnica"
+            required
+          />
+          <span class="form-hint">Aparece no cabeçalho de OS, etiquetas e garantias</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-quote"></i>
+            Slogan
+          </label>
+          <input
+            type="text"
+            name="slogan"
+            class="form-input"
+            value="<%= configs.slogan || '' %>"
+            placeholder="Ex: Manutenção inteligente, gestão simples"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-file-certificate"></i>
+            CNPJ / CPF
+          </label>
+          <input
+            type="text"
+            name="cnpj"
+            class="form-input"
+            value="<%= configs.cnpj || '' %>"
+            placeholder="00.000.000/0001-00"
+          />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Seção: Contato -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-phone"></i>
+        <h3>Contato</h3>
+      </div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-phone"></i>
+            Telefone Fixo
+          </label>
+          <input
+            type="text"
+            name="telefone"
+            class="form-input"
+            value="<%= configs.telefone || '' %>"
+            placeholder="(00) 0000-0000"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-brand-whatsapp"></i>
+            WhatsApp de Atendimento
+          </label>
+          <input
+            type="text"
+            name="whatsapp_atendimento"
+            class="form-input"
+            value="<%= configs.whatsapp_atendimento || '' %>"
+            placeholder="5511999999999 (somente números)"
+          />
+          <span class="form-hint">Usado nos botões de rastreio e garantia do cliente</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-mail"></i>
+            E-mail
+          </label>
+          <input
+            type="email"
+            name="email"
+            class="form-input"
+            value="<%= configs.email || '' %>"
+            placeholder="contato@suaempresa.com.br"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-world"></i>
+            Site / URL
+          </label>
+          <input
+            type="text"
+            name="site"
+            class="form-input"
+            value="<%= configs.site || '' %>"
+            placeholder="https://suaempresa.com.br"
+          />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Seção: Localização -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-map-pin"></i>
+        <h3>Localização</h3>
+      </div>
+      <div class="form-grid">
+
+        <div class="form-group form-group--full">
+          <label class="form-label">
+            <i class="ti ti-map"></i>
+            Endereço Completo
+          </label>
+          <input
+            type="text"
+            name="endereco"
+            class="form-input"
+            value="<%= configs.endereco || '' %>"
+            placeholder="Rua, número, bairro, cidade — Estado, CEP"
+          />
+          <span class="form-hint">Aparece no rodapé dos documentos impressos</span>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">
+            <i class="ti ti-clock"></i>
+            Horário de Funcionamento
+          </label>
+          <input
+            type="text"
+            name="horario"
+            class="form-input"
+            value="<%= configs.horario || '' %>"
+            placeholder="Seg–Sex: 08h–18h | Sáb: 09h–13h"
+          />
+          <span class="form-hint">Exibido na página pública e nos QR Codes de rastreio</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="form-section">
+      <div class="form-section__header">
+        <i class="ti ti-eye"></i>
+        <h3>Preview do Rodapé (documentos)</h3>
+      </div>
+      <div class="doc-preview">
+        <div class="doc-preview__inner" id="docPreview">
+          <strong id="prev-nome"><%= configs.empresa_nome || 'Nome da Empresa' %></strong>
+          <span id="prev-cnpj"><% if(configs.cnpj) { %> · CNPJ: <%= configs.cnpj %><% } %></span>
+          <br/>
+          <span id="prev-endereco"><%= configs.endereco || 'Endereço não configurado' %></span>
+          <br/>
+          <span id="prev-tel"><% if(configs.telefone) { %>Tel: <%= configs.telefone %> <% } %></span>
+          <span id="prev-email"><% if(configs.email) { %> · <%= configs.email %><% } %></span>
+          <br/>
+          <span id="prev-horario"><% if(configs.horario) { %>⏰ <%= configs.horario %><% } %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações -->
+    <div class="form-actions">
+      <a href="/admin" class="btn btn--ghost">
+        <i class="ti ti-x"></i>
+        Cancelar
+      </a>
+      <button type="submit" class="btn btn--primary">
+        <i class="ti ti-device-floppy"></i>
+        Salvar Dados da Empresa
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+<style>
+/* ── Wrapper ── */
+.admin-wrapper {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Page Header ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.btn-back {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #1e1b2e;
+  border: 1px solid rgba(15,23,42,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.btn-back:hover { background: #7c3aed; color: #fff; }
+
+.page-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.page-subtitle {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0.2rem 0 0;
+}
+
+/* ── Alerts ── */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.alert i { font-size: 1.2rem; flex-shrink: 0; }
+.alert--success {
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #34d399;
+}
+.alert--error {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.25);
+  color: #f87171;
+}
+
+/* ── Form ── */
+.admin-form { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.form-section {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.form-section__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+  background: rgba(255,255,255,0.02);
+}
+.form-section__header i {
+  color: #7c3aed;
+  font-size: 1.1rem;
+}
+.form-section__header h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  padding: 1.4rem;
+}
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group--full { grid-column: 1 / -1; }
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.form-label i { font-size: 0.9rem; color: #7c3aed; }
+
+.form-input {
+  background: #0a0a0f;
+  border: 1px solid rgba(15,23,42,0.05);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  color: #f1f5f9;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.92rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.form-input:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+}
+.form-input::placeholder { color: #334155; }
+
+.form-hint {
+  font-size: 0.78rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+/* ── Preview ── */
+.doc-preview {
+  padding: 1.4rem;
+}
+.doc-preview__inner {
+  background: #0a0a0f;
+  border: 1px solid rgba(15,23,42,0.05);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.8;
+  font-family: 'Geist', sans-serif;
+  border-left: 3px solid #7c3aed;
+}
+.doc-preview__inner strong {
+  color: #f1f5f9;
+  font-size: 1rem;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+/* ── Form Actions ── */
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Geist', sans-serif;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn--primary {
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  color: #fff;
+}
+.btn--primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+}
+.btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(15,23,42,0.06);
+  color: #94a3b8;
+}
+.btn--ghost:hover { background: rgba(15,23,42,0.04); color: #f1f5f9; }
+
+/* ── Responsivo ── */
+@media (max-width: 640px) {
+  .admin-wrapper { padding: 1rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group--full { grid-column: 1; }
+  .page-title { font-size: 1.25rem; }
+  .form-actions { justify-content: stretch; flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+}
+</style>
+
+<script>
+/* Preview em tempo real */
+const fields = {
+  empresa_nome: 'prev-nome',
+  endereco:     'prev-endereco',
+  telefone:     'prev-tel',
+  email:        'prev-email',
+  horario:      'prev-horario',
+  cnpj:         'prev-cnpj'
+};
+
+Object.entries(fields).forEach(([name, id]) => {
+  const input = document.querySelector(`[name="${name}"]`);
+  const el    = document.getElementById(id);
+  if (!input || !el) return;
+
+  input.addEventListener('input', () => {
+    const v = input.value.trim();
+    if (name === 'empresa_nome') el.textContent = v || 'Nome da Empresa';
+    else if (name === 'cnpj')    el.textContent = v ? ` · CNPJ: ${v}` : '';
+    else if (name === 'telefone') el.textContent = v ? `Tel: ${v}` : '';
+    else if (name === 'email')    el.textContent = v ? ` · ${v}` : '';
+    else if (name === 'horario')  el.textContent = v ? `⏰ ${v}` : '';
+    else el.textContent = v;
+  });
+});
+</script>

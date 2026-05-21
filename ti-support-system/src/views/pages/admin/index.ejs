@@ -1,0 +1,490 @@
+<%- contentFor('title') %>
+Administração — Allservices
+
+<%- contentFor('body') %>
+
+<div class="admin-wrapper">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-icon">
+        <i class="ti ti-shield-crown"></i>
+      </div>
+      <div>
+        <h1 class="page-title">Painel de Administração</h1>
+        <p class="page-subtitle">Controle total do sistema Allservices</p>
+      </div>
+    </div>
+    <div class="page-header-right">
+      <span class="admin-badge">
+        <i class="ti ti-circle-filled pulse-dot"></i>
+        Sistema Online
+      </span>
+    </div>
+  </div>
+
+  <!-- Cards de Acesso Rápido -->
+  <div class="admin-grid">
+
+    <a href="/admin/empresa" class="admin-card admin-card--purple">
+      <div class="admin-card__icon">
+        <i class="ti ti-building-store"></i>
+      </div>
+      <div class="admin-card__content">
+        <h3>Dados da Empresa</h3>
+        <p>Nome, CNPJ, endereço, telefone, horário de funcionamento</p>
+      </div>
+      <div class="admin-card__arrow">
+        <i class="ti ti-arrow-right"></i>
+      </div>
+    </a>
+
+    <a href="/admin/sistema" class="admin-card admin-card--blue">
+      <div class="admin-card__icon">
+        <i class="ti ti-settings-2"></i>
+      </div>
+      <div class="admin-card__content">
+        <h3>Configurações do Sistema</h3>
+        <p>Garantia padrão, prazos, comportamento geral da plataforma</p>
+      </div>
+      <div class="admin-card__arrow">
+        <i class="ti ti-arrow-right"></i>
+      </div>
+    </a>
+
+    <a href="/admin/templates" class="admin-card admin-card--green">
+      <div class="admin-card__icon">
+        <i class="ti ti-brand-whatsapp"></i>
+      </div>
+      <div class="admin-card__content">
+        <h3>Templates WhatsApp</h3>
+        <p>Mensagens automáticas de OS, garantia e atendimento</p>
+      </div>
+      <div class="admin-card__arrow">
+        <i class="ti ti-arrow-right"></i>
+      </div>
+    </a>
+
+    <a href="/admin/backup" class="admin-card admin-card--orange">
+      <div class="admin-card__icon">
+        <i class="ti ti-database-export"></i>
+      </div>
+      <div class="admin-card__content">
+        <h3>Backup do Banco</h3>
+        <p>Download do arquivo SQLite com todos os dados do sistema</p>
+      </div>
+      <div class="admin-card__arrow">
+        <i class="ti ti-arrow-right"></i>
+      </div>
+    </a>
+
+    <a href="/admin/estatisticas" class="admin-card admin-card--red">
+      <div class="admin-card__icon">
+        <i class="ti ti-chart-bar"></i>
+      </div>
+      <div class="admin-card__content">
+        <h3>Estatísticas Avançadas</h3>
+        <p>Relatórios detalhados, gráficos e indicadores de performance</p>
+      </div>
+      <div class="admin-card__arrow">
+        <i class="ti ti-arrow-right"></i>
+      </div>
+    </a>
+
+    <a href="/usuarios" class="admin-card admin-card--teal">
+      <div class="admin-card__icon">
+        <i class="ti ti-users-group"></i>
+      </div>
+      <div class="admin-card__content">
+        <h3>Gerenciar Usuários</h3>
+        <p>Cadastro, perfis, permissões e controle de acesso</p>
+      </div>
+      <div class="admin-card__arrow">
+        <i class="ti ti-arrow-right"></i>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Info do Sistema -->
+  <div class="admin-info-grid">
+
+    <!-- Versão e Status -->
+    <div class="info-card">
+      <div class="info-card__header">
+        <i class="ti ti-info-circle"></i>
+        <h4>Informações do Sistema</h4>
+      </div>
+      <div class="info-list">
+        <div class="info-item">
+          <span class="info-label">Plataforma</span>
+          <span class="info-value">Allservices v1.0</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Stack</span>
+          <span class="info-value">Node.js + Express + SQLite</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Banco de dados</span>
+          <span class="info-value info-value--green">
+            <i class="ti ti-circle-filled"></i> Conectado
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Sessão</span>
+          <span class="info-value info-value--green">
+            <i class="ti ti-circle-filled"></i> Ativa
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Usuário logado</span>
+          <span class="info-value"><%= usuario.nome %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Perfil</span>
+          <span class="info-value">
+            <span class="badge-perfil"><%= usuario.perfil %></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Totais do banco -->
+    <div class="info-card">
+      <div class="info-card__header">
+        <i class="ti ti-database"></i>
+        <h4>Dados no Banco</h4>
+      </div>
+      <div class="info-list">
+        <div class="info-item">
+          <span class="info-label">
+            <i class="ti ti-users"></i> Usuários
+          </span>
+          <span class="info-value info-value--highlight"><%= stats.usuarios %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">
+            <i class="ti ti-address-book"></i> Clientes
+          </span>
+          <span class="info-value info-value--highlight"><%= stats.clientes %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">
+            <i class="ti ti-device-laptop"></i> Dispositivos
+          </span>
+          <span class="info-value info-value--highlight"><%= stats.dispositivos %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">
+            <i class="ti ti-clipboard-list"></i> Ordens de Serviço
+          </span>
+          <span class="info-value info-value--highlight"><%= stats.ordens %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">
+            <i class="ti ti-package"></i> Peças no Estoque
+          </span>
+          <span class="info-value info-value--highlight"><%= stats.pecas %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">
+            <i class="ti ti-cash"></i> Lançamentos Financeiros
+          </span>
+          <span class="info-value info-value--highlight"><%= stats.financeiro %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Configs rápidas -->
+    <div class="info-card">
+      <div class="info-card__header">
+        <i class="ti ti-adjustments"></i>
+        <h4>Configurações Ativas</h4>
+      </div>
+      <div class="info-list">
+        <div class="info-item">
+          <span class="info-label">Empresa</span>
+          <span class="info-value"><%= configs.empresa_nome || '—' %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Telefone</span>
+          <span class="info-value"><%= configs.telefone || '—' %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">WhatsApp</span>
+          <span class="info-value"><%= configs.whatsapp_atendimento || '—' %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Garantia Padrão</span>
+          <span class="info-value"><%= configs.garantia_padrao || '90' %> dias</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Prazo Padrão</span>
+          <span class="info-value"><%= configs.prazo_padrao || '3' %> dias úteis</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Email</span>
+          <span class="info-value"><%= configs.email || '—' %></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ═══════════════════ ESTILOS ═══════════════════ -->
+<style>
+/* ── Wrapper ── */
+.admin-wrapper {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Page Header ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.page-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.page-subtitle {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin: 0.2rem 0 0;
+}
+
+/* Badge online */
+.admin-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #10b981;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.pulse-dot {
+  font-size: 0.6rem;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Admin Grid (cards principais) ── */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.admin-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.4rem 1.25rem;
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 16px;
+  text-decoration: none;
+  color: #f1f5f9;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.admin-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: 16px;
+}
+.admin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.admin-card:hover::before { opacity: 1; }
+
+/* Variantes de cor */
+.admin-card--purple { border-color: rgba(124,58,237,0.3); }
+.admin-card--purple:hover { border-color: rgba(124,58,237,0.6); box-shadow: 0 12px 40px rgba(124,58,237,0.2); }
+.admin-card--purple .admin-card__icon { background: rgba(124,58,237,0.15); color: #a78bfa; }
+
+.admin-card--blue { border-color: rgba(37,99,235,0.3); }
+.admin-card--blue:hover { border-color: rgba(37,99,235,0.6); box-shadow: 0 12px 40px rgba(37,99,235,0.2); }
+.admin-card--blue .admin-card__icon { background: rgba(37,99,235,0.15); color: #60a5fa; }
+
+.admin-card--green { border-color: rgba(16,185,129,0.3); }
+.admin-card--green:hover { border-color: rgba(16,185,129,0.6); box-shadow: 0 12px 40px rgba(16,185,129,0.2); }
+.admin-card--green .admin-card__icon { background: rgba(16,185,129,0.15); color: #34d399; }
+
+.admin-card--orange { border-color: rgba(249,115,22,0.3); }
+.admin-card--orange:hover { border-color: rgba(249,115,22,0.6); box-shadow: 0 12px 40px rgba(249,115,22,0.2); }
+.admin-card--orange .admin-card__icon { background: rgba(249,115,22,0.15); color: #fb923c; }
+
+.admin-card--red { border-color: rgba(239,68,68,0.3); }
+.admin-card--red:hover { border-color: rgba(239,68,68,0.6); box-shadow: 0 12px 40px rgba(239,68,68,0.2); }
+.admin-card--red .admin-card__icon { background: rgba(239,68,68,0.15); color: #f87171; }
+
+.admin-card--teal { border-color: rgba(20,184,166,0.3); }
+.admin-card--teal:hover { border-color: rgba(20,184,166,0.6); box-shadow: 0 12px 40px rgba(20,184,166,0.2); }
+.admin-card--teal .admin-card__icon { background: rgba(20,184,166,0.15); color: #2dd4bf; }
+
+.admin-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.admin-card__content { flex: 1; min-width: 0; }
+.admin-card__content h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 0.3rem;
+}
+.admin-card__content p {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+.admin-card__arrow {
+  color: #334155;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  transition: transform 0.2s, color 0.2s;
+}
+.admin-card:hover .admin-card__arrow {
+  transform: translateX(4px);
+  color: #94a3b8;
+}
+
+/* ── Info Grid (3 cards inferiores) ── */
+.admin-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.info-card {
+  background: #13121f;
+  border: 1px solid rgba(15,23,42,0.04);
+  border-radius: 16px;
+  padding: 1.4rem;
+}
+.info-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+}
+.info-card__header i {
+  color: #7c3aed;
+  font-size: 1.2rem;
+}
+.info-card__header h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.info-list { display: flex; flex-direction: column; gap: 0.65rem; }
+.info-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.83rem;
+  color: #64748b;
+}
+.info-label i { font-size: 0.9rem; }
+
+.info-value {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 500;
+  text-align: right;
+}
+.info-value--green {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #10b981;
+  font-size: 0.75rem;
+}
+.info-value--green i { font-size: 0.6rem; }
+.info-value--highlight {
+  color: #a78bfa;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.badge-perfil {
+  background: rgba(124,58,237,0.15);
+  color: #a78bfa;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* ── Responsivo ── */
+@media (max-width: 768px) {
+  .admin-wrapper { padding: 1rem; }
+  .page-title { font-size: 1.35rem; }
+  .admin-grid { grid-template-columns: 1fr; }
+  .admin-info-grid { grid-template-columns: 1fr; }
+  .admin-card { padding: 1.1rem; }
+}
+</style>

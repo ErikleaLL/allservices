@@ -4,7 +4,7 @@
     <div class="page-header">
         <div>
             <h2>Financeiro</h2>
-            <span style="color: rgba(255,255,255,0.4); font-size: 13px;">
+            <span style="color: #64748b; font-size: 13px;">
                 Receitas, despesas e fluxo de caixa
             </span>
         </div>
@@ -38,14 +38,14 @@
                 <div style="width: 38px; height: 38px; border-radius: 10px; background: <%= resumo.saldo >= 0 ? 'rgba(74,222,128,0.2)' : 'rgba(248,113,113,0.2)' %>; color: <%= resumo.saldo >= 0 ? '#4ade80' : '#f87171' %>; display: flex; align-items: center; justify-content: center; font-size: 18px;">
                     <i class="ti ti-wallet"></i>
                 </div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
                     Saldo atual
                 </div>
             </div>
             <div style="font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: <%= resumo.saldo >= 0 ? '#4ade80' : '#f87171' %>;">
                 R$ <%= resumo.saldo.toFixed(2).replace('.', ',') %>
             </div>
-            <div style="font-size: 10.5px; color: rgba(255,255,255,0.4); margin-top: 4px;">
+            <div style="font-size: 10.5px; color: #64748b; margin-top: 4px;">
                 Receitas − Despesas (pagos)
             </div>
         </div>
@@ -56,7 +56,7 @@
                 <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(74,222,128,0.15); color: #4ade80; display: flex; align-items: center; justify-content: center; font-size: 18px;">
                     <i class="ti ti-arrow-up-right"></i>
                 </div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
                     Total recebido
                 </div>
             </div>
@@ -74,7 +74,7 @@
                 <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(248,113,113,0.15); color: #f87171; display: flex; align-items: center; justify-content: center; font-size: 18px;">
                     <i class="ti ti-arrow-down-right"></i>
                 </div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
                     Total pago
                 </div>
             </div>
@@ -92,14 +92,14 @@
                 <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(124,58,237,0.2); color: #a78bfa; display: flex; align-items: center; justify-content: center; font-size: 18px;">
                     <i class="ti ti-chart-pie"></i>
                 </div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
+                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
                     Saldo projetado
                 </div>
             </div>
             <div style="font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #a78bfa;">
                 R$ <%= resumo.saldoProjetado.toFixed(2).replace('.', ',') %>
             </div>
-            <div style="font-size: 10.5px; color: rgba(255,255,255,0.4); margin-top: 4px;">
+            <div style="font-size: 10.5px; color: #64748b; margin-top: 4px;">
                 Considera pendentes
             </div>
         </div>
@@ -112,7 +112,7 @@
             <div style="display: flex; align-items: center; gap: 12px;">
                 <i class="ti ti-calendar-stats" style="color: #a78bfa; font-size: 22px;"></i>
                 <div>
-                    <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+                    <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
                         Movimentação do mês
                     </div>
                     <div style="font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-top: 2px;">
@@ -122,19 +122,19 @@
             </div>
             <div style="display: flex; gap: 25px; flex-wrap: wrap;">
                 <div>
-                    <div style="font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Receitas</div>
+                    <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Receitas</div>
                     <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: #4ade80;">
                         R$ <%= resumoMes.receitas.toFixed(2).replace('.', ',') %>
                     </div>
                 </div>
                 <div>
-                    <div style="font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Despesas</div>
+                    <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Despesas</div>
                     <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: #f87171;">
                         R$ <%= resumoMes.despesas.toFixed(2).replace('.', ',') %>
                     </div>
                 </div>
                 <div>
-                    <div style="font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Saldo</div>
+                    <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Saldo</div>
                     <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: <%= resumoMes.saldo >= 0 ? '#4ade80' : '#f87171' %>;">
                         R$ <%= resumoMes.saldo.toFixed(2).replace('.', ',') %>
                     </div>
@@ -195,22 +195,22 @@
                             <td>
                                 <strong><%= l.descricao %></strong>
                                 <% if (l.cliente_nome) { %>
-                                    <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
                                         <i class="ti ti-user"></i> <%= l.cliente_nome %>
                                     </div>
                                 <% } else if (l.fornecedor_nome) { %>
-                                    <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">
+                                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
                                         <i class="ti ti-truck"></i> <%= l.fornecedor_nome %>
                                     </div>
                                 <% } %>
                             </td>
                             <td>
                                 <% if (l.categoria) { %>
-                                    <span style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); padding: 3px 9px; border-radius: 50px; font-size: 11px;">
+                                    <span style="background: #f1f5f9; color: #334155; padding: 3px 9px; border-radius: 50px; font-size: 11px;">
                                         <%= l.categoria %>
                                     </span>
                                 <% } else { %>
-                                    <span style="color: rgba(255,255,255,0.3); font-size: 12px;">-</span>
+                                    <span style="color: #94a3b8; font-size: 12px;">-</span>
                                 <% } %>
                             </td>
                             <td>
@@ -222,7 +222,7 @@
                                 <% if (l.data_vencimento) { %>
                                     <%= new Date(l.data_vencimento + 'T00:00:00').toLocaleDateString('pt-BR') %>
                                 <% } else { %>
-                                    <span style="color: rgba(255,255,255,0.3);">-</span>
+                                    <span style="color: #94a3b8;">-</span>
                                 <% } %>
                             </td>
                             <td>

@@ -1,0 +1,199 @@
+/* ════════════════════════════════════════════════════════════
+   ALLSERVICES — FIXES POR PÁGINA NO TEMA LIGHT
+   Corrige cores hardcoded inline que somem no fundo branco
+   ════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════
+   📊 PÁGINA FINANCEIRO
+   ════════════════════════════════════════════════════════════ */
+
+/* Textos com rgba(255,255,255,0.4) e rgba(255,255,255,0.5) */
+/* — labels "Saldo atual", "Total recebido", etc */
+[data-theme="light"] [style*="color: rgba(255,255,255,0.4)"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.5)"],
+[data-theme="light"] [style*="color: rgba(255,255,255, 0.4)"],
+[data-theme="light"] [style*="color: rgba(255,255,255, 0.5)"],
+[data-theme="light"] [style*="color:rgba(255,255,255,0.4)"],
+[data-theme="light"] [style*="color:rgba(255,255,255,0.5)"] {
+  color: #64748b !important;
+}
+
+/* Textos rgba(255,255,255,0.3) — "Total: X transações" e similares */
+[data-theme="light"] [style*="color: rgba(255,255,255,0.3)"],
+[data-theme="light"] [style*="color: rgba(255,255,255, 0.3)"],
+[data-theme="light"] [style*="color:rgba(255,255,255,0.3)"] {
+  color: #94a3b8 !important;
+}
+
+/* Textos rgba(255,255,255,0.7) — categorias / tags */
+[data-theme="light"] [style*="color: rgba(255,255,255,0.7)"],
+[data-theme="light"] [style*="color: rgba(255,255,255, 0.7)"],
+[data-theme="light"] [style*="color:rgba(255,255,255,0.7)"] {
+  color: #475569 !important;
+}
+
+/* Textos rgba(255,255,255,0.8) e 0.9 — texto secundário forte */
+[data-theme="light"] [style*="color: rgba(255,255,255,0.8)"],
+[data-theme="light"] [style*="color: rgba(255,255,255, 0.8)"],
+[data-theme="light"] [style*="color:rgba(255,255,255,0.8)"],
+[data-theme="light"] [style*="color: rgba(255,255,255,0.9)"],
+[data-theme="light"] [style*="color: rgba(255,255,255, 0.9)"],
+[data-theme="light"] [style*="color:rgba(255,255,255,0.9)"] {
+  color: #334155 !important;
+}
+
+/* Background rgba(255,255,255,0.05) — categoria pill no financeiro */
+[data-theme="light"] [style*="background: rgba(255,255,255,0.05)"],
+[data-theme="light"] [style*="background:rgba(255,255,255,0.05)"],
+[data-theme="light"] [style*="background-color: rgba(255,255,255,0.05)"] {
+  background: rgba(15,23,42,0.05) !important;
+}
+
+/* Background rgba(255,255,255,0.08) e 0.1 */
+[data-theme="light"] [style*="background: rgba(255,255,255,0.08)"],
+[data-theme="light"] [style*="background:rgba(255,255,255,0.08)"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.1)"],
+[data-theme="light"] [style*="background:rgba(255,255,255,0.1)"] {
+  background: rgba(15,23,42,0.06) !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   📊 CARDS DE RESUMO COM GRADIENTE COLORIDO
+   (Saldo Atual / Total Recebido / Total Pago / Saldo Projetado)
+   No light, deixamos o gradiente mais sutil
+   ════════════════════════════════════════════════════════════ */
+
+/* Cards de gradiente verde (saldo, receitas) — light mode */
+[data-theme="light"] [style*="linear-gradient(135deg, rgba(74,222,128,0.15)"],
+[data-theme="light"] [style*="linear-gradient(135deg, rgba(74,222,128,0.08)"],
+[data-theme="light"] [style*="linear-gradient(135deg,rgba(74,222,128"] {
+  background: linear-gradient(135deg, rgba(74,222,128,0.18), rgba(74,222,128,0.06)) !important;
+  border-color: rgba(74,222,128,0.35) !important;
+}
+
+/* Cards de gradiente vermelho (despesas) — light mode */
+[data-theme="light"] [style*="linear-gradient(135deg, rgba(248,113,113,0.15)"],
+[data-theme="light"] [style*="linear-gradient(135deg, rgba(248,113,113,0.08)"],
+[data-theme="light"] [style*="linear-gradient(135deg,rgba(248,113,113"] {
+  background: linear-gradient(135deg, rgba(248,113,113,0.18), rgba(248,113,113,0.06)) !important;
+  border-color: rgba(248,113,113,0.35) !important;
+}
+
+/* Cards de gradiente roxo (saldo projetado) — light mode */
+[data-theme="light"] [style*="linear-gradient(135deg, rgba(124,58,237,0.12)"],
+[data-theme="light"] [style*="linear-gradient(135deg, rgba(124,58,237,0.08)"],
+[data-theme="light"] [style*="linear-gradient(135deg,rgba(124,58,237"] {
+  background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(124,58,237,0.05)) !important;
+  border-color: rgba(124,58,237,0.3) !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   📊 BOTÕES DE TOPO DO FINANCEIRO
+   (Fluxo de caixa / Vencidos / Despesa / Receita)
+   ════════════════════════════════════════════════════════════ */
+
+/* Botão Receita (verde) que estava sumindo */
+[data-theme="light"] .btn-success,
+[data-theme="light"] [class*="btn-success"] {
+  background: rgba(74,222,128,0.15) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(74,222,128,0.35) !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .btn-success:hover,
+[data-theme="light"] [class*="btn-success"]:hover {
+  background: #10b981 !important;
+  color: #fff !important;
+}
+
+/* Botão Despesa (vermelho) */
+[data-theme="light"] .btn-danger,
+[data-theme="light"] [class*="btn-danger"] {
+  background: rgba(248,113,113,0.15) !important;
+  color: #dc2626 !important;
+  border: 1px solid rgba(248,113,113,0.35) !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .btn-danger:hover,
+[data-theme="light"] [class*="btn-danger"]:hover {
+  background: #ef4444 !important;
+  color: #fff !important;
+}
+
+/* Botão Vencidos (amarelo) */
+[data-theme="light"] .btn-warning,
+[data-theme="light"] [class*="btn-warning"] {
+  background: rgba(251,191,36,0.18) !important;
+  color: #b45309 !important;
+  border: 1px solid rgba(251,191,36,0.4) !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .btn-warning:hover,
+[data-theme="light"] [class*="btn-warning"]:hover {
+  background: #f59e0b !important;
+  color: #fff !important;
+}
+
+/* Botão Info (azul) — Fluxo de caixa */
+[data-theme="light"] .btn-info,
+[data-theme="light"] [class*="btn-info"] {
+  background: rgba(96,165,250,0.15) !important;
+  color: #2563eb !important;
+  border: 1px solid rgba(96,165,250,0.35) !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .btn-info:hover,
+[data-theme="light"] [class*="btn-info"]:hover {
+  background: #3b82f6 !important;
+  color: #fff !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   📅 BARRA DO MÊS ("Maio de 2026")
+   Tinha fundo branco transparente que sumia
+   ════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .mes-header,
+[data-theme="light"] .month-bar,
+[data-theme="light"] .periodo-bar {
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,0.08) !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+}
+[data-theme="light"] .mes-header *,
+[data-theme="light"] .month-bar *,
+[data-theme="light"] .periodo-bar * {
+  color: #0f172a !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   📊 ESTADO VAZIO (empty state)
+   "Nenhum lançamento financeiro" — texto cinza claríssimo
+   ════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .empty-state,
+[data-theme="light"] .vazio,
+[data-theme="light"] .no-data {
+  color: #64748b !important;
+}
+[data-theme="light"] .empty-state em,
+[data-theme="light"] .empty-state i:not(.ti),
+[data-theme="light"] .empty-state strong,
+[data-theme="light"] .vazio em,
+[data-theme="light"] .vazio strong {
+  color: #475569 !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   🔤 PALAVRAS-CHAVE: "receita" e "despesa" em destaque
+   ════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] em,
+[data-theme="light"] .destaque-receita {
+  color: #059669;
+  font-weight: 600;
+}
+[data-theme="light"] .destaque-despesa {
+  color: #dc2626;
+  font-weight: 600;
+}
